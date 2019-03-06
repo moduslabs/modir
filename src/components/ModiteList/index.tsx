@@ -16,9 +16,16 @@ type Modite = {
   real_name: string;
   name: string;
   id: string;
+  tz: string;
+  color: string;
   profile: {
+    title: string;
     last_name: string;
+    phone: string;
+    email: string;
     image_72: string;
+    image_192: string;
+    image_512: string;
   };
 };
 
@@ -26,6 +33,8 @@ type ListItemProps = {
   list: Modite[];
   filter: string;
 };
+
+const locale = navigator.language;
 
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter }) => (
   <>
@@ -36,12 +45,27 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter }) => (
       )
       .map(modite => (
         <IonMenuToggle key={modite.id} auto-hide="false">
-          <IonItem button onClick={() => alert(modite.real_name)}>
-            <IonThumbnail slot="start">
-              <IonImg src={modite.profile.image_72} class={s.thumbnail} />
+          <IonItem
+            button
+            class={s.appear}
+            onClick={() => alert(modite.real_name)}
+          >
+            <IonThumbnail slot="start" class={s.thumbnailContainer}>
+              <IonImg
+                src={modite.profile.image_72}
+                class={s.thumbnail}
+                alt={modite.real_name}
+              />
             </IonThumbnail>
 
             <IonLabel>{modite.real_name}</IonLabel>
+            <IonLabel class={s.time}>
+              {new Date().toLocaleString(locale, {
+                timeZone: modite.tz,
+                hour: 'numeric',
+                minute: 'numeric',
+              })}
+            </IonLabel>
           </IonItem>
         </IonMenuToggle>
       ))}
@@ -77,10 +101,11 @@ function ModiteList() {
   return (
     <IonContent>
       <IonSearchbar
-        debounce={500}
+        debounce={200}
+        value={filter}
         placeholder="Filter Modites"
         onIonChange={event => setFilter(event.detail.value || '')}
-        value={filter}
+        class={s.slideInDown}
       />
       <IonList>
         <IonListHeader>Modites</IonListHeader>

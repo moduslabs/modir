@@ -1,3 +1,53 @@
+@keyframes slideInDown {
+  from {
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.slideInDown {
+  animation-name: slideInDown;
+  animation-fill-mode: forwards;
+  animation-duration: 300ms;
+  animation-timing-function: ease-in;
+}
+
+.appear {
+  animation-name: appear;
+  animation-fill-mode: forwards;
+  animation-duration: 500ms;
+  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
+}
+
+.thumbnailContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .thumbnail {
-  border-radius: 10px;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.8rem;
+}
+
+.time {
+  flex: 0 1 3rem;
+  opacity: 0.5;
 }
