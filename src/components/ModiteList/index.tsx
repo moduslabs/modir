@@ -37,6 +37,16 @@ type ListItemProps = {
 
 const locale = navigator.language;
 
+const getTimeOfDay = (date: Date, timeZone: string) => {
+  const hour = ~~date.toLocaleString(locale, {
+    timeZone,
+    hour: 'numeric',
+    hour12: false,
+  });
+  if (hour < 8 || hour > 22) return '💤';
+  return '😃';
+};
+
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date }) => (
   <>
     {list
@@ -60,6 +70,7 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date }) => (
             </IonThumbnail>
 
             <IonLabel>{modite.real_name}</IonLabel>
+            <IonLabel class={s.tod}>{getTimeOfDay(date, modite.tz)}</IonLabel>
             <IonLabel class={s.time}>
               {date.toLocaleString(locale, {
                 timeZone: modite.tz,
