@@ -32,11 +32,12 @@ type Modite = {
 type ListItemProps = {
   list: Modite[];
   filter: string;
+  date: Date;
 };
 
 const locale = navigator.language;
 
-const ListItem: FunctionComponent<ListItemProps> = ({ list, filter }) => (
+const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date }) => (
   <>
     {list
       .filter(
@@ -60,7 +61,7 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter }) => (
 
             <IonLabel>{modite.real_name}</IonLabel>
             <IonLabel class={s.time}>
-              {new Date().toLocaleString(locale, {
+              {date.toLocaleString(locale, {
                 timeZone: modite.tz,
                 hour: 'numeric',
                 minute: 'numeric',
@@ -75,10 +76,17 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter }) => (
 function ModiteList() {
   const [modites, setModites] = useState([]);
   const [filter, setFilter] = useState('');
+  const [date, setDate] = useState(new Date());
+
+  const tick = () => setDate(new Date());
 
   useEffect(() => {
+    // start the clock
+    const intervalID = setInterval(tick, 1000 * 60);
+    const clearTimeInterval = () => clearInterval(intervalID);
+
     // if we already have something, we can safely abandon fetching
-    if (modites.length) return;
+    if (modites.length) return clearTimeInterval;
 
     fetch('https://mosquito-slack-bot.herokuapp.com/modites')
       .then(res => res.json())
@@ -109,7 +117,7 @@ function ModiteList() {
       />
       <IonList>
         <IonListHeader>Modites</IonListHeader>
-        <ListItem list={modites} filter={filter} />
+        <ListItem list={modites} filter={filter} date={date} />
       </IonList>
     </IonContent>
   );
