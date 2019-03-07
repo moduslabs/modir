@@ -5,7 +5,7 @@ import '@ionic/core/css/ionic.bundle.css';
 import './theme.css';
 
 const ModiteList = lazy(() =>
-  import('../ModiteList' /* webpackChunkName: "modite-list" */)
+  import('../ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */)
 );
 
 function App() {
