@@ -9,6 +9,7 @@ import {
   IonThumbnail,
   IonImg,
   IonSearchbar,
+  IonSkeletonText,
 } from '@ionic/react';
 import s from './styles.module.css';
 
@@ -84,6 +85,28 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date }) => (
   </>
 );
 
+const SkeletonList: React.SFC<{}> = () => (
+  <>
+    {Array.from(new Array(10)).map((_, index) => (
+      <IonItem key={index}>
+        <IonThumbnail slot="start" class={s.thumbnailContainer}>
+          <IonSkeletonText />
+        </IonThumbnail>
+
+        <IonLabel>
+          <IonSkeletonText style={{ width: `${Math.random() * 30 + 50}%` }} />
+        </IonLabel>
+        <IonLabel class={s.tod}>
+          <IonSkeletonText style={{ width: '60%' }} />
+        </IonLabel>
+        <IonLabel class={s.time}>
+          <IonSkeletonText style={{ width: '80%' }} />
+        </IonLabel>
+      </IonItem>
+    ))}
+  </>
+);
+
 function ModiteList() {
   const [modites, setModites] = useState([]);
   const [filter, setFilter] = useState('');
@@ -126,9 +149,14 @@ function ModiteList() {
         onIonChange={event => setFilter(event.detail.value || '')}
         class={s.slideInDown}
       />
+
       <IonList>
         <IonListHeader>Modites</IonListHeader>
-        <ListItem list={modites} filter={filter} date={date} />
+        {modites.length ? (
+          <ListItem list={modites} filter={filter} date={date} />
+        ) : (
+          <SkeletonList />
+        )}
       </IonList>
     </IonContent>
   );

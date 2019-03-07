@@ -1,12 +1,9 @@
 @keyframes slideInDown {
   from {
-    -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
-    visibility: visible;
   }
 
   to {
-    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
 }
@@ -22,10 +19,12 @@
 }
 
 .slideInDown {
+  transform: translate3d(0, -100%, 0);
   animation-name: slideInDown;
   animation-fill-mode: forwards;
   animation-duration: 300ms;
   animation-timing-function: ease-in;
+  animation-delay: 500ms;
 }
 
 .appear {
@@ -48,7 +47,7 @@
 }
 
 .time {
-  flex: 0 1 3rem;
+  flex: 0 1 4.5rem;
   opacity: 0.5;
 }
 
