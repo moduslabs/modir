@@ -12,9 +12,9 @@
     "react-scripts": "2.1.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -32,6 +32,8 @@
     "@types/react-dom": "^16.8.2",
     "@types/react-router": "^4.4.4",
     "@types/react-router-dom": "^4.3.1",
-    "typescript": "^3.3.3333"
+    "react-app-rewired": "^2.1.0",
+    "typescript": "^3.3.3333",
+    "worker-loader": "^2.0.0"
   }
 }

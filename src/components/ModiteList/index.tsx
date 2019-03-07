@@ -11,6 +11,9 @@ import {
   IonSearchbar,
   IonSkeletonText,
 } from '@ionic/react';
+
+// @ts-ignore
+import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 
 type Modite = {
@@ -19,6 +22,8 @@ type Modite = {
   id: string;
   tz: string;
   color: string;
+  localTime: string;
+  tod: string;
   profile: {
     title: string;
     last_name: string;
@@ -36,52 +41,56 @@ type ListItemProps = {
   date: Date;
 };
 
+type WorkerEvent = {
+  data: never[];
+};
+
+type FilterEvent = {
+  detail: {
+    value: string | undefined;
+  };
+};
+
+// get locale once
 const locale = navigator.language;
 
-const getTimeOfDay = (date: Date, timeZone: string) => {
-  const hour = ~~date.toLocaleString(locale, {
-    timeZone,
-    hour: 'numeric',
-    hour12: false,
-  });
-  if (hour < 8 || hour > 22) return '💤';
-  return '😃';
-};
+// reference to the worker that formats and filters modite data
+const worker = new Worker();
+
+// keep server response here for future reference
+let rawModites: Modite[];
+
+// get data from server
+async function getData(filter: string, date: Date) {
+  rawModites = await fetch(
+    'https://mosquito-slack-bot.herokuapp.com/modites'
+  ).then(res => res.json());
+  worker.postMessage({ modites: rawModites, filter, date, locale });
+}
 
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date }) => (
   <>
-    {list
-      .filter(
-        modite =>
-          modite.real_name.toLowerCase().indexOf(filter.toLowerCase()) > -1
-      )
-      .map(modite => (
-        <IonMenuToggle key={modite.id} auto-hide="false">
-          <IonItem
-            button
-            class={s.appear}
-            onClick={() => alert(modite.real_name)}
-          >
-            <IonThumbnail slot="start" class={s.thumbnailContainer}>
-              <IonImg
-                src={modite.profile.image_72}
-                class={s.thumbnail}
-                alt={modite.real_name}
-              />
-            </IonThumbnail>
+    {list.map(modite => (
+      <IonMenuToggle key={modite.id} auto-hide="false">
+        <IonItem
+          button
+          class={s.appear}
+          onClick={() => alert(modite.real_name)}
+        >
+          <IonThumbnail slot="start" class={s.thumbnailContainer}>
+            <IonImg
+              src={modite.profile.image_72}
+              class={s.thumbnail}
+              alt={modite.real_name}
+            />
+          </IonThumbnail>
 
-            <IonLabel>{modite.real_name}</IonLabel>
-            <IonLabel class={s.tod}>{getTimeOfDay(date, modite.tz)}</IonLabel>
-            <IonLabel class={s.time}>
-              {date.toLocaleString(locale, {
-                timeZone: modite.tz,
-                hour: 'numeric',
-                minute: 'numeric',
-              })}
-            </IonLabel>
-          </IonItem>
-        </IonMenuToggle>
-      ))}
+          <IonLabel>{modite.real_name}</IonLabel>
+          <IonLabel class={s.tod}>{modite.tod}</IonLabel>
+          <IonLabel class={s.time}>{modite.localTime}</IonLabel>
+        </IonItem>
+      </IonMenuToggle>
+    ))}
   </>
 );
 
@@ -112,7 +121,23 @@ function ModiteList() {
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
 
+  // get fresh time
   const tick = () => setDate(new Date());
+
+  const onFilter = (event: FilterEvent) => {
+    const query = event.detail.value || '';
+
+    // save filter
+    setFilter(query);
+
+    //tell worker to parse and filter
+    worker.postMessage({
+      modites: rawModites,
+      filter: query,
+      date,
+      locale,
+    });
+  };
 
   useEffect(() => {
     // start the clock
@@ -122,22 +147,11 @@ function ModiteList() {
     // if we already have something, we can safely abandon fetching
     if (modites.length) return clearTimeInterval;
 
-    fetch('https://mosquito-slack-bot.herokuapp.com/modites')
-      .then(res => res.json())
+    // initial data parsing
+    worker.onmessage = (event: WorkerEvent) => setModites(event.data);
 
-      // sort by last name
-      .then(modites => {
-        setModites(
-          modites.sort((prev: Modite, next: Modite) => {
-            const prevName = prev.profile.last_name;
-            const nextName = next.profile.last_name;
-
-            if (prevName < nextName) return -1;
-            if (prevName > nextName) return 1;
-            return 0;
-          })
-        );
-      });
+    // get data from the api
+    getData(filter, date);
   });
 
   return (
@@ -146,7 +160,7 @@ function ModiteList() {
         debounce={200}
         value={filter}
         placeholder="Filter Modites"
-        onIonChange={event => setFilter(event.detail.value || '')}
+        onIonChange={onFilter}
         class={s.slideInDown}
       />
 
