@@ -1,8 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import {
-  IonList,
   IonContent,
-  IonListHeader,
   IonMenuToggle,
   IonItem,
   IonLabel,
@@ -10,91 +8,64 @@ import {
   IonImg,
   IonSearchbar,
   IonSkeletonText,
+  IonToolbar,
 } from '@ionic/react';
+import Modite from '../../models/Modite';
+import ListItemProps from '../../models/ListItemProps';
+import WorkerEvent from '../../models/WorkerEvent';
+import FilterEvent from '../../models/FilterEvent';
+import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
+// @ts-ignore
+import AutoSizer from "react-virtualized-auto-sizer";
 
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 
-type Modite = {
-  real_name: string;
-  name: string;
-  id: string;
-  tz: string;
-  color: string;
-  localTime: string;
-  tod: string;
-  profile: {
-    title: string;
-    last_name: string;
-    phone: string;
-    email: string;
-    image_72: string;
-    image_192: string;
-    image_512: string;
-  };
-};
-
-type ListItemProps = {
-  list: Modite[];
-  filter: string;
-  date: Date;
-};
-
-type WorkerEvent = {
-  data: never[];
-};
-
-type FilterEvent = {
-  detail: {
-    value: string | undefined;
-  };
-};
-
 // get locale once
-const locale = navigator.language;
+const locale: string = navigator.language;
 
 // reference to the worker that formats and filters modite data
-const worker = new Worker();
+const worker: Worker = new Worker();
 
 // keep server response here for future reference
 let rawModites: Modite[];
 
 // get data from server
-async function getData(filter: string, date: Date) {
+async function getData(filter: string, date: Date): Promise<void> {
   rawModites = await fetch(
     'https://mosquito-slack-bot.herokuapp.com/modites'
   ).then(res => res.json());
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
-const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date }) => (
-  <>
-    {list.map(modite => (
-      <IonMenuToggle key={modite.id} auto-hide="false">
-        <IonItem
-          button
-          class={s.appear}
-          onClick={() => alert(modite.real_name)}
-        >
-          <IonThumbnail slot="start" class={s.thumbnailContainer}>
-            <IonImg
-              src={modite.profile.image_72}
-              class={s.thumbnail}
-              alt={modite.real_name}
-            />
-          </IonThumbnail>
+const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, index = 0 }) => {
+  const modite = list[index];
 
-          <IonLabel>{modite.real_name}</IonLabel>
-          <IonLabel class={s.tod}>{modite.tod}</IonLabel>
-          <IonLabel class={s.time}>{modite.localTime}</IonLabel>
-        </IonItem>
-      </IonMenuToggle>
-    ))}
-  </>
-);
+  return (
+    <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
+      <IonItem
+        button
+        class={s.appear}
+        onClick={() => alert(modite.real_name)}
+      >
+        <IonThumbnail slot="start" class={s.thumbnailContainer}>
+          <IonImg
+            src={modite.profile.image_72}
+            class={s.thumbnail}
+            alt={modite.real_name}
+          />
+        </IonThumbnail>
 
-const SkeletonList: React.SFC<{}> = () => (
+        <IonLabel>{modite.real_name}</IonLabel>
+        <IonLabel class={s.tod}>{modite.tod}</IonLabel>
+        <IonLabel class={s.time}>{modite.localTime}</IonLabel>
+      </IonItem>
+    </IonMenuToggle>
+  );
+};
+
+const SkeletonList: FunctionComponent<{}> = () => (
   <>
     {Array.from(new Array(10)).map((_, index) => (
       <IonItem key={index}>
@@ -117,15 +88,15 @@ const SkeletonList: React.SFC<{}> = () => (
 );
 
 function ModiteList() {
-  const [modites, setModites] = useState([]);
+  const [modites, setModites] = useState();
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
 
   // get fresh time
-  const tick = () => setDate(new Date());
+  const tick = (): void => setDate(new Date());
 
-  const onFilter = (event: FilterEvent) => {
-    const query = event.detail.value || '';
+  const onFilter = (event: FilterEvent): void => {
+    const query: string = event.detail.value || '';
 
     // save filter
     setFilter(query);
@@ -139,40 +110,59 @@ function ModiteList() {
     });
   };
 
+  const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
+    <ListItem list={modites} filter={filter} date={date} style={style} index={index} />
+  );
+
+  const Skeleton: FunctionComponent<ListChildComponentProps> = () => <SkeletonList />;
+
   useEffect(() => {
     // start the clock
-    const intervalID = setInterval(tick, 1000 * 60);
-    const clearTimeInterval = () => clearInterval(intervalID);
+    const intervalID: number = window.setInterval(tick, 1000 * 60);
+    const clearTimeInterval = (): void => clearInterval(intervalID);
 
     // if we already have something, we can safely abandon fetching
-    if (modites.length) return clearTimeInterval;
-
-    // initial data parsing
-    worker.onmessage = (event: WorkerEvent) => setModites(event.data);
-
-    // get data from the api
-    getData(filter, date);
+    if (modites) {
+      if (modites.length) return clearTimeInterval;
+    } else {
+      // initial data parsing
+      worker.onmessage = (event: WorkerEvent) => setModites(event.data);
+      // get data from the api
+      getData(filter, date);
+    }
   });
 
   return (
-    <IonContent>
-      <IonSearchbar
-        debounce={200}
-        value={filter}
-        placeholder="Filter Modites"
-        onIonChange={onFilter}
-        class={s.slideInDown}
-      />
+    <>
+      <IonToolbar>
+        <IonSearchbar
+          debounce={200}
+          value={filter}
+          placeholder="Filter Modites"
+          onIonChange={onFilter}
+          class={s.slideInDown}
+        />
+      </IonToolbar>
 
-      <IonList>
-        <IonListHeader>Modites</IonListHeader>
-        {modites.length ? (
-          <ListItem list={modites} filter={filter} date={date} />
-        ) : (
-          <SkeletonList />
-        )}
-      </IonList>
-    </IonContent>
+      <IonContent>
+        <AutoSizer>
+          {({ height, width }: {
+            height: number;
+            width: number;
+          }) => (
+            <List
+              className="List"
+              height={height}
+              itemCount={modites && modites.length || 10}
+              itemSize={72}
+              width={width}
+            >
+              {modites && modites.length ? ModiteListItem : Skeleton}
+            </List>
+          )}
+        </AutoSizer>
+      </IonContent>
+    </>
   );
 }
 
