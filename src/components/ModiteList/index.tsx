@@ -16,7 +16,7 @@ import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
-import AutoSizer from "react-virtualized-auto-sizer";
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
@@ -33,9 +33,7 @@ let rawModites: Modite[];
 
 // get data from server
 async function getData(filter: string, date: Date): Promise<void> {
-  rawModites = await fetch(
-    'https://mosquito-slack-bot.herokuapp.com/modites'
-  ).then(res => res.json());
+  rawModites = await fetch('https://mosquito-slack-bot.herokuapp.com/modites').then(res => res.json());
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
@@ -44,17 +42,9 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style,
 
   return (
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
-      <IonItem
-        button
-        class={s.appear}
-        onClick={() => alert(modite.real_name)}
-      >
+      <IonItem button class={s.appear} onClick={() => alert(modite.real_name)}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <IonImg
-            src={modite.profile.image_72}
-            class={s.thumbnail}
-            alt={modite.real_name}
-          />
+          <IonImg src={modite.profile.image_72} class={s.thumbnail} alt={modite.real_name} />
         </IonThumbnail>
 
         <IonLabel>{modite.real_name}</IonLabel>
@@ -135,28 +125,13 @@ function ModiteList() {
   return (
     <>
       <IonToolbar>
-        <IonSearchbar
-          debounce={200}
-          value={filter}
-          placeholder="Filter Modites"
-          onIonChange={onFilter}
-          class={s.slideInDown}
-        />
+        <IonSearchbar debounce={200} value={filter} placeholder="Filter Modites" onIonChange={onFilter} class={s.slideInDown} />
       </IonToolbar>
 
       <IonContent>
         <AutoSizer>
-          {({ height, width }: {
-            height: number;
-            width: number;
-          }) => (
-            <List
-              className="List"
-              height={height}
-              itemCount={modites && modites.length || 10}
-              itemSize={72}
-              width={width}
-            >
+          {({ height, width }: { height: number; width: number }) => (
+            <List className="List" height={height} itemCount={(modites && modites.length) || 10} itemSize={72} width={width}>
               {modites && modites.length ? ModiteListItem : Skeleton}
             </List>
           )}

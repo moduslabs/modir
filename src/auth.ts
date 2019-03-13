@@ -3,21 +3,17 @@ function handleClientLoad(cb: Function) {
   // Loading the auth2 library is optional here since `gapi.client.init` function will load
   // it if not already loaded. Loading it upfront can save one network request.
   gapi.load('client:auth2', () => {
-    initClient();
-    cb();
+    initClient(cb);
   });
 }
 
-function initClient() {
+function initClient(cb: Function) {
   // Initialize the client with API key and People API, and initialize OAuth with an
   // OAuth 2.0 client ID and scopes (space delimited string) to request access.
   gapi.client
     .init({
-      discoveryDocs: [
-        'https://people.googleapis.com/$discovery/rest?version=v1',
-      ],
-      clientId:
-        '398317159902-tq6ld761e6f8tut1m46l09nbrdld74q1.apps.googleusercontent.com',
+      discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
+      clientId: '398317159902-tq6ld761e6f8tut1m46l09nbrdld74q1.apps.googleusercontent.com',
       scope: 'profile',
     })
     .then(function() {
@@ -25,15 +21,16 @@ function initClient() {
       gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
       // Handle the initial sign-in state.
-      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get(), cb);
     });
 }
 
-function updateSigninStatus(isSignedIn: boolean) {
+function updateSigninStatus(isSignedIn: boolean, cb?: Function) {
   // When signin status changes, this function is called.
   // If the signin status is changed to signedIn, we make an API call.
   if (isSignedIn) {
     makeApiCall();
+    if (cb) cb();
   } else {
     signIn();
   }
@@ -49,6 +46,7 @@ function signOut() {
   gapi.auth2.getAuthInstance().signOut();
 }
 
+// todo: move this to the app state
 function makeApiCall() {
   // Make an API call to the People API, and print the user's given name.
   // @ts-ignore
@@ -63,7 +61,7 @@ function makeApiCall() {
       },
       function(reason: any) {
         console.log('Error: ' + reason.result.error.message);
-      }
+      },
     );
 }
 
