@@ -15,6 +15,8 @@ function initClient(cb: Function) {
       discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
       clientId: '398317159902-tq6ld761e6f8tut1m46l09nbrdld74q1.apps.googleusercontent.com',
       scope: 'profile',
+      // @ts-ignore
+      ux_mode: 'redirect',
     })
     .then(function() {
       // Listen for sign-in state changes.
