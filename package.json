@@ -4,12 +4,15 @@
   "private": true,
   "dependencies": {
     "@ionic/react": "0.0.5",
+    "@types/react-window": "^1.5.1",
     "classnames": "^2.2.6",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.5"
+    "react-scripts": "2.1.5",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-window": "^1.6.2"
   },
   "scripts": {
     "start": "react-app-rewired start",

@@ -4,5 +4,11 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true
-  }
+  },
+  "cSpell.words": [
+    "Modite",
+    "Modites",
+    "Searchbar",
+    "unmount"
+  ]
 }

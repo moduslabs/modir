@@ -1,7 +1,6 @@
 // @ts-ignore
 onmessage = function(event) {
   const { modites, filter, date, locale } = event.data;
-
   const getTimeOfDay = (date, timeZone, locale) => {
     const hour = ~~date.toLocaleString(locale, {
       timeZone,
