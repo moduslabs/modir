@@ -5,5 +5,5 @@ export default interface ListItemProps {
   filter: string;
   date: Date;
   style: { [key: string]: any };
-  index: number;
+  modite: Modite;
 }

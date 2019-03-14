@@ -7,10 +7,29 @@
     transform: translate3d(0, 0, 0);
   }
 }
+@keyframes slideInDown20 {
+  from {
+    transform: translate3d(0, -5%, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
 
 @keyframes appear {
   from {
     opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes clearAppear {
+  from {
+    opacity: 0;
   }
 
   to {
@@ -33,6 +52,51 @@
   animation-duration: 500ms;
   animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
 }
+
+.clearAppear {
+  opacity: 0;
+  animation-name: clearAppear;
+  animation-fill-mode: forwards;
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
+  animation-delay: 150ms;
+}
+
+.detailPage {
+  display: flex;
+  align-items: stretch;
+}
+.detailsCt {
+  position: relative;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.detailsMapCt {
+  flex: 1;
+}
+.detailImageCt {
+  height: 192px;
+  width: 192px;
+  position: relative;
+  overflow: hidden;
+}
+.detailImageCt ion-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.detailImageCt ion-img:first-child {
+  filter: blur(7px);
+}
+.closeIcon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 2rem;
+}
+
 
 .thumbnailContainer {
   display: flex;
