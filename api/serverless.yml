@@ -1,0 +1,25 @@
+service:
+  name: modites-api
+
+provider:
+  name: cloudflare
+  config:
+    accountId: CLOUDFLARE_ACCOUNT_ID
+    zoneId: CLOUDFLARE_ZONE_ID
+
+plugins:
+  - serverless-cloudflare-workers
+
+functions:
+  getModites:
+    name: getModites
+    script: modites # there must be a file called modites.js
+    environment:
+      BOT_TOKEN: ${env:BOT_TOKEN}
+      SLACK_CLIENT_ID: ${env:SLACK_CLIENT_ID}
+      SLACK_CLIENT_SECRET: ${env:SLACK_CLIENT_SECRET}
+      SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
+    events:
+      - http:
+          url: modus.app/modites/get
+          method: GET

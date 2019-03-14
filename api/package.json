@@ -1,0 +1,23 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Cloudflare serverless deployment for self-serve customers",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "preview": "workers-preview < dist/bundle.js"
+  },
+  "author": "cloudflare",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-cloudflare-workers": "1.0.5"
+  },
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "dotenv-webpack": "^1.7.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "workers-preview": "^1.0.6"
+  }
+}
