@@ -6,4 +6,5 @@ export default interface ListItemProps {
   date: Date;
   style: { [key: string]: any };
   modite: Modite;
+  onItemClick?: Function;
 }
