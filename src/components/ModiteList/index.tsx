@@ -75,13 +75,13 @@ const SkeletonList: FunctionComponent<{}> = () => (
   </>
 );
 
-function ModiteList({ onModiteItemClick }: ModiteListProps) {
+function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
   const [modites, setModites] = useState();
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
 
   // get fresh time
-  const tick = (): void => setDate(new Date());
+  const tick: Function = (): void => setDate(new Date());
 
   const onFilter = (event: FilterEvent): void => {
     const query: string = event.detail.value || '';
@@ -98,12 +98,10 @@ function ModiteList({ onModiteItemClick }: ModiteListProps) {
     });
   };
 
-  // TODO: I'm sure there's a way to type this correctly, but I wasn't able to sort it out, yet...
-  const slides: any = document.getElementById('slides');
   // handles clicks on the list of Modites and shows the details view for the clicked Modite
   const handleListClick = (e: any): void => {
     // DEV NOTE: timeout is used as without it the image would intermittently not update between Modite views
-    setTimeout(() => slides.slidePrev(), 1);
+    setTimeout(() => slides.current.slidePrev(), 1);
   };
 
   const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (

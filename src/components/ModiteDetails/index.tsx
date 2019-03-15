@@ -2,22 +2,21 @@ import React, { lazy } from 'react';
 import { IonIcon } from '@ionic/react';
 import Modite from '../../models/Modite';
 import s from './styles.module.css';
+import ModiteDetailsProps from '../../models/ModiteDetailsProps';
 
 const MapComponent = lazy(() =>
   import('../MapComponent' /* webpackChunkName: "maps", webpackPrefetch: true  */)
 );
 
-// TODO: I'm sure there's a way to type this correctly, but I wasn't able to sort it out, yet...
-const slides: any = document.getElementById('slides');
-
-// closes the details panel
-const closeDetails = (): void => {
-  slides.slideNext();
-}
-
 const defaultModite: Modite = ({ profile: {}} as Modite);
 
-function ModiteDetails({ modite = defaultModite }: { modite?: Modite }) {
+function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
+  // closes the details panel
+  const closeDetails = (): void => {
+    // slides.slideNext();
+    slides.current.slideNext();
+  }
+
   return (
     <>
       <div className={s.detailsCt}>
