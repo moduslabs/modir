@@ -17,10 +17,10 @@ import FilterEvent from '../../models/FilterEvent';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer';
-
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
+import ModiteListProps from '../../models/ModiteListProps';
 
 // get locale once
 const locale: string = navigator.language;
@@ -37,12 +37,10 @@ async function getData(filter: string, date: Date): Promise<void> {
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
-const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, index = 0 }) => {
-  const modite = list[index];
-
+const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, modite, onItemClick = () => {} }) => {
   return (
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
-      <IonItem button class={s.appear} onClick={() => alert(modite.real_name)}>
+      <IonItem button class={s.appear} onClick={() => onItemClick(modite)}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
           <IonImg src={modite.profile.image_72} class={s.thumbnail} alt={modite.real_name} />
         </IonThumbnail>
@@ -77,13 +75,13 @@ const SkeletonList: FunctionComponent<{}> = () => (
   </>
 );
 
-function ModiteList() {
+function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
   const [modites, setModites] = useState();
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
 
   // get fresh time
-  const tick = (): void => setDate(new Date());
+  const tick: Function = (): void => setDate(new Date());
 
   const onFilter = (event: FilterEvent): void => {
     const query: string = event.detail.value || '';
@@ -100,8 +98,14 @@ function ModiteList() {
     });
   };
 
+  // handles clicks on the list of Modites and shows the details view for the clicked Modite
+  const handleListClick = (e: any): void => {
+    // DEV NOTE: timeout is used as without it the image would intermittently not update between Modite views
+    setTimeout(() => slides.current.slidePrev(), 1);
+  };
+
   const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <ListItem list={modites} filter={filter} date={date} style={style} index={index} />
+    <ListItem list={modites} filter={filter} date={date} style={style} modite={modites[index]} onItemClick={onModiteItemClick} />
   );
 
   const Skeleton: FunctionComponent<ListChildComponentProps> = () => <SkeletonList />;
@@ -127,11 +131,10 @@ function ModiteList() {
       <IonToolbar>
         <IonSearchbar debounce={200} value={filter} placeholder="Filter Modites" onIonChange={onFilter} class={s.slideInDown} />
       </IonToolbar>
-
-      <IonContent>
+      <IonContent onClick={handleListClick}>
         <AutoSizer>
           {({ height, width }: { height: number; width: number }) => (
-            <List className="List" height={height} itemCount={(modites && modites.length) || 10} itemSize={72} width={width}>
+            <List height={height} itemCount={(modites && modites.length) || 10} itemSize={72} width={width}>
               {modites && modites.length ? ModiteListItem : Skeleton}
             </List>
           )}

@@ -7,10 +7,29 @@
     transform: translate3d(0, 0, 0);
   }
 }
+@keyframes slideInDown20 {
+  from {
+    transform: translate3d(0, -5%, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
 
 @keyframes appear {
   from {
     opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes clearAppear {
+  from {
+    opacity: 0;
   }
 
   to {
@@ -32,6 +51,15 @@
   animation-fill-mode: forwards;
   animation-duration: 500ms;
   animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
+}
+
+.clearAppear {
+  opacity: 0;
+  animation-name: clearAppear;
+  animation-fill-mode: forwards;
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
+  animation-delay: 150ms;
 }
 
 .thumbnailContainer {

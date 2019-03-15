@@ -3,8 +3,10 @@ export default interface Modite {
   name: string;
   id: string;
   tz: string;
+  tz_offset: number;
   color: string;
   localTime: string;
+  localDate: string;
   tod: string;
   profile: {
     title: string;

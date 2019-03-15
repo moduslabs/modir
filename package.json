@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@ionic/react": "0.0.5",
+    "@types/google-map-react": "^0.23.11",
     "@types/react-window": "^1.5.1",
     "classnames": "^2.2.6",
+    "google-map-react": "^1.1.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router": "^4.3.1",
