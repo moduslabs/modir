@@ -38,9 +38,14 @@ async function getData(filter: string, date: Date): Promise<void> {
 }
 
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, modite, onItemClick = () => {} }) => {
+  const handleItemClick = async (): Promise<void> => {
+    const moditeProfile: Modite = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
+    onItemClick(moditeProfile);
+  };
+
   return (
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
-      <IonItem button class={s.appear} onClick={() => onItemClick(modite)}>
+      <IonItem button class={s.appear} onClick={handleItemClick}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
           <IonImg src={modite.profile.image_72} class={s.thumbnail} alt={modite.real_name} />
         </IonThumbnail>
