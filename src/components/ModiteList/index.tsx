@@ -33,7 +33,7 @@ let rawModites: Modite[];
 
 // get data from server
 async function getData(filter: string, date: Date): Promise<void> {
-  rawModites = await fetch('https://mosquito-slack-bot.herokuapp.com/modites').then(res => res.json());
+  rawModites = await fetch('https://modus.app/modites/all').then(res => res.json());
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
