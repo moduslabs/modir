@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect, FunctionComponent, Component } from 'react';
 import {
   IonContent,
   IonMenuToggle,
@@ -37,6 +37,33 @@ async function getData(filter: string, date: Date): Promise<void> {
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
+export class ModiteImage extends Component<any, any> {
+  constructor(props: any) {
+    super(props)
+    this.state = { loaded: false };
+    this.onLoad = this.onLoad.bind(this)
+  }
+
+  onLoad() {
+    this.setState({ loaded: true })
+  }
+
+  render() {
+    if(this.state.loaded) {
+      return (
+        <IonImg class={s.thumbnail} src={this.props.modite.profile.image_72} alt={this.props.modite.real_name} />
+      )
+    } else {
+      return (
+        <div>
+          <IonImg class={s.thumbnail} src={process.env.PUBLIC_URL + './user-icon-placeholder.png'} />
+          <img className={s.hidden} src={this.props.modite.profile.image_72} onLoad={this.onLoad} />
+        </div>
+      )
+    }
+  }
+}
+
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, index = 0 }) => {
   const modite = list[index];
 
@@ -44,7 +71,7 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style,
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
       <IonItem button class={s.appear} onClick={() => alert(modite.real_name)}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <IonImg src={modite.profile.image_72} class={s.thumbnail} alt={modite.real_name} />
+          <ModiteImage modite={modite}/>
         </IonThumbnail>
 
         <IonLabel>{modite.real_name}</IonLabel>
