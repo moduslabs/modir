@@ -10,7 +10,7 @@ import {
   IonSkeletonText,
   IonToolbar,
 } from '@ionic/react';
-import Modite from '../../models/Modite';
+import Modite, { ModiteProfile } from '../../models/Modite';
 import ListItemProps from '../../models/ListItemProps';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
@@ -21,6 +21,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 import ModiteListProps from '../../models/ModiteListProps';
+import ModiteProfileResp from '../../models/ModiteProfileResp';
 
 // get locale once
 const locale: string = navigator.language;
@@ -39,8 +40,14 @@ async function getData(filter: string, date: Date): Promise<void> {
 
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, modite, onItemClick = () => {} }) => {
   const handleItemClick = async (): Promise<void> => {
-    const moditeProfile: Modite = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
-    onItemClick(moditeProfile);
+    onItemClick({
+      profile: {
+        image_192: "modus-neon.gif"
+      }
+    });
+    const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
+    if (moditeProfile.ok) modite.profile = moditeProfile.profile;
+    onItemClick(modite);
   };
 
   return (
@@ -105,8 +112,7 @@ function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
 
   // handles clicks on the list of Modites and shows the details view for the clicked Modite
   const handleListClick = (e: any): void => {
-    // DEV NOTE: timeout is used as without it the image would intermittently not update between Modite views
-    setTimeout(() => slides.current.slidePrev(), 1);
+    slides.current.slidePrev();
   };
 
   const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (

@@ -24,6 +24,7 @@ function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
 
         <img src={modite.profile.image_192} />
         <div>{modite.real_name}</div>
+        <div>{modite.profile.gitHubUser}</div>
         <div>{modite.localDate} {modite.localTime}</div>
         <hr />
         <div>{modite.profile.title}</div>
