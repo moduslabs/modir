@@ -27,7 +27,7 @@ const getModiteResponse = async event => {
     response = new Response(JSON.stringify(modite));
     response.headers.set('Content-Type', 'application/json');
     response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Cache-Control', 'max-age=3600');
+    response.headers.set('Cache-Control', 'max-age=300');
     event.waitUntil(cache.put(event.request, response.clone()));
   }
 
