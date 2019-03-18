@@ -8,11 +8,13 @@ const getModite = async (slackId) => {
   return user;
 };
 
-// fetch the gitHubUser from the user profile API
-const addGitHubUser = (modite) => {
-  const { fields = {} } = modite.profile;
-  const gitHubUser = Object.values(fields).find(item => item.label === "GitHub User") || {};
-  modite.profile.gitHubUser = gitHubUser.value;
+const addFields = (moditeResp) => {
+  const { fields = {} } = moditeResp.profile;
+
+  moditeResp.profile.fields = Object.values(fields).reduce((map, item) => {
+    map[item.label] = item.value;
+    return map;
+  }, {});
 };
 
 const getModiteResponse = async event => {
@@ -22,9 +24,9 @@ const getModiteResponse = async event => {
   if (!response) {
     const { url } = event.request;
     const slackId = url.split('/').pop();
-    const modite = await getModite(slackId);
-    addGitHubUser(modite);
-    response = new Response(JSON.stringify(modite));
+    const moditeResp = await getModite(slackId);
+    addFields(moditeResp);
+    response = new Response(JSON.stringify(moditeResp));
     response.headers.set('Content-Type', 'application/json');
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Cache-Control', 'max-age=300');

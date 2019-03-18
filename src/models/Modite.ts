@@ -6,7 +6,7 @@ export interface ModiteProfile {
   image_72: string;
   image_192: string;
   image_512: string;
-  gitHubUser: string;
+  fields: { [key: string]: any };
 };
 
 export default interface Modite {
