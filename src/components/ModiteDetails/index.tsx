@@ -8,12 +8,11 @@ const MapComponent = lazy(() =>
   import('../MapComponent' /* webpackChunkName: "maps", webpackPrefetch: true  */)
 );
 
-const defaultModite: Modite = ({ profile: {}} as Modite);
+const defaultModite: Modite = ({ profile: { fields: {} }} as Modite);
 
 function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
   // closes the details panel
   const closeDetails = (): void => {
-    // slides.slideNext();
     slides.current.slideNext();
   }
 
@@ -24,6 +23,7 @@ function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
 
         <img src={modite.profile.image_192} />
         <div>{modite.real_name}</div>
+        <div>{modite.profile.fields && modite.profile.fields.gitHubUser}</div>
         <div>{modite.localDate} {modite.localTime}</div>
         <hr />
         <div>{modite.profile.title}</div>

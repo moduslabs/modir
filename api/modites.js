@@ -5,7 +5,7 @@ const getModites = async () => {
   });
   const users = await usersRes.json();
 
-  // only ussers who are not bots, not restricted (usually clients) and not deleted
+  // only users who are not bots, not restricted (usually clients) and not deleted
   const activeUsers = users.members.filter(user => user.name !== 'slackbot' && !user.is_bot && !user.is_restricted && !user.deleted);
 
   return activeUsers;

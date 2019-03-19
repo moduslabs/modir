@@ -21,5 +21,18 @@ functions:
       SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
     events:
       - http:
-          url: modus.app/modites/get
+          url: modus.app/modites/all
           method: GET
+  getModite:
+    name: getModite
+    script: modite # there must be a file called modite.js
+    environment:
+      BOT_TOKEN: ${env:BOT_TOKEN}
+      SLACK_CLIENT_ID: ${env:SLACK_CLIENT_ID}
+      SLACK_CLIENT_SECRET: ${env:SLACK_CLIENT_SECRET}
+      SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
+    events:
+      - http:
+          url: modus.app/modite/*
+          method: GET
+
