@@ -9,6 +9,7 @@ import {
   IonSearchbar,
   IonSkeletonText,
   IonToolbar,
+  IonBadge,
 } from '@ionic/react';
 import Modite, { ModiteProfile } from '../../models/Modite';
 import ListItemProps from '../../models/ListItemProps';
@@ -58,7 +59,10 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style,
           <IonImg src={modite.profile.image_72} class={s.thumbnail} alt={modite.real_name} />
         </IonThumbnail>
 
-        <IonLabel>{modite.real_name}</IonLabel>
+        <IonLabel>
+          <IonLabel>{modite.real_name}</IonLabel>
+          <IonBadge color="light">🌮 {modite.tacos}</IonBadge>
+        </IonLabel>
         <IonLabel class={s.tod}>{modite.tod}</IonLabel>
         <IonLabel class={s.time}>{modite.localTime}</IonLabel>
       </IonItem>

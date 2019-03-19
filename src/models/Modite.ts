@@ -20,4 +20,5 @@ export default interface Modite {
   localDate: string;
   tod: string;
   profile: ModiteProfile;
+  tacos: string;
 };

@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { IonIcon } from '@ionic/react';
+import { IonIcon, IonBadge } from '@ionic/react';
 import Modite from '../../models/Modite';
 import s from './styles.module.css';
 import ModiteDetailsProps from '../../models/ModiteDetailsProps';
@@ -22,7 +22,10 @@ function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
         <IonIcon name="close-circle" class={s.closeIcon} onClick={closeDetails}></IonIcon>
 
         <img src={modite.profile.image_192} />
-        <div>{modite.real_name}</div>
+        <div>
+          {modite.real_name}
+          <IonBadge color="light">🌮 {modite.tacos}</IonBadge>
+        </div>
         <div>{modite.profile.fields && modite.profile.fields.gitHubUser}</div>
         <div>{modite.localDate} {modite.localTime}</div>
         <hr />
