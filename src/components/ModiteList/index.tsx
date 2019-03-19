@@ -22,6 +22,7 @@ import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 import ModiteListProps from '../../models/ModiteListProps';
 import ModiteProfileResp from '../../models/ModiteProfileResp';
+import profilePlaceholder from '../../assets/images/modus-neon.gif';
 
 // get locale once
 const locale: string = navigator.language;
@@ -42,7 +43,7 @@ const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style,
   const handleItemClick = async (): Promise<void> => {
     onItemClick({
       profile: {
-        image_192: "modus-neon.gif"
+        image_192: profilePlaceholder
       }
     });
     const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
