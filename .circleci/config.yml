@@ -150,3 +150,7 @@ workflows:
       - check-sizes:
           requires:
             - build-pwa
+
+      - lighthouse:
+          requires:
+            - build-pwa
