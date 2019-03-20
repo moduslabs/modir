@@ -15,10 +15,9 @@ bot.comment(
 <h3>Lighthouse report</h3>
 
 | Category        | Score           |
-| --------------- |----------------:|
-${scores}
+| --------------- |----------------:|${scores}
 
-<h4>Full Report</h4>
+<h3>Full Report</h3>
 <strong>${bot
     .artifactLink('artifacts/lighthouse.report.html', 'Lighthouse Report')
     .replace('/project/', '/repo/')}</strong>
