@@ -8,7 +8,7 @@ const scores = Object.values(report.categories).reduce(
   '',
 );
 
-bot.comment(`
+bot.comment((process.env.GH_AUTH_TOKEN, `
 <h3>Lighthouse report</h3>
 
 ${scores}
