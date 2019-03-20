@@ -6,7 +6,7 @@ const report = require('../../artifacts/lighthouse.report.json');
 const scores = Object.values(report.categories).reduce(
   (agg, category) => `
     ${agg}
-    | ${category.title} | ${category.score} |`,
+    | ${category.title} | ${~~category.score * 100} |`,
   '',
 );
 
