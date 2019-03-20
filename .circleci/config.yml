@@ -154,6 +154,7 @@ workflows:
       - lighthouse:
           requires:
             - build-pwa
-          branches:
-            ignore:
-              - master
+          filters:
+            branches:
+              ignore:
+                - master
