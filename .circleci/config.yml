@@ -1,0 +1,160 @@
+aliases:
+  - &restore-npm-cache
+    keys:
+      - v1-dependencies-{{ checksum "package-lock.json" }}
+      - v1-dependencies-master
+      - v1-dependencies-
+  - &restore-dist-cache
+    keys:
+      - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+      - v1-dist-master
+      - v1-dist-
+  - &restore-ios-cache
+    keys:
+      - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+      - v1-dist-master
+      - v1-dist-
+  - &restore-bundlesize
+    keys:
+      - v1-bundlesize-{{ .Environment.CIRCLE_SHA1 }}
+      - v1-bundlesize-master
+      - v1-bundlesize-
+  - &restore-lighthouse
+    keys:
+      - v1-lighthouse-{{ .Environment.CIRCLE_SHA1 }}
+      - v1-lighthouse-master
+      - v1-lighthouse-
+
+version: 2
+jobs:
+  install-dependencies:
+    docker:
+      - image: circleci/node:10
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache: *restore-npm-cache
+
+      - run:
+          name: Install Node modules
+          command: npm i -ci
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+
+  build-pwa:
+    docker:
+      - image: circleci/node:10
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+
+      - run:
+          name: Build Project
+          command: npm run build
+
+      - save_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - build
+
+  check-sizes:
+    docker:
+      - image: circleci/node:10
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: *restore-dist-cache
+      - restore_cache: *restore-bundlesize
+
+      - run:
+          name: Install Bundlesize
+          command: npm i bundlesize
+
+      - run:
+          name: Check Sizes
+          command: yarn bundlesize
+
+      - save_cache:
+          key: v1-bundlesize-master
+          paths:
+            - node_modules
+
+  lighthouse:
+    docker:
+      - image: circleci/node:10-browsers
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: *restore-dist-cache
+      - restore_cache: *restore-lighthouse
+
+      - run:
+          name: Setup Artifacts
+          command: mkdir ./artifacts
+
+      - run:
+          name: Install Lighthouse
+          command: npm i lighthouse serve circle-github-bot
+
+      - run:
+          name: Serve the app
+          command: yarn serve -l 3000 -s build
+          background: true
+
+      # wait for the server to start responding.
+      - run:
+          shell: /bin/sh
+          command: |
+            wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 10 http://localhost:3000
+            :
+
+      - run:
+          name: Run Lighthouse
+          command: yarn lighthouse "http://localhost:3000/?moduslabsci"  --output json --output html --output-path=./artifacts/lighthouse.json
+
+      - run:
+          name: Build Lighthouse Report
+          command: ./test/ci/lighthouse.js
+
+      - store_artifacts:
+          path: ./artifacts
+
+      - save_cache:
+          key: v1-lighthouse-master
+          paths:
+            - node_modules
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - install-dependencies
+
+      - build-pwa:
+          requires:
+            - install-dependencies
+
+      - check-sizes:
+          requires:
+            - build-pwa
+
+      - lighthouse:
+          requires:
+            - build-pwa
+          filters:
+            branches:
+              ignore:
+                - master
