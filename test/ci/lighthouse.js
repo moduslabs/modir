@@ -4,7 +4,9 @@ const bot = require('circle-github-bot').create();
 const report = require('../../artifacts/lighthouse.report.json');
 
 const scores = Object.values(report.categories).reduce(
-  (agg, category) => `${agg}<h4>${category.title}</h4><div>${category.score}</div>`,
+  (agg, category) => `
+    ${agg}
+    | ${category.title} | ${category.score} |`,
   '',
 );
 
@@ -12,7 +14,8 @@ bot.comment(
   process.env.GH_AUTH_TOKEN,
   `
 <h3>Lighthouse report</h3>
-
+| Category        | Score           |
+| --------------- |:---------------:|
 ${scores}
 
 <h4>Full Report</h4>
