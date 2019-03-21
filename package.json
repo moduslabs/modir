@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.2.4",
+    "@amcharts/amcharts4-geodata": "^4.1.4",
     "@ionic/react": "0.0.5",
     "@types/google-map-react": "^0.23.11",
     "@types/react-window": "^1.5.1",

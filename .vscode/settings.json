@@ -11,7 +11,12 @@
     "Prefetch",
     "Reston",
     "Searchbar",
+    "amcharts",
+    "doublehit",
+    "geocode",
+    "geodata",
     "keyframes",
+    "resizable",
     "serverless",
     "slackbot",
     "unmount"

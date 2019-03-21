@@ -1,3 +1,5 @@
+import profilePlaceholder from '../assets/images/modus-neon.gif';
+
 export interface ModiteProfile {
   title: string;
   last_name: string;
@@ -7,7 +9,7 @@ export interface ModiteProfile {
   image_192: string;
   image_512: string;
   fields: { [key: string]: any };
-};
+}
 
 export default interface Modite {
   real_name: string;
@@ -20,4 +22,11 @@ export default interface Modite {
   localDate: string;
   tod: string;
   profile: ModiteProfile;
-};
+}
+
+export const defaultModite: Modite = {
+  profile: {
+    image_192: profilePlaceholder,
+    fields: {}
+  }
+} as Modite;
