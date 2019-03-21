@@ -10,7 +10,7 @@ import {
   IonSkeletonText,
   IonToolbar,
 } from '@ionic/react';
-import Modite, { ModiteProfile } from '../../models/Modite';
+import Modite, { defaultModite } from '../../models/Modite';
 import ListItemProps from '../../models/ListItemProps';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
@@ -22,7 +22,6 @@ import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 import ModiteListProps from '../../models/ModiteListProps';
 import ModiteProfileResp from '../../models/ModiteProfileResp';
-import profilePlaceholder from '../../assets/images/modus-neon.gif';
 
 // get locale once
 const locale: string = navigator.language;
@@ -41,11 +40,7 @@ async function getData(filter: string, date: Date): Promise<void> {
 
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, modite, onItemClick = () => {} }) => {
   const handleItemClick = async (): Promise<void> => {
-    onItemClick({
-      profile: {
-        image_192: profilePlaceholder
-      }
-    });
+    onItemClick(defaultModite);
     const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
     if (moditeProfile.ok) modite.profile = moditeProfile.profile;
     onItemClick(modite);

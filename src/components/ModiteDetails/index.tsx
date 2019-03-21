@@ -1,14 +1,12 @@
 import React, { lazy } from 'react';
 import { IonIcon } from '@ionic/react';
-import Modite from '../../models/Modite';
+import { defaultModite } from '../../models/Modite';
 import s from './styles.module.css';
 import ModiteDetailsProps from '../../models/ModiteDetailsProps';
 
 const MapComponent = lazy(() =>
   import('../MapComponent' /* webpackChunkName: "maps", webpackPrefetch: true  */)
 );
-
-const defaultModite: Modite = ({ profile: { fields: {} }} as Modite);
 
 function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
   // closes the details panel
@@ -29,7 +27,7 @@ function ModiteDetails({ modite = defaultModite, slides }: ModiteDetailsProps) {
         <div>{modite.profile.title}</div>
       </div>
       <div className={s.detailsMapCt}>
-        <MapComponent />
+        <MapComponent modite={modite}/>
       </div>
     </>
   );
