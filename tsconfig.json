@@ -22,5 +22,7 @@
   "include": [
     "src"
   ],
-  "exclude": ["src/serviceWorkerCustom.js"]
+  "exclude": [
+    "src/serviceWorkerCustom.js"
+  ]
 }
