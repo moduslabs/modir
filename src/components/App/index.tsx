@@ -7,13 +7,13 @@ import s from './styles.module.css';
 import Modite, { defaultModite } from '../../models/Modite';
 
 const ModiteList = lazy(() =>
-  import('../ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */)
+  import('../ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
 );
 const ModiteDetails = lazy(() =>
-  import('../ModiteDetails' /* webpackChunkName: "modite-details", webpackPrefetch: true  */)
+  import('../ModiteDetails' /* webpackChunkName: "modite-details", webpackPrefetch: true  */),
 );
 const GlobeComponent = lazy(() =>
-  import('../GlobeComponent' /* webpackChunkName: "globe-component", webpackPrefetch: true  */)
+  import('../GlobeComponent' /* webpackChunkName: "globe-component", webpackPrefetch: true  */),
 );
 
 const slideStyle: { [key: string]: string } = {
@@ -23,15 +23,11 @@ const slideStyle: { [key: string]: string } = {
 
 function App() {
   const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useState(defaultModite);
+  const [globe, setGlobe]: [Boolean, React.Dispatch<any>] = useState(false);
   const slidesRef: React.MutableRefObject<null> = useRef(null);
-  const globeRef: React.MutableRefObject<null> = useRef(null);
-  let showGlobe: boolean = false;
 
   const toggleShowGlobe = () => {
-    showGlobe = !showGlobe;
-    if(globeRef.current) {
-      (globeRef.current as any).classList[showGlobe ? 'add' : 'remove'](s.showGlobe);
-    }
+    setGlobe(!globe);
   };
 
   return (
@@ -40,18 +36,21 @@ function App() {
         <IonPage>
           <IonContent>
             <IonSlides ref={slidesRef}>
-
               <IonSlide style={slideStyle}>
-                <div className={s.globeCt} ref={globeRef}>
-                  <GlobeComponent></GlobeComponent>
-                </div>
-                <ModiteList onModiteItemClick={setActiveModite} activeModite={activeModite} slides={slidesRef} toggleShowGlobe={toggleShowGlobe}/>
+                {globe ? <GlobeComponent /> : null}
+                <ModiteList
+                  onModiteItemClick={setActiveModite}
+                  activeModite={activeModite}
+                  slides={slidesRef}
+                  toggleShowGlobe={toggleShowGlobe}
+                />
               </IonSlide>
 
-              <IonSlide style={slideStyle} class={s.detailPage}>
-                <ModiteDetails modite={activeModite} slides={slidesRef}/>
-              </IonSlide>
-
+              {activeModite ? (
+                <IonSlide style={slideStyle} class={s.detailPage}>
+                  <ModiteDetails modite={activeModite} slides={slidesRef} />
+                </IonSlide>
+              ) : null}
             </IonSlides>
           </IonContent>
         </IonPage>
