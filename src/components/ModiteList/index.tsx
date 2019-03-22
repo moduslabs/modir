@@ -9,18 +9,19 @@ import {
   IonSkeletonText,
   IonToolbar,
 } from '@ionic/react';
-import Modite from '../../models/Modite';
+import Modite, { defaultModite } from '../../models/Modite';
 import ListItemProps from '../../models/ListItemProps';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer';
-
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 import ModiteImage from '../ModiteImage';
+import ModiteListProps from '../../models/ModiteListProps';
+import ModiteProfileResp from '../../models/ModiteProfileResp';
 
 // get locale once
 const locale: string = navigator.language;
@@ -33,16 +34,21 @@ let rawModites: Modite[];
 
 // get data from server
 async function getData(filter: string, date: Date): Promise<void> {
-  rawModites = await fetch('https://mosquito-slack-bot.herokuapp.com/modites').then(res => res.json());
+  rawModites = await fetch('https://modus.app/modites/all').then(res => res.json());
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
-const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, index = 0 }) => {
-  const modite = list[index];
+const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, modite, onItemClick = () => {} }) => {
+  const handleItemClick = async (): Promise<void> => {
+    onItemClick(defaultModite);
+    const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
+    if (moditeProfile.ok) modite.profile = moditeProfile.profile;
+    onItemClick(modite);
+  };
 
   return (
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
-      <IonItem button class={s.appear} onClick={() => alert(modite.real_name)}>
+      <IonItem button class={s.appear} onClick={handleItemClick}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
           <ModiteImage modite={modite}/>
         </IonThumbnail>
@@ -77,13 +83,13 @@ const SkeletonList: FunctionComponent<{}> = () => (
   </>
 );
 
-function ModiteList() {
+function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
   const [modites, setModites] = useState();
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
 
   // get fresh time
-  const tick = (): void => setDate(new Date());
+  const tick: Function = (): void => setDate(new Date());
 
   const onFilter = (event: FilterEvent): void => {
     const query: string = event.detail.value || '';
@@ -100,8 +106,13 @@ function ModiteList() {
     });
   };
 
+  // handles clicks on the list of Modites and shows the details view for the clicked Modite
+  const handleListClick = (e: any): void => {
+    slides.current.slidePrev();
+  };
+
   const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <ListItem list={modites} filter={filter} date={date} style={style} index={index} />
+    <ListItem list={modites} filter={filter} date={date} style={style} modite={modites[index]} onItemClick={onModiteItemClick} />
   );
 
   const Skeleton: FunctionComponent<ListChildComponentProps> = () => <SkeletonList />;
@@ -127,11 +138,10 @@ function ModiteList() {
       <IonToolbar>
         <IonSearchbar debounce={200} value={filter} placeholder="Filter Modites" onIonChange={onFilter} class={s.slideInDown} />
       </IonToolbar>
-
-      <IonContent>
+      <IonContent onClick={handleListClick}>
         <AutoSizer>
           {({ height, width }: { height: number; width: number }) => (
-            <List className="List" height={height} itemCount={(modites && modites.length) || 10} itemSize={72} width={width}>
+            <List height={height} itemCount={(modites && modites.length) || 10} itemSize={72} width={width}>
               {modites && modites.length ? ModiteListItem : Skeleton}
             </List>
           )}

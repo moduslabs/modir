@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.2.4",
+    "@amcharts/amcharts4-geodata": "^4.1.4",
     "@ionic/react": "0.0.5",
+    "@types/google-map-react": "^0.23.11",
     "@types/react-window": "^1.5.1",
     "classnames": "^2.2.6",
+    "google-map-react": "^1.1.2",
     "lazysizes": "4.1.7",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
@@ -40,5 +44,27 @@
     "react-app-rewired": "^2.1.0",
     "typescript": "^3.3.3333",
     "worker-loader": "^2.0.0"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./build/precache-*.js",
+      "maxSize": "50 kB"
+    },
+    {
+      "path": "./build/*.worker.js",
+      "maxSize": "10 kB"
+    },
+    {
+      "path": "./build/static/js/*.chunk.js",
+      "maxSize": "300 kB"
+    },
+    {
+      "path": "./build/static/js/*.chunk.js",
+      "maxSize": "250 kB"
+    },
+    {
+      "path": "./build/static/js/runtime*.js",
+      "maxSize": "30 kB"
+    }
+  ]
 }

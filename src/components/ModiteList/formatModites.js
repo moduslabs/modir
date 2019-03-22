@@ -31,6 +31,12 @@ onmessage = function(event) {
         hour: 'numeric',
         minute: 'numeric',
       }),
+      localDate: date.toLocaleString(locale, {
+        timeZone: modite.tz,
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      }),
       tod: getTimeOfDay(date, modite.tz, locale),
     }));
 
