@@ -5,7 +5,6 @@ import {
   IonItem,
   IonLabel,
   IonThumbnail,
-  IonImg,
   IonSearchbar,
   IonSkeletonText,
   IonToolbar,
@@ -23,6 +22,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
+import ModiteImage from '../ModiteImage';
 import ModiteListProps from '../../models/ModiteListProps';
 import ModiteProfileResp from '../../models/ModiteProfileResp';
 
@@ -55,7 +55,7 @@ const ListItem: FunctionComponent<ListItemProps> = ({ style, modite, activeModit
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
       <IonItem button class={s.appear} onClick={handleItemClick}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <IonImg src={modite.profile.image_72} class={s.thumbnail} alt={modite.real_name} />
+          <ModiteImage modite={modite}/>
         </IonThumbnail>
 
         <IonLabel>{modite.real_name}</IonLabel>
