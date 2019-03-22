@@ -6,6 +6,7 @@
   flex-direction: column;
   color: #1b1b1b;
   line-height: 1.5rem;
+  text-align: center;
 }
 
 .closeIcon {

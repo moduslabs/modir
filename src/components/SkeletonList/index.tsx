@@ -1,0 +1,27 @@
+import React, { FunctionComponent } from "react";
+import { IonItem, IonThumbnail, IonSkeletonText, IonLabel } from "@ionic/react";
+import s from './styles.module.css';
+
+const SkeletonList: FunctionComponent<{}> = () => (
+  <>
+    {Array.from(new Array(10)).map((_, index) => (
+      <IonItem key={index}>
+        <IonThumbnail slot="start" class={s.thumbnailContainer}>
+          <IonSkeletonText />
+        </IonThumbnail>
+
+        <IonLabel>
+          <IonSkeletonText style={{ width: `${Math.random() * 30 + 50}%` }} />
+        </IonLabel>
+        <IonLabel class={s.tod}>
+          <IonSkeletonText style={{ width: '60%' }} />
+        </IonLabel>
+        <IonLabel class={s.time}>
+          <IonSkeletonText style={{ width: '80%' }} />
+        </IonLabel>
+      </IonItem>
+    ))}
+  </>
+);
+
+export default SkeletonList;

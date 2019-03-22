@@ -8,7 +8,6 @@ const ModiteDetails = lazy(() =>
 );
 
 function Details() {
-  // @ts-ignore
   const [activeModite]: [Modite] = useContext(ModiteContext);
 
   return (

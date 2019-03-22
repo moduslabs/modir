@@ -6,7 +6,7 @@ import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import './theme.css';
 
-import ModiteContext from '../../state/modite';
+import { ModiteContextProvider } from '../../state/modite';
 
 const Modites = lazy(() =>
   import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
@@ -26,14 +26,14 @@ function App() {
   return (
     <IonApp>
       <Suspense fallback={<IonContent>Loading...</IonContent>}>
-        <ModiteContext.Provider value={[activeModite, setActiveModite]}>
+        <ModiteContextProvider value={[activeModite, setActiveModite]}>
           <Router>
             <Route path="/" exact component={Modites} />
             <Route path="/details" exact component={Details} />
             <Route path="/details/:id" component={Details} />
             <Route path="/globe" exact component={Globe} />
           </Router>
-        </ModiteContext.Provider>
+        </ModiteContextProvider>
       </Suspense>
     </IonApp>
   );
