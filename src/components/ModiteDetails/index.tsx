@@ -1,8 +1,8 @@
 import React, { lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { IonIcon, IonBadge } from '@ionic/react';
-import { defaultModite } from '@/models/Modite';
-import ModiteDetailsProps from '@/models/ModiteDetailsProps';
+import { defaultModite } from '../../models/Modite';
+import ModiteDetailsProps from '../../models/ModiteDetailsProps';
 import s from './styles.module.css';
 
 const MapComponent = lazy(() =>

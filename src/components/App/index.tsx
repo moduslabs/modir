@@ -1,23 +1,23 @@
 import React, { Suspense, useState, lazy } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { IonApp, IonContent } from '@ionic/react';
-import Modite, { defaultModite } from '@/models/Modite';
+import Modite, { defaultModite } from '../../models/Modite';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import './theme.css';
 
-import ModiteContext from '@/state/modite';
+import ModiteContext from '../../state/modite';
 
 const Modites = lazy(() =>
-  import('@/pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
+  import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
 );
 
 const Details = lazy(() =>
-  import('@/pages/Details' /* webpackChunkName: "page-details", webpackPrefetch: true  */),
+  import('../../pages/Details' /* webpackChunkName: "page-details", webpackPrefetch: true  */),
 );
 
 const Globe = lazy(() =>
-  import('@/pages/Globe' /* webpackChunkName: "page-globe", webpackPrefetch: true  */),
+  import('../../pages/Globe' /* webpackChunkName: "page-globe", webpackPrefetch: true  */),
 );
 
 function App() {

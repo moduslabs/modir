@@ -1,10 +1,10 @@
 import React, { lazy, useState, useRef, useContext } from 'react';
 import { IonPage } from '@ionic/react';
-import Modite from '@/models/Modite';
-import ModiteContext from '@/state/modite';
+import Modite from '../../models/Modite';
+import ModiteContext from '../../state/modite';
 
 const ModiteList = lazy(() =>
-  import('@/components/ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
+  import('../../components/ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
 );
 
 function App() {

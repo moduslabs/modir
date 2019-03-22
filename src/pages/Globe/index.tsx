@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Circle, color, create } from '@amcharts/amcharts4/core';
 import { MapChart, projections, MapPolygonSeries, MapImageSeries } from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
-import { defaultModite } from '@/models/Modite';
 import s from './styles.module.css';
 
 // TODO: type the props correctly

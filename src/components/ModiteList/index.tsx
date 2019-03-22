@@ -24,9 +24,9 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 import ModiteImage from '../ModiteImage';
-import ModiteListProps from '@/models/ModiteListProps';
-import ModiteProfileResp from '@/models/ModiteProfileResp';
-import ModiteContext from '@/state/modite';
+import ModiteListProps from '../../models/ModiteListProps';
+import ModiteProfileResp from '../../models/ModiteProfileResp';
+import ModiteContext from '../../state/modite';
 
 // get locale once
 const locale: string = navigator.language;
