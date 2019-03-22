@@ -7,4 +7,5 @@ export default interface ListItemProps {
   style: { [key: string]: any };
   modite: Modite;
   onItemClick?: Function;
+  activeModite: Modite;
 }

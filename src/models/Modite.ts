@@ -22,6 +22,7 @@ export default interface Modite {
   localDate: string;
   tod: string;
   profile: ModiteProfile;
+  tacos: number;
 }
 
 export const defaultModite: Modite = {

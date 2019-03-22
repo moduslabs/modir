@@ -2,25 +2,23 @@ import React, { useEffect, useRef } from 'react';
 import { Circle, color, create } from '@amcharts/amcharts4/core';
 import { MapChart, projections, MapPolygonSeries, MapImageSeries } from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
-import MapComponentProps from './MapComponentProps';
 import { defaultModite } from '../../models/Modite';
 import s from './styles.module.css';
 
-function MapComponent({ modite = defaultModite }: MapComponentProps) {
+// TODO: type the props correctly
+function GlobeComponent() {
   const mapRef: React.MutableRefObject<null> = useRef(null);
   let map: MapChart;
 
   useEffect(() => {
-    const { locationData = {} } = modite.profile.fields;
-
     if (!map && mapRef.current) {
       const el: any = mapRef.current;
       map = create(el, MapChart);
       map.geodata = am4geodata_worldLow;
-      map.projection = new projections.Miller();
+      map.projection = new projections.Orthographic();
       const polygonSeries = map.series.push(new MapPolygonSeries());
       polygonSeries.useGeodata = true;
-      polygonSeries.exclude = ["AQ"];
+      // polygonSeries.exclude = ["AQ"];
 
       map.seriesContainer.draggable = false;
       map.seriesContainer.resizable = false;
@@ -59,21 +57,28 @@ function MapComponent({ modite = defaultModite }: MapComponentProps) {
       imageSeriesTemplate.propertyFields.latitude = "latitude";
       imageSeriesTemplate.propertyFields.longitude = "longitude";
 
-      if (locationData && locationData.geocode) {
-        // Add user location by lat / lon
-        const { location: title } = locationData;
-        let { lat: latitude, lon: longitude } = locationData.geocode;
+      setInterval(() => {
+        const latitude = 43.5858014;
+        const longitude = -116.1219831;
+        const title = 'Boise, ID';
         imageSeries.data = [{ latitude, longitude, title }];
-        map.homeZoomLevel = 5;
-        map.homeGeoPoint = { latitude, longitude };
-      }
+        map.deltaLongitude = -longitude;
+      }, 5000);
+
+      setInterval(() => {
+        const latitude = 40.6974034;
+        const longitude = -74.1197614;
+        const title = 'New York City, NY';
+        imageSeries.data = [{ latitude, longitude, title }];
+        map.deltaLongitude = -longitude;
+      }, 10000);
 
     }
   });
 
   return (
-    <div className={s.mapCt} ref={mapRef}></div>
+    <div className={s.globeInnerCt} ref={mapRef}></div>
   );
 }
 
-export default MapComponent;
+export default GlobeComponent;
