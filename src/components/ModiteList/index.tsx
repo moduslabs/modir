@@ -1,11 +1,10 @@
-import React, { useState, useEffect, FunctionComponent, Component } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import {
   IonContent,
   IonMenuToggle,
   IonItem,
   IonLabel,
   IonThumbnail,
-  IonImg,
   IonSearchbar,
   IonSkeletonText,
   IonToolbar,
@@ -21,6 +20,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
+import ModiteImage from '../ModiteImage';
 
 // get locale once
 const locale: string = navigator.language;
@@ -35,33 +35,6 @@ let rawModites: Modite[];
 async function getData(filter: string, date: Date): Promise<void> {
   rawModites = await fetch('https://mosquito-slack-bot.herokuapp.com/modites').then(res => res.json());
   worker.postMessage({ modites: rawModites, filter, date, locale });
-}
-
-export class ModiteImage extends Component<any, any> {
-  constructor(props: any) {
-    super(props)
-    this.state = { loaded: false };
-    this.onLoad = this.onLoad.bind(this)
-  }
-
-  onLoad() {
-    this.setState({ loaded: true })
-  }
-
-  render() {
-    if(this.state.loaded) {
-      return (
-        <IonImg class={s.thumbnail} src={this.props.modite.profile.image_72} alt={this.props.modite.real_name} />
-      )
-    } else {
-      return (
-        <div>
-          <IonImg class={s.thumbnail} src={process.env.PUBLIC_URL + './user-icon-placeholder.png'} />
-          <img className={s.hidden} src={this.props.modite.profile.image_72} onLoad={this.onLoad} />
-        </div>
-      )
-    }
-  }
 }
 
 const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, index = 0 }) => {
