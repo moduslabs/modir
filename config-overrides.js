@@ -1,3 +1,4 @@
+const path = require('path');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 module.exports = function override(config, env) {
@@ -10,12 +11,14 @@ module.exports = function override(config, env) {
     if (plugin.constructor.name === 'GenerateSW') {
       return new WorkboxWebpackPlugin.InjectManifest({
         swSrc: './src/serviceWorkerCustom.js',
-        swDest: 'service-worker.js'
-      })
+        swDest: 'service-worker.js',
+      });
     }
 
     return plugin;
   });
+
+  config.resolve.alias['@'] = path.resolve(__dirname, 'src');
 
   return config;
 };

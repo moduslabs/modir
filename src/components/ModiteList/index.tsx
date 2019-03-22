@@ -1,4 +1,6 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect, FunctionComponent, useContext } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 import {
   IonContent,
   IonMenuToggle,
@@ -10,7 +12,6 @@ import {
   IonToolbar,
   IonIcon,
   IonButtons,
-  IonButton,
 } from '@ionic/react';
 import Modite, { defaultModite } from '../../models/Modite';
 import ListItemProps from '../../models/ListItemProps';
@@ -23,8 +24,9 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
 import ModiteImage from '../ModiteImage';
-import ModiteListProps from '../../models/ModiteListProps';
-import ModiteProfileResp from '../../models/ModiteProfileResp';
+import ModiteListProps from '@/models/ModiteListProps';
+import ModiteProfileResp from '@/models/ModiteProfileResp';
+import ModiteContext from '@/state/modite';
 
 // get locale once
 const locale: string = navigator.language;
@@ -41,13 +43,20 @@ async function getData(filter: string, date: Date): Promise<void> {
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
-const ListItem: FunctionComponent<ListItemProps> = ({ style, modite, activeModite, onItemClick = () => {} }) => {
+// todo: fix type
+
+const ListItem: FunctionComponent<ListItemProps> = ({ style, modite, history }) => {
+  // @ts-ignore
+  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
   const handleItemClick = async (): Promise<void> => {
     if (modite.id !== activeModite.id) {
-      onItemClick(defaultModite);
-      const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
+      setActiveModite(defaultModite);
+      const moditeProfile: ModiteProfileResp = await fetch(
+        `https://modus.app/modite/${modite.id}`,
+      ).then(res => res.json());
       if (moditeProfile.ok) modite.profile = moditeProfile.profile;
-      onItemClick(modite);
+      setActiveModite(modite);
+      history.push(`/details/${modite.id}`);
     }
   };
 
@@ -55,7 +64,7 @@ const ListItem: FunctionComponent<ListItemProps> = ({ style, modite, activeModit
     <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
       <IonItem button class={s.appear} onClick={handleItemClick}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <ModiteImage modite={modite}/>
+          <ModiteImage modite={modite} />
         </IonThumbnail>
 
         <IonLabel>{modite.real_name}</IonLabel>
@@ -88,7 +97,9 @@ const SkeletonList: FunctionComponent<{}> = () => (
   </>
 );
 
-function ModiteList({ onModiteItemClick, slides, activeModite, toggleShowGlobe }: ModiteListProps) {
+// todo: extend type history
+// @ts-ignore
+function ModiteList({ slides, activeModite, toggleShowGlobe, history }: ModiteListProps) {
   const [modites, setModites] = useState();
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
@@ -111,14 +122,19 @@ function ModiteList({ onModiteItemClick, slides, activeModite, toggleShowGlobe }
     });
   };
 
-  // handles clicks on the list of Modites and shows the details view for the clicked Modite
-  const handleListClick = (e: any): void => {
-    slides.current.slideNext();
-  };
+  type ModiteListItemWithoutRouterProps =
+    | FunctionComponent<ListChildComponentProps>
+    | RouteComponentProps;
+  const ModiteListItemWithoutRouter: ModiteListItemWithoutRouterProps = ({
+    index,
+    style,
+    // @ts-ignore
+    history,
+    // @ts-ignore
+  }) => <ListItem list={modites} modite={modites[index]} {...{ history, filter, date, style }} />;
 
-  const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <ListItem list={modites} filter={filter} date={date} style={style} modite={modites[index]} onItemClick={onModiteItemClick} activeModite={activeModite} />
-  );
+  // @ts-ignore
+  const ModiteListItem = withRouter(ModiteListItemWithoutRouter);
 
   const Skeleton: FunctionComponent<ListChildComponentProps> = () => <SkeletonList />;
 
@@ -141,17 +157,33 @@ function ModiteList({ onModiteItemClick, slides, activeModite, toggleShowGlobe }
   return (
     <>
       <IonToolbar>
-        <IonSearchbar debounce={200} value={filter} placeholder="Filter Modites" onIonChange={onFilter} class={s.slideInDown} />
+        <IonSearchbar
+          debounce={200}
+          value={filter}
+          placeholder="Filter Modites"
+          onIonChange={onFilter}
+          class={s.slideInDown}
+        />
         <IonButtons slot="end">
-          <IonButton onClick={() => toggleShowGlobe()}>
-            <IonIcon class={`${s.worldMapButton} ${s.slideInDown}`} slot="icon-only" ios="md-globe" md="md-globe" />
-          </IonButton>
+          <Link to="/globe">
+            <IonIcon
+              class={`${s.worldMapButton} ${s.slideInDown}`}
+              slot="icon-only"
+              ios="md-globe"
+              md="md-globe"
+            />
+          </Link>
         </IonButtons>
       </IonToolbar>
-      <IonContent onClick={handleListClick}>
+      <IonContent>
         <AutoSizer>
           {({ height, width }: { height: number; width: number }) => (
-            <List height={height} itemCount={(modites && modites.length) || 10} itemSize={72} width={width}>
+            <List
+              height={height}
+              itemCount={(modites && modites.length) || 10}
+              itemSize={72}
+              width={width}
+            >
               {modites && modites.length ? ModiteListItem : Skeleton}
             </List>
           )}
@@ -161,4 +193,8 @@ function ModiteList({ onModiteItemClick, slides, activeModite, toggleShowGlobe }
   );
 }
 
-export default ModiteList;
+export { ModiteList };
+
+// todo: fix
+// @ts-ignore
+export default withRouter(ModiteList);

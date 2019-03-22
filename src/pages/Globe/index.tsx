@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Circle, color, create } from '@amcharts/amcharts4/core';
 import { MapChart, projections, MapPolygonSeries, MapImageSeries } from '@amcharts/amcharts4/maps';
-import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
-import { defaultModite } from '../../models/Modite';
+import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
+import { defaultModite } from '@/models/Modite';
 import s from './styles.module.css';
 
 // TODO: type the props correctly
@@ -23,19 +23,19 @@ function GlobeComponent() {
       map.seriesContainer.draggable = false;
       map.seriesContainer.resizable = false;
       // map.maxZoomLevel = 1;
-      map.seriesContainer.events.disableType("doublehit");
-      map.chartContainer.background.events.disableType("doublehit");
+      map.seriesContainer.events.disableType('doublehit');
+      map.chartContainer.background.events.disableType('doublehit');
 
       // Configure series
       const polygonTemplate = polygonSeries.mapPolygons.template;
-      polygonTemplate.tooltipText = "{name}";
-      polygonTemplate.fill = color("#d6d6d6");
+      polygonTemplate.tooltipText = '{name}';
+      polygonTemplate.fill = color('#d6d6d6');
 
       // Create hover state and set alternative fill color
-      const hs = polygonTemplate.states.create("hover");
-      hs.properties.fill = color("#d6d6d6");
+      const hs = polygonTemplate.states.create('hover');
+      hs.properties.fill = color('#d6d6d6');
 
-      polygonTemplate.events.on("hit", function (event: any) {
+      polygonTemplate.events.on('hit', function(event: any) {
         map.maxZoomLevel = 1;
         event.target.isActive = false;
       });
@@ -47,15 +47,15 @@ function GlobeComponent() {
       var imageSeriesTemplate = imageSeries.mapImages.template;
       var circle = imageSeriesTemplate.createChild(Circle);
       circle.radius = 10;
-      circle.fill = color("#ff5c5d");
-      circle.stroke = color("#FFFFFF");
+      circle.fill = color('#ff5c5d');
+      circle.stroke = color('#FFFFFF');
       circle.strokeWidth = 4;
       circle.nonScaling = true;
-      circle.tooltipText = "{title}";
+      circle.tooltipText = '{title}';
 
       // Set property fields
-      imageSeriesTemplate.propertyFields.latitude = "latitude";
-      imageSeriesTemplate.propertyFields.longitude = "longitude";
+      imageSeriesTemplate.propertyFields.latitude = 'latitude';
+      imageSeriesTemplate.propertyFields.longitude = 'longitude';
 
       setInterval(() => {
         const latitude = 43.5858014;
@@ -72,13 +72,10 @@ function GlobeComponent() {
         imageSeries.data = [{ latitude, longitude, title }];
         map.deltaLongitude = -longitude;
       }, 10000);
-
     }
   });
 
-  return (
-    <div className={s.globeInnerCt} ref={mapRef}></div>
-  );
+  return <div className={s.globeInnerCt} ref={mapRef} />;
 }
 
 export default GlobeComponent;
