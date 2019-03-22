@@ -13,14 +13,12 @@
     "noEmit": true,
     "jsx": "preserve",
     "isolatedModules": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ]
+    "baseUrl": "./src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": ["src/serviceWorkerCustom.js"]
 }

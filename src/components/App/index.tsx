@@ -4,7 +4,7 @@ import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import './theme.css';
 import s from './styles.module.css';
-import Modite, { defaultModite } from '../../models/Modite';
+import Modite, { defaultModite } from '@/models/Modite';
 
 const ModiteList = lazy(() =>
   import('../ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
