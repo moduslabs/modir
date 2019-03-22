@@ -82,3 +82,7 @@
 .tod {
   flex: 0 1 1.8rem;
 }
+
+.worldMapButton {
+  color: var(--ion-color-modus-charcoal);
+}

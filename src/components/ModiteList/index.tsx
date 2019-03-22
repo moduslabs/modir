@@ -9,6 +9,9 @@ import {
   IonSearchbar,
   IonSkeletonText,
   IonToolbar,
+  IonIcon,
+  IonButtons,
+  IonButton,
 } from '@ionic/react';
 import Modite, { defaultModite } from '../../models/Modite';
 import ListItemProps from '../../models/ListItemProps';
@@ -38,12 +41,14 @@ async function getData(filter: string, date: Date): Promise<void> {
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
-const ListItem: FunctionComponent<ListItemProps> = ({ list, filter, date, style, modite, onItemClick = () => {} }) => {
+const ListItem: FunctionComponent<ListItemProps> = ({ style, modite, activeModite, onItemClick = () => {} }) => {
   const handleItemClick = async (): Promise<void> => {
-    onItemClick(defaultModite);
-    const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
-    if (moditeProfile.ok) modite.profile = moditeProfile.profile;
-    onItemClick(modite);
+    if (modite.id !== activeModite.id) {
+      onItemClick(defaultModite);
+      const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${modite.id}`).then(res => res.json());
+      if (moditeProfile.ok) modite.profile = moditeProfile.profile;
+      onItemClick(modite);
+    }
   };
 
   return (
@@ -83,7 +88,7 @@ const SkeletonList: FunctionComponent<{}> = () => (
   </>
 );
 
-function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
+function ModiteList({ onModiteItemClick, slides, activeModite, toggleShowGlobe }: ModiteListProps) {
   const [modites, setModites] = useState();
   const [filter, setFilter] = useState('');
   const [date, setDate] = useState(new Date());
@@ -108,11 +113,11 @@ function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
 
   // handles clicks on the list of Modites and shows the details view for the clicked Modite
   const handleListClick = (e: any): void => {
-    slides.current.slidePrev();
+    slides.current.slideNext();
   };
 
   const ModiteListItem: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <ListItem list={modites} filter={filter} date={date} style={style} modite={modites[index]} onItemClick={onModiteItemClick} />
+    <ListItem list={modites} filter={filter} date={date} style={style} modite={modites[index]} onItemClick={onModiteItemClick} activeModite={activeModite} />
   );
 
   const Skeleton: FunctionComponent<ListChildComponentProps> = () => <SkeletonList />;
@@ -137,6 +142,11 @@ function ModiteList({ onModiteItemClick, slides }: ModiteListProps) {
     <>
       <IonToolbar>
         <IonSearchbar debounce={200} value={filter} placeholder="Filter Modites" onIonChange={onFilter} class={s.slideInDown} />
+        <IonButtons slot="end">
+          <IonButton onClick={() => toggleShowGlobe()}>
+            <IonIcon class={`${s.worldMapButton} ${s.slideInDown}`} slot="icon-only" ios="md-globe" md="md-globe" />
+          </IonButton>
+        </IonButtons>
       </IonToolbar>
       <IonContent onClick={handleListClick}>
         <AutoSizer>

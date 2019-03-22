@@ -147,10 +147,16 @@
   --ion-color-food: #3bc7c4;
   --ion-color-documentation: #b16be3;
   --ion-color-navigation: #6600cc;
+
+  --ion-color-modus-silver: #f7f7f7;
+  --ion-color-modus-ash: #c1c1c1;
+  --ion-color-modus-nickel: #5c5c5c;
+  --ion-color-modus-charcoal: #1b1b1b;
+  --ion-color-modus-salmon: #ff5c5d;
 }
 
 .md {
-  --ion-toolbar-background: var(--ion-color-primary);
+  --ion-toolbar-background: var(--ion-color-modus-silver);
   --ion-toolbar-color: #fff;
   --ion-toolbar-color-activated: #fff;
 }
