@@ -1,11 +1,5 @@
-import { RouteComponentProps } from 'react-router';
 import Modite from './Modite';
 
-export default interface ListItemProps extends RouteComponentProps {
-  list: Modite[];
-  filter: string;
-  date: Date;
-  style: { [key: string]: any };
+export default interface ListItemProps {
   modite: Modite;
-  onItemClick?: Function;
 }

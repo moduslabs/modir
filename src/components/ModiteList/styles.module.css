@@ -17,26 +17,6 @@
   }
 }
 
-@keyframes appear {
-  from {
-    opacity: 0.2;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes clearAppear {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 .slideInDown {
   transform: translate3d(0, -100%, 0);
   animation-name: slideInDown;
@@ -44,22 +24,6 @@
   animation-duration: 300ms;
   animation-timing-function: ease-in;
   animation-delay: 500ms;
-}
-
-.appear {
-  animation-name: appear;
-  animation-fill-mode: forwards;
-  animation-duration: 500ms;
-  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
-}
-
-.clearAppear {
-  opacity: 0;
-  animation-name: clearAppear;
-  animation-fill-mode: forwards;
-  animation-duration: 300ms;
-  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
-  animation-delay: 150ms;
 }
 
 .thumbnailContainer {
@@ -71,15 +35,6 @@
 .thumbnail {
   width: 3rem;
   height: 3rem;
-}
-
-.time {
-  flex: 0 1 4.5rem;
-  opacity: 0.5;
-}
-
-.tod {
-  flex: 0 1 1.8rem;
 }
 
 .worldMapButton {

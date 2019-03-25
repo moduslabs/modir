@@ -1,0 +1,31 @@
+.thumbnailContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.time {
+  flex: 0 1 4.5rem;
+  opacity: 0.5;
+}
+
+.tod {
+  flex: 0 1 1.8rem;
+}
+
+.appear {
+  animation-name: appear;
+  animation-fill-mode: forwards;
+  animation-duration: 500ms;
+  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

@@ -1,32 +1,22 @@
-import React, { useState, useEffect, FunctionComponent, useContext } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import {
   IonContent,
-  IonMenuToggle,
-  IonItem,
-  IonLabel,
-  IonThumbnail,
   IonSearchbar,
-  IonSkeletonText,
   IonToolbar,
   IonIcon,
   IonButtons,
 } from '@ionic/react';
-import Modite, { defaultModite } from '../../models/Modite';
-import ListItemProps from '../../models/ListItemProps';
+import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
-import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
-// @ts-ignore
-import AutoSizer from 'react-virtualized-auto-sizer';
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js';
 import s from './styles.module.css';
-import ModiteImage from '../ModiteImage';
 import ModiteListProps from '../../models/ModiteListProps';
-import ModiteProfileResp from '../../models/ModiteProfileResp';
-import ModiteContext from '../../state/modite';
+import SkeletonList from '../SkeletonList';
+import ModiteListItem from '../ModiteListItem';
 
 // get locale once
 const locale: string = navigator.language;
@@ -43,72 +33,29 @@ async function getData(filter: string, date: Date): Promise<void> {
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
-// todo: fix type
+let minutes: number; // used by tick
+let lastFilter: string = ''; // used by onFilter
 
-const ListItem: FunctionComponent<ListItemProps> = ({ style, modite, history }) => {
-  // @ts-ignore
-  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
-  const handleItemClick = async (): Promise<void> => {
-    if (modite.id !== activeModite.id) {
-      setActiveModite(defaultModite);
-      const moditeProfile: ModiteProfileResp = await fetch(
-        `https://modus.app/modite/${modite.id}`,
-      ).then(res => res.json());
-      if (moditeProfile.ok) modite.profile = moditeProfile.profile;
-      setActiveModite(modite);
-      history.push(`/details/${modite.id}`);
-    }
-  };
-
-  return (
-    <IonMenuToggle key={modite.id} auto-hide="false" style={style}>
-      <IonItem button class={s.appear} onClick={handleItemClick}>
-        <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <ModiteImage modite={modite} />
-        </IonThumbnail>
-
-        <IonLabel>{modite.real_name}</IonLabel>
-        <IonLabel class={s.tod}>{modite.tod}</IonLabel>
-        <IonLabel class={s.time}>{modite.localTime}</IonLabel>
-      </IonItem>
-    </IonMenuToggle>
-  );
-};
-
-const SkeletonList: FunctionComponent<{}> = () => (
-  <>
-    {Array.from(new Array(10)).map((_, index) => (
-      <IonItem key={index}>
-        <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <IonSkeletonText />
-        </IonThumbnail>
-
-        <IonLabel>
-          <IonSkeletonText style={{ width: `${Math.random() * 30 + 50}%` }} />
-        </IonLabel>
-        <IonLabel class={s.tod}>
-          <IonSkeletonText style={{ width: '60%' }} />
-        </IonLabel>
-        <IonLabel class={s.time}>
-          <IonSkeletonText style={{ width: '80%' }} />
-        </IonLabel>
-      </IonItem>
-    ))}
-  </>
-);
-
-// todo: extend type history
-// @ts-ignore
-function ModiteList({ slides, activeModite, toggleShowGlobe, history }: ModiteListProps) {
-  const [modites, setModites] = useState();
-  const [filter, setFilter] = useState('');
-  const [date, setDate] = useState(new Date());
+const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ slides, activeModite, toggleShowGlobe, history }) => {
+  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
+  const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
 
   // get fresh time
-  const tick: Function = (): void => setDate(new Date());
+  const tick: Function = (): void => {
+    const date: Date = new Date();
+    const currentMinutes: number = date.getMinutes();
+    if (minutes && currentMinutes !== minutes) {
+      worker.postMessage({ modites: rawModites, filter: lastFilter, date, locale })
+    };
+    minutes = currentMinutes;
+  };
 
   const onFilter = (event: FilterEvent): void => {
+
     const query: string = event.detail.value || '';
+
+    if (query === lastFilter) return;
+    lastFilter = query;
 
     // save filter
     setFilter(query);
@@ -117,30 +64,14 @@ function ModiteList({ slides, activeModite, toggleShowGlobe, history }: ModiteLi
     worker.postMessage({
       modites: rawModites,
       filter: query,
-      date,
+      date: new Date(),
       locale,
     });
   };
 
-  type ModiteListItemWithoutRouterProps =
-    | FunctionComponent<ListChildComponentProps>
-    | RouteComponentProps;
-  const ModiteListItemWithoutRouter: ModiteListItemWithoutRouterProps = ({
-    index,
-    style,
-    // @ts-ignore
-    history,
-    // @ts-ignore
-  }) => <ListItem list={modites} modite={modites[index]} {...{ history, filter, date, style }} />;
-
-  // @ts-ignore
-  const ModiteListItem = withRouter(ModiteListItemWithoutRouter);
-
-  const Skeleton: FunctionComponent<ListChildComponentProps> = () => <SkeletonList />;
-
   useEffect(() => {
     // start the clock
-    const intervalID: number = window.setInterval(tick, 1000 * 60);
+    const intervalID: number = window.setInterval(tick, 1000);
     const clearTimeInterval = (): void => clearInterval(intervalID);
 
     // if we already have something, we can safely abandon fetching
@@ -148,9 +79,11 @@ function ModiteList({ slides, activeModite, toggleShowGlobe, history }: ModiteLi
       if (modites.length) return clearTimeInterval;
     } else {
       // initial data parsing
-      worker.onmessage = (event: WorkerEvent) => setModites(event.data);
+      worker.onmessage = (event: WorkerEvent) => {
+        requestAnimationFrame(() => setModites(event.data));
+      };
       // get data from the api
-      getData(filter, date);
+      getData(filter, new Date());
     }
   });
 
@@ -176,25 +109,12 @@ function ModiteList({ slides, activeModite, toggleShowGlobe, history }: ModiteLi
         </IonButtons>
       </IonToolbar>
       <IonContent>
-        <AutoSizer>
-          {({ height, width }: { height: number; width: number }) => (
-            <List
-              height={height}
-              itemCount={(modites && modites.length) || 10}
-              itemSize={72}
-              width={width}
-            >
-              {modites && modites.length ? ModiteListItem : Skeleton}
-            </List>
-          )}
-        </AutoSizer>
+        {(!modites || !modites.length) ? <SkeletonList></SkeletonList> : modites.map((modite: Modite, i: number) => {
+          return <ModiteListItem modite={modite} key={modite.id}></ModiteListItem>
+        })}
       </IonContent>
     </>
   );
 }
 
-export { ModiteList };
-
-// todo: fix
-// @ts-ignore
 export default withRouter(ModiteList);

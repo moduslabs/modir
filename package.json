@@ -21,9 +21,7 @@
     "react-dom": "^16.8.4",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
-    "react-virtualized-auto-sizer": "^1.0.2",
-    "react-window": "^1.7.1"
+    "react-scripts": "2.1.8"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",
