@@ -45,7 +45,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     const date: Date = new Date();
     const currentMinutes: number = date.getMinutes();
     if (minutes && currentMinutes !== minutes) {
-      worker.postMessage({ modites: rawModites, filter: lastFilter, date: new Date(), locale })
+      worker.postMessage({ modites: rawModites, filter: lastFilter, date, locale })
     };
     minutes = currentMinutes;
   };
@@ -80,7 +80,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     } else {
       // initial data parsing
       worker.onmessage = (event: WorkerEvent) => {
-        setModites(event.data);
+        requestAnimationFrame(() => setModites(event.data));
       };
       // get data from the api
       getData(filter, new Date());
