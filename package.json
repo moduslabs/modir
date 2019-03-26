@@ -43,7 +43,7 @@
     "extends": "react-app"
   },
   "optionalDependencies": {
-    "fsevents": "1.2.4"
+    "fsevents": "1.2.7"
   },
   "husky": {
     "hooks": {
