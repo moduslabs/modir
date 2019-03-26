@@ -1,18 +1,12 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
-import {
-  IonContent,
-  IonSearchbar,
-  IonToolbar,
-  IonIcon,
-  IonButtons,
-} from '@ionic/react';
+import { IonContent, IonSearchbar, IonToolbar, IonIcon, IonButtons } from '@ionic/react';
 import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
 // @ts-ignore
-import Worker from 'worker-loader!./formatModites.js';
+import Worker from 'worker-loader!./formatModites.js'; // eslint-disable-line import/no-webpack-loader-syntax
 import s from './styles.module.css';
 import ModiteListProps from '../../models/ModiteListProps';
 import SkeletonList from '../SkeletonList';
@@ -29,14 +23,16 @@ let rawModites: Modite[];
 
 // get data from server
 async function getData(filter: string, date: Date): Promise<void> {
-  rawModites = await fetch('https://modus.app/modites/all').then(res => res.json());
+  if (!rawModites || !rawModites.length) {
+    rawModites = await fetch('https://modus.app/modites/all').then(res => res.json());
+  }
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
 let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ slides, activeModite, toggleShowGlobe, history }) => {
+const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
   const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
 
@@ -45,13 +41,12 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     const date: Date = new Date();
     const currentMinutes: number = date.getMinutes();
     if (minutes && currentMinutes !== minutes) {
-      worker.postMessage({ modites: rawModites, filter: lastFilter, date, locale })
-    };
+      worker.postMessage({ modites: rawModites, filter: lastFilter, date, locale });
+    }
     minutes = currentMinutes;
   };
 
   const onFilter = (event: FilterEvent): void => {
-
     const query: string = event.detail.value || '';
 
     if (query === lastFilter) return;
@@ -109,12 +104,16 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
         </IonButtons>
       </IonToolbar>
       <IonContent>
-        {(!modites || !modites.length) ? <SkeletonList></SkeletonList> : modites.map((modite: Modite, i: number) => {
-          return <ModiteListItem modite={modite} key={modite.id}></ModiteListItem>
-        })}
+        {!modites || !modites.length ? (
+          <SkeletonList />
+        ) : (
+          modites.map((modite: Modite, i: number) => {
+            return <ModiteListItem modite={modite} key={modite.id} />;
+          })
+        )}
       </IonContent>
     </>
   );
-}
+};
 
 export default withRouter(ModiteList);
