@@ -8,7 +8,7 @@ function init() {
   ReactDOM.render(<App />, document.getElementById('root'));
 }
 
-if (location.search.match(/moduslabsci/)) {
+if (document.location.search.match(/moduslabsci/)) {
   init();
 } else {
   initAuth(init);
