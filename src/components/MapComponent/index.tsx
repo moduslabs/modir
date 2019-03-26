@@ -59,13 +59,17 @@ function MapComponent({ modite = defaultModite }: MapComponentProps) {
       imageSeriesTemplate.propertyFields.latitude = "latitude";
       imageSeriesTemplate.propertyFields.longitude = "longitude";
 
-      if (locationData && locationData.geocode) {
+      if (locationData) {
         // Add user location by lat / lon
-        const { location: title } = locationData;
-        let { lat: latitude, lon: longitude } = locationData.geocode;
-        imageSeries.data = [{ latitude, longitude, title }];
-        map.homeZoomLevel = 5;
-        map.homeGeoPoint = { latitude, longitude };
+        const { Location: title } = modite.profile.fields;
+        let { lat: latitude, lon: longitude } = locationData;
+
+        map.events.on('ready', () => {
+          setTimeout(() => {
+            map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500);
+            imageSeries.data = [{ latitude, longitude, title }];
+          }, 100);
+        });
       }
 
     }

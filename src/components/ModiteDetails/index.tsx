@@ -10,17 +10,12 @@ const MapComponent = lazy(() =>
 );
 
 function ModiteDetails({ modite = defaultModite }: ModiteDetailsProps) {
-  // closes the details panel
-  const closeDetails = (): void => {
-    // slides.current.slidePrev();
-  };
-
   return (
     <>
       <div className={s.detailsMapCt}>
         <MapComponent modite={modite} />
         <Link to="/">
-          <IonIcon name="close-circle" class={s.closeIcon} onClick={closeDetails} />
+          <IonIcon name="close-circle" class={s.closeIcon} />
         </Link>
       </div>
 
@@ -36,9 +31,7 @@ function ModiteDetails({ modite = defaultModite }: ModiteDetailsProps) {
         <div className={s.detailsWrap}>
           <div className={s.detailsTitle}>{modite.real_name}</div>
           <div>
-            {modite.profile.fields &&
-              modite.profile.fields.locationData &&
-              modite.profile.fields.locationData.location}
+            {modite.profile.fields && modite.profile.fields.Location}
           </div>
           <div>
             {modite.localDate} {modite.localTime}
