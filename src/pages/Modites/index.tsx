@@ -1,10 +1,15 @@
 import React, { lazy, useState, useRef, useContext } from 'react';
 import { IonPage } from '@ionic/react';
-import Modite from '../../models/Modite';
+import Modite, { defaultModite } from '../../models/Modite';
 import ModiteContext from '../../state/modite';
+import s from './styles.module.css';
 
 const ModiteList = lazy(() =>
   import('../../components/ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
+);
+
+const MapComponent = lazy(() =>
+  import('../../components/MapComponent' /* webpackChunkName: "maps", webpackPrefetch: true  */),
 );
 
 function App() {
@@ -21,8 +26,18 @@ function App() {
     setActiveModite(modite);
   };
 
+  defaultModite.profile.fields.Location = 'Boise, ID';
+  defaultModite.profile.fields.locationData = {
+    lat: 43.6007205,
+    lon: -116.3739816
+  };
+
   return (
     <IonPage>
+      <div className={s.mapCt}>
+        <MapComponent modite={defaultModite}/>
+        <div className={s.mapOverlay}></div>
+      </div>
       <ModiteList
         onModiteItemClick={onModiteClick}
         activeModite={activeModite}

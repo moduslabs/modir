@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect, FunctionComponent, useRef } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import { IonContent, IonSearchbar, IonToolbar, IonIcon, IonButtons } from '@ionic/react';
@@ -35,6 +35,7 @@ let lastFilter: string = ''; // used by onFilter
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
   const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
+  const itemWindow: React.MutableRefObject<null> = useRef(null);
 
   // get fresh time
   const tick: Function = (): void => {
@@ -64,6 +65,13 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     });
   };
 
+  const onScroll = (e: any) => {
+    // console.log(e);
+    if (itemWindow && itemWindow.current) {
+      // (itemWindow.current as any).style.backgroundColor = 'red';
+    }
+  }
+
   useEffect(() => {
     // start the clock
     const intervalID: number = window.setInterval(tick, 1000);
@@ -82,9 +90,23 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     }
   });
 
+  const AllItems = () => {
+    const myMap = modites.map((modite: Modite, i: number) => {
+      return <ModiteListItem modite={modite} key={modite.id} />;
+    });
+    const style = { height: 200 };
+    const items = [<div style={style} ref={itemWindow}></div>, ...myMap];
+
+    return (
+      <>
+        {items}
+      </>
+    );
+  }
+
   return (
     <>
-      <IonToolbar>
+      {/* <IonToolbar>
         <IonSearchbar
           debounce={200}
           value={filter}
@@ -102,16 +124,27 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
             />
           </Link>
         </IonButtons>
-      </IonToolbar>
-      <IonContent>
+      </IonToolbar> */}
+
+      <IonContent scrollEvents={true} onIonScroll={onScroll}>
         {!modites || !modites.length ? (
           <SkeletonList />
         ) : (
-          modites.map((modite: Modite, i: number) => {
-            return <ModiteListItem modite={modite} key={modite.id} />;
-          })
+          <AllItems />
         )}
       </IonContent>
+
+      <div className={s.searchbarCt}>
+        <div className={s.searchbarWrap}>
+          <IonSearchbar
+            debounce={200}
+            value={filter}
+            placeholder="Filter Modites"
+            onIonChange={onFilter}
+            class={s.slideInDown + ' ' + s.searchbar}
+          />
+        </div>
+      </div>
     </>
   );
 };

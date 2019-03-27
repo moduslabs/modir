@@ -26,17 +26,27 @@ const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = (
   };
 
   return (
-    <IonMenuToggle key={modite.id} auto-hide="false">
-      <IonItem button class={s.appear} onClick={handleItemClick}>
-        <IonThumbnail slot="start" class={s.thumbnailContainer}>
-          <ModiteImage modite={modite} />
-        </IonThumbnail>
+    // <IonMenuToggle key={modite.id} auto-hide="false">
+    //   <IonItem button onClick={handleItemClick}>
+    //     <IonThumbnail slot="start" class={s.thumbnailContainer}>
+    //       <ModiteImage modite={modite} />
+    //     </IonThumbnail>
 
-        <IonLabel>{modite.real_name}</IonLabel>
-        <IonLabel class={s.tod}>{modite.tod}</IonLabel>
-        <IonLabel class={s.time}>{modite.localTime}</IonLabel>
-      </IonItem>
-    </IonMenuToggle>
+    //     <IonLabel>{modite.real_name}</IonLabel>
+    //     <IonLabel class={s.tod}>{modite.tod}</IonLabel>
+    //     <IonLabel class={s.time}>{modite.localTime}</IonLabel>
+    //   </IonItem>
+    // </IonMenuToggle>
+    <div>
+      <div className={s.itemInnerCt}>
+        <div className={s.thumbContainer}>
+          <ModiteImage modite={modite} />
+        </div>
+        <div className={s.nameCt}>{modite.real_name}</div>
+        <div className={s.todCt}>{modite.tod}</div>
+        <div className={s.localTime}>{modite.localTime}</div>
+      </div>
+    </div>
   );
 };
 export default withRouter(ModiteListItem);

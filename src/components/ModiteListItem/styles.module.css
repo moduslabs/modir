@@ -20,6 +20,43 @@
   animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
 }
 
+.itemInnerCt {
+  margin: 0 12px 12px 12px;
+  background-color: white;
+  box-shadow: 0px 26px 51px -3px rgba(0, 0, 0, 0.3);
+  height: 52px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 18px;
+  padding: 0 8px;
+}
+
+.thumbContainer {
+  width: 36px;
+  height: 36px;
+  margin-right: 14px;
+  box-shadow: 0px 7px 17px 2px rgba(0, 0, 0, 0.15);
+}
+.thumbContainer img {
+  border-radius: 5px;
+}
+
+.nameCt {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.localTime {
+  font-size: 17px;
+  opacity: 0.5;
+  width: 78px;
+  text-align: right;
+}
+
 @keyframes appear {
   from {
     opacity: 0.2;
