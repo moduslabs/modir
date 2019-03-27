@@ -13,12 +13,7 @@ function ModiteImage({ modite, ...other }: Props) {
     <div className={cx(styles.moditeImage, styles.loading)}>
       <picture {...other}>
         <source srcSet={`${modite.profile.image_72}, ${modite.profile.image_192} 2x`} />
-        <img
-          src={userIconPlaceholder}
-          data-src={modite.profile.image_24}
-          alt={modite.real_name}
-          role="presentation"
-        />
+        <img src={userIconPlaceholder} alt={modite.real_name} role="presentation" />
       </picture>
     </div>
   );
