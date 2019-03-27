@@ -101,16 +101,17 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
   return (
     <>
       <IonToolbar>
-        <IonSearchbar
-          debounce={200}
-          value={filter}
-          placeholder="Filter Modites"
-          onIonChange={onFilter}
-          class={s.slideInDown}
-          aria-label={'Filter Modites'}
-        />
+        <label aria-label={'Filter Modites'} role="search">
+          <IonSearchbar
+            debounce={200}
+            value={filter}
+            placeholder="Filter Modites"
+            onIonChange={onFilter}
+            class={s.slideInDown}
+          />
+        </label>
         <IonButtons slot="end">
-          <Link to="/globe">
+          <Link to="/globe" role="navigation">
             <IonIcon
               class={`${s.worldMapButton} ${s.slideInDown}`}
               slot="icon-only"
@@ -124,7 +125,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
         {!modites || !modites.length ? (
           <SkeletonList />
         ) : (
-          <AutoSizer>
+          <AutoSizer aria-label="The list of Modites">
             {({ height, width }: { height: number; width: number }) => (
               <List
                 className="List"

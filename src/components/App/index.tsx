@@ -30,12 +30,14 @@ function App() {
       <Suspense fallback={<IonContent>Loading...</IonContent>}>
         <ModiteContextProvider value={[activeModite, setActiveModite]}>
           <ModitesContextProvider value={[modites, setModites]}>
-            <Router>
-              <Route path="/" exact component={Modites} />
-              <Route path="/details" exact component={Details} />
-              <Route path="/details/:id" component={Details} />
-              <Route path="/globe" exact component={Globe} />
-            </Router>
+            <main role="main">
+              <Router>
+                <Route path="/" exact component={Modites} />
+                <Route path="/details" exact component={Details} />
+                <Route path="/details/:id" component={Details} />
+                <Route path="/globe" exact component={Globe} />
+              </Router>
+            </main>
           </ModitesContextProvider>
         </ModiteContextProvider>
       </Suspense>
