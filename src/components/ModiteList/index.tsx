@@ -91,6 +91,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
           placeholder="Filter Modites"
           onIonChange={onFilter}
           class={s.slideInDown}
+          aria-label={'Filter Modites'}
         />
         <IonButtons slot="end">
           <Link to="/globe">

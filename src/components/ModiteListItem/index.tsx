@@ -28,12 +28,14 @@ const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = (
   return (
     <IonMenuToggle key={modite.id} auto-hide="false">
       <IonItem button class={s.appear} onClick={handleItemClick}>
-        <IonThumbnail slot="start" class={s.thumbnailContainer}>
+        <IonThumbnail aria-hidden="true" slot="start" class={s.thumbnailContainer}>
           <ModiteImage modite={modite} />
         </IonThumbnail>
 
         <IonLabel>{modite.real_name}</IonLabel>
-        <IonLabel class={s.tod}>{modite.tod}</IonLabel>
+        <IonLabel aria-hidden="true" class={s.tod}>
+          {modite.tod}
+        </IonLabel>
         <IonLabel class={s.time}>{modite.localTime}</IonLabel>
       </IonItem>
     </IonMenuToggle>
