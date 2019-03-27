@@ -130,10 +130,12 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
                 className="List"
                 itemSize={72}
                 itemCount={(modites && modites.length) || 10}
-                height={height * 3}
+                height={height}
                 width={width}
                 initialScrollOffset={lastScrollOffset}
                 onScroll={onScroll}
+                itemKey={(index: number) => modites[index].id}
+                overscanCount={30}
               >
                 {Row}
               </List>
