@@ -16,7 +16,7 @@
 .appear {
   animation-name: appear;
   animation-fill-mode: forwards;
-  animation-duration: 500ms;
+  animation-duration: 100ms;
   animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
 }
 

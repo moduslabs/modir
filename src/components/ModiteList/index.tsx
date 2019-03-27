@@ -1,6 +1,10 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
+// @ts-ignore
+import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
+// @ts-ignore
+import AutoSizer from 'react-virtualized-auto-sizer';
 import { IonContent, IonSearchbar, IonToolbar, IonIcon, IonButtons } from '@ionic/react';
 import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
@@ -82,6 +86,12 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     }
   });
 
+  const Row = ({ index, style }: ListChildComponentProps) => (
+    <div style={style}>
+      <ModiteListItem modite={modites[index]} key={modites[index].id} />
+    </div>
+  );
+
   return (
     <>
       <IonToolbar>
@@ -108,9 +118,19 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
         {!modites || !modites.length ? (
           <SkeletonList />
         ) : (
-          modites.map((modite: Modite, i: number) => {
-            return <ModiteListItem modite={modite} key={modite.id} />;
-          })
+          <AutoSizer>
+            {({ height, width }: { height: number; width: number }) => (
+              <List
+                className="List"
+                itemSize={72}
+                itemCount={(modites && modites.length) || 10}
+                height={height * 3}
+                width={width}
+              >
+                {Row}
+              </List>
+            )}
+          </AutoSizer>
         )}
       </IonContent>
     </>

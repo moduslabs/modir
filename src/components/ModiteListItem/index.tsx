@@ -27,7 +27,7 @@ const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = (
 
   return (
     <IonMenuToggle key={modite.id} auto-hide="false">
-      <IonItem button class={s.appear} onClick={handleItemClick}>
+      <IonItem button onClick={handleItemClick}>
         <IonThumbnail aria-hidden="true" slot="start" class={s.thumbnailContainer}>
           <ModiteImage modite={modite} />
         </IonThumbnail>
