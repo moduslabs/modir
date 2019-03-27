@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect, useContext, FunctionComponent } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 // @ts-ignore
@@ -15,6 +15,7 @@ import s from './styles.module.css';
 import ModiteListProps from '../../models/ModiteListProps';
 import SkeletonList from '../SkeletonList';
 import ModiteListItem from '../ModiteListItem';
+import ModitesContext from '../../state/modites';
 
 // get locale once
 const locale: string = navigator.language;
@@ -36,8 +37,13 @@ async function getData(filter: string, date: Date): Promise<void> {
 let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
 
+let lastScrollOffset = 0;
+const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
+  lastScrollOffset = scrollOffset;
+};
+
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
-  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
+  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
 
   // get fresh time
@@ -126,6 +132,8 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
                 itemCount={(modites && modites.length) || 10}
                 height={height * 3}
                 width={width}
+                initialScrollOffset={lastScrollOffset}
+                onScroll={onScroll}
               >
                 {Row}
               </List>
