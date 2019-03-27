@@ -14,12 +14,13 @@
     "@amcharts/amcharts4-geodata": "^4.1.4",
     "@ionic/react": "0.0.5",
     "classnames": "^2.2.6",
-    "lazysizes": "4.1.7",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-window": "^1.7.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",
@@ -41,13 +42,16 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "eslintIgnore": [
+    "src/models/*"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run autoformat"
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
+    "src/**/*.{js,jsx,ts,tsx},!src/models": [
       "eslint --fix",
       "git add"
     ],

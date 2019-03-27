@@ -4,22 +4,17 @@ import styles from './styles.module.css';
 import userIconPlaceholder from './user-icon-placeholder.png';
 import Modite from '../../models/Modite';
 
-// @ts-ignore
-import('lazysizes' /* webpackChunkName: "lazysizes" */);
-
 type Props = {
   modite: Modite;
 };
 
-function ModiteImage({ modite }: Props) {
+function ModiteImage({ modite, ...other }: Props) {
   return (
     <div className={cx(styles.moditeImage, styles.loading)}>
-      <img
-        className="lazyload"
-        src={userIconPlaceholder}
-        data-src={modite.profile.image_72}
-        alt={modite.real_name}
-      />
+      <picture {...other}>
+        <source srcSet={`${modite.profile.image_72}, ${modite.profile.image_192} 2x`} />
+        <img src={userIconPlaceholder} alt={modite.real_name} role="presentation" />
+      </picture>
     </div>
   );
 }

@@ -5,6 +5,8 @@ export interface ModiteProfile {
   last_name: string;
   phone: string;
   email: string;
+  image_24: string;
+  image_32: string;
   image_72: string;
   image_192: string;
   image_512: string;
@@ -28,6 +30,6 @@ export default interface Modite {
 export const defaultModite: Modite = {
   profile: {
     image_192: profilePlaceholder,
-    fields: {}
-  }
+    fields: {},
+  },
 } as Modite;

@@ -1,6 +1,10 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect, useContext, FunctionComponent } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
+// @ts-ignore
+import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
+// @ts-ignore
+import AutoSizer from 'react-virtualized-auto-sizer';
 import { IonContent, IonSearchbar, IonToolbar, IonIcon, IonButtons } from '@ionic/react';
 import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
@@ -11,6 +15,7 @@ import s from './styles.module.css';
 import ModiteListProps from '../../models/ModiteListProps';
 import SkeletonList from '../SkeletonList';
 import ModiteListItem from '../ModiteListItem';
+import ModitesContext from '../../state/modites';
 
 // get locale once
 const locale: string = navigator.language;
@@ -32,8 +37,13 @@ async function getData(filter: string, date: Date): Promise<void> {
 let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
 
+let lastScrollOffset = 0;
+const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
+  lastScrollOffset = scrollOffset;
+};
+
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
-  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
+  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
 
   // get fresh time
@@ -82,19 +92,26 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     }
   });
 
+  const Row = ({ index, style }: ListChildComponentProps) => (
+    <div style={style}>
+      <ModiteListItem modite={modites[index]} key={modites[index].id} />
+    </div>
+  );
+
   return (
     <>
       <IonToolbar>
-        <IonSearchbar
-          debounce={200}
-          value={filter}
-          placeholder="Filter Modites"
-          onIonChange={onFilter}
-          class={s.slideInDown}
-          aria-label={'Filter Modites'}
-        />
+        <label aria-label={'Filter Modites'} role="search">
+          <IonSearchbar
+            debounce={200}
+            value={filter}
+            placeholder="Filter Modites"
+            onIonChange={onFilter}
+            class={s.slideInDown}
+          />
+        </label>
         <IonButtons slot="end">
-          <Link to="/globe">
+          <Link to="/globe" role="navigation">
             <IonIcon
               class={`${s.worldMapButton} ${s.slideInDown}`}
               slot="icon-only"
@@ -108,9 +125,23 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
         {!modites || !modites.length ? (
           <SkeletonList />
         ) : (
-          modites.map((modite: Modite, i: number) => {
-            return <ModiteListItem modite={modite} key={modite.id} />;
-          })
+          <AutoSizer aria-label="The list of Modites">
+            {({ height, width }: { height: number; width: number }) => (
+              <List
+                className="List"
+                itemSize={72}
+                itemCount={(modites && modites.length) || 10}
+                height={height}
+                width={width}
+                initialScrollOffset={lastScrollOffset}
+                onScroll={onScroll}
+                itemKey={(index: number) => modites[index].id}
+                overscanCount={30}
+              >
+                {Row}
+              </List>
+            )}
+          </AutoSizer>
         )}
       </IonContent>
     </>

@@ -3,8 +3,13 @@
   "name": "Modite Directory",
   "icons": [
     {
-      "src": "https://res.cloudinary.com/modus-labs/image/upload/b_rgb:000000,c_pad,h_640,w_640/v1533109874/modus/logo-vertical-black.png",
+      "src": "favicon256.png",
       "sizes": "256x256 128x128 64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "logo640.png",
+      "sizes": "640x640 512x512",
       "type": "image/png"
     }
   ],
