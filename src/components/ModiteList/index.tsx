@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, FunctionComponent, useRef } from 'react';
+import React, { useState, useEffect, useContext, FunctionComponent } from 'react';
 import { withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 // @ts-ignore
@@ -6,6 +6,7 @@ import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react';
+import classNames from 'classnames/bind';
 import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
@@ -37,26 +38,19 @@ async function getData(filter: string, date: Date): Promise<void> {
 
 let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
-
-let lastScrollOffset = 0;
+let lastScrollOffset = 0; // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
   const [modites, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
-  const mapWindowRef: React.MutableRefObject<null> = useRef(null);
-  const searchBarWrapRef: React.MutableRefObject<null> = useRef(null);
-  const searchbarSpacerRef: React.MutableRefObject<null> = useRef(null);
+  const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false);
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
     const threshold = 10; // scroll threshold to hit before acting on the layout
 
-    if ((lastScrollOffset < threshold && scrollOffset > threshold) || (lastScrollOffset > threshold && scrollOffset < threshold)) {
-      const modify = scrollOffset > threshold;
-
+    if ((lastScrollOffset <= threshold && scrollOffset > threshold) || (lastScrollOffset >= threshold && scrollOffset < threshold)) {
       requestAnimationFrame(() => {
-        (mapWindowRef.current as any).style.height = modify ? 0 : '40vh';
-        (searchBarWrapRef.current as any).style.transform = `translateY(calc(${modify ? '0px' : '40vh / 2 - 21px'}))`;
-        (searchbarSpacerRef.current as any).style.width = modify ? '40px' : 0;
+        setCollapsed(scrollOffset > threshold);
       });
     }
 
@@ -110,15 +104,20 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
   });
 
   const Row = ({ index, style }: ListChildComponentProps) => (
-    <div style={style}>
+    <div className={s.moditeRow} style={style}>
       <ModiteListItem modite={modites[index]} key={modites[index].id} />
     </div>
   );
 
+  const cx = classNames.bind(s);
+  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed });
+  const searchbarWrapCls = cx('searchbarWrap', { searchbarWrapCollapsed: collapsed });
+  const searchbarSpacerCls = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed });
+
   return (
     <>
       <IonPage className={s.moditeListCt}>
-        <div className={s.mapWindow} ref={mapWindowRef}></div>
+        <div className={mapWindowCls}></div>
         <div className={s.moditeListWrap}>
           {!modites || !modites.length ? (
             <SkeletonList/>
@@ -149,17 +148,17 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
       <div className={s.searchbarCt}>
         <div className={s.globalBarWrap}>
           <div className={s.globalSpacer}></div>
-          <div className={s.globeTitle}>MODITE WORLD</div>
+          <div className={s.globeTitle}>MODITE LAND</div>
           <IonIcon
             class={`${s.globeButton}`}
             slot="icon-only"
             ios="ios-globe"
             md="ios-globe"
-            // TODO: wire up the handling of the globe click for real
+            // TODO: wire up the handling of the globe click for really realz
             onClick={() => console.log('clicked')}
           />
         </div>
-        <div className={s.searchbarWrap} ref={searchBarWrapRef}>
+        <label className={searchbarWrapCls}>
           <IonSearchbar
             debounce={200}
             value={filter}
@@ -167,8 +166,8 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
             onIonChange={onFilter}
             class={s.searchbar}
           />
-          <div ref={searchbarSpacerRef} className={s.globalSpacer2}></div>
-        </div>
+          <div className={searchbarSpacerCls}></div>
+        </label>
       </div>
     </>
   );

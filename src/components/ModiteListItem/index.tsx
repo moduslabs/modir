@@ -25,14 +25,14 @@ const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = (
   };
 
   return (
-    <div className={s.itemInnerCt} onClick={handleItemClick}>
+    <button className={s.itemInnerCt} onClick={handleItemClick}>
       <div aria-hidden="true" className={s.thumbContainer}>
         <ModiteImage modite={modite} />
       </div>
       <div className={s.nameCt}>{modite.real_name}</div>
       <div aria-hidden="true" className={s.todCt}>{modite.tod}</div>
       <div className={s.localTime}>{modite.localTime}</div>
-    </div>
+    </button>
   );
 };
 export default withRouter(ModiteListItem);

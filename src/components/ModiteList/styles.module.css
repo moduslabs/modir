@@ -58,6 +58,9 @@
   flex-direction: row;
   z-index: 2;
 }
+.searchbarWrapCollapsed {
+  transform: translateY(0px);
+}
 
 .searchbar {
   padding: 12px;
@@ -78,6 +81,9 @@
 .mapWindow {
   height: 40vh;
   transition: height 500ms;
+}
+.mapWindowCollapsed {
+  height: 0;
 }
 
 .globalBarWrap {
@@ -100,9 +106,12 @@
 .globalSpacer {
   width: 40px;
 }
-.globalSpacer2 {
+.searchbarSpacer {
   width: 0;
   transition: width 600ms;
+}
+.searchbarSpacerCollapsed {
+  width: 40px;
 }
 
 .globeTitle {
@@ -117,4 +126,8 @@
   font-size: 25px;
   padding: 4px;
   margin-left: 7px;
+}
+
+.moditeRow {
+  display: flex;
 }

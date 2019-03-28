@@ -31,6 +31,8 @@
   align-items: center;
   font-size: 18px;
   padding: 0 8px;
+  flex-flow: wrap;
+  flex: 1;
 }
 
 .thumbContainer {
@@ -48,6 +50,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 }
 
 .localTime {
