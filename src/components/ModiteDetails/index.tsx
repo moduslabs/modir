@@ -13,7 +13,7 @@ function ModiteDetails({ modite = defaultModite }: ModiteDetailsProps) {
   return (
     <>
       <div className={s.detailsMapCt}>
-        <MapComponent modite={modite} />
+        <MapComponent modites={modite} />
         <Link to="/">
           <IonIcon name="close-circle" class={s.closeIcon} />
         </Link>

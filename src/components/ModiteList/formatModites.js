@@ -7,8 +7,8 @@ onmessage = function(event) {
       hour: 'numeric',
       hour12: false,
     });
-    if (hour < 8 || hour > 22) return '💤';
-    return '😃';
+    if (hour < 8 || hour > 22) return '🌙';
+    return '☀️';
   };
 
   const filtered = modites

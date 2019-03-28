@@ -31,7 +31,8 @@ const addLocationPoint = async (modite, slackId) => {
 
 // adds key / value from label / value data in the Modite profile
 const addFields = (moditeResp) => {
-  const { fields = {} } = moditeResp.profile;
+  let { fields = {} } = moditeResp.profile;
+  fields = fields || {};
 
   moditeResp.profile.fields = Object.values(fields).reduce((map, item) => {
     map[item.label] = item.value;

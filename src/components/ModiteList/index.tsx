@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, FunctionComponent } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 // @ts-ignore
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { IonContent, IonSearchbar, IonToolbar, IonIcon, IonButtons } from '@ionic/react';
+import { IonSearchbar, IonIcon, IonPage } from '@ionic/react';
+import classNames from 'classnames/bind';
 import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
 import FilterEvent from '../../models/FilterEvent';
@@ -29,22 +30,32 @@ let rawModites: Modite[];
 // get data from server
 async function getData(filter: string, date: Date): Promise<void> {
   if (!rawModites || !rawModites.length) {
-    rawModites = await fetch('https://modus.app/modites/all').then(res => res.json());
+    const moditesResp: { modites: Modite[] } = await fetch('https://modus.app/modites/all').then(res => res.json());
+    rawModites = moditesResp.modites;
   }
   worker.postMessage({ modites: rawModites, filter, date, locale });
 }
 
 let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
-
-let lastScrollOffset = 0;
-const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
-  lastScrollOffset = scrollOffset;
-};
+let lastScrollOffset = 0; // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
   const [modites, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
+  const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false);
+
+  const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
+    const threshold = 10; // scroll threshold to hit before acting on the layout
+
+    if ((lastScrollOffset <= threshold && scrollOffset > threshold) || (lastScrollOffset >= threshold && scrollOffset < threshold)) {
+      requestAnimationFrame(() => {
+        setCollapsed(scrollOffset > threshold);
+      });
+    }
+
+    lastScrollOffset = scrollOffset;
+  };
 
   // get fresh time
   const tick: Function = (): void => {
@@ -93,57 +104,71 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
   });
 
   const Row = ({ index, style }: ListChildComponentProps) => (
-    <div style={style}>
+    <div className={s.moditeRow} style={style}>
       <ModiteListItem modite={modites[index]} key={modites[index].id} />
     </div>
   );
 
+  const cx = classNames.bind(s);
+  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed });
+  const searchbarWrapCls = cx('searchbarWrap', { searchbarWrapCollapsed: collapsed });
+  const searchbarSpacerCls = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed });
+
   return (
     <>
-      <IonToolbar>
-        <label aria-label={'Filter Modites'} role="search">
+      <IonPage className={s.moditeListCt}>
+        <div className={mapWindowCls}></div>
+        <div className={s.moditeListWrap}>
+          {!modites || !modites.length ? (
+            <SkeletonList/>
+          ) : (
+            <AutoSizer aria-label="The list of Modites">
+              {({ height, width }: { height: number; width: number }) => (
+                <>
+                <List
+                  className="List"
+                  itemSize={60}
+                  itemCount={(modites && modites.length) || 10}
+                  height={height}
+                  width={width}
+                  initialScrollOffset={lastScrollOffset}
+                  onScroll={onScroll}
+                  itemKey={(index: number) => modites[index].id}
+                  overscanCount={30}
+                >
+                  {Row}
+                </List>
+                </>
+              )}
+            </AutoSizer>
+          )}
+        </div>
+      </IonPage>
+
+      <div className={s.searchbarCt}>
+        <div className={s.globalBarWrap}>
+          <div className={s.globalSpacer}></div>
+          <div className={s.globeTitle}>MODITE LAND</div>
+          <IonIcon
+            class={`${s.globeButton}`}
+            slot="icon-only"
+            ios="ios-globe"
+            md="ios-globe"
+            // TODO: wire up the handling of the globe click for really realz
+            onClick={() => console.log('clicked')}
+          />
+        </div>
+        <label className={searchbarWrapCls}>
           <IonSearchbar
             debounce={200}
             value={filter}
             placeholder="Filter Modites"
             onIonChange={onFilter}
-            class={s.slideInDown}
+            class={s.searchbar}
           />
+          <div className={searchbarSpacerCls}></div>
         </label>
-        <IonButtons slot="end">
-          <Link to="/globe" role="navigation">
-            <IonIcon
-              class={`${s.worldMapButton} ${s.slideInDown}`}
-              slot="icon-only"
-              ios="md-globe"
-              md="md-globe"
-            />
-          </Link>
-        </IonButtons>
-      </IonToolbar>
-      <IonContent>
-        {!modites || !modites.length ? (
-          <SkeletonList />
-        ) : (
-          <AutoSizer aria-label="The list of Modites">
-            {({ height, width }: { height: number; width: number }) => (
-              <List
-                className="List"
-                itemSize={72}
-                itemCount={(modites && modites.length) || 10}
-                height={height}
-                width={width}
-                initialScrollOffset={lastScrollOffset}
-                onScroll={onScroll}
-                itemKey={(index: number) => modites[index].id}
-                overscanCount={30}
-              >
-                {Row}
-              </List>
-            )}
-          </AutoSizer>
-        )}
-      </IonContent>
+      </div>
     </>
   );
 };
