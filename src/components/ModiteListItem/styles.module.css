@@ -6,7 +6,7 @@
 
 .time {
   flex: 0 1 4.5rem;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .tod {
@@ -16,14 +16,14 @@
 .appear {
   animation-name: appear;
   animation-fill-mode: forwards;
-  animation-duration: 500ms;
+  animation-duration: 100ms;
   animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
 }
 
 .itemInnerCt {
-  margin: 0 12px 12px 12px;
+  margin: 0 12px;
   background-color: white;
-  box-shadow: 0px 26px 51px -3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 14px 24px 0px rgba(0, 0, 0, 0.25);
   height: 52px;
   border-radius: 10px;
   display: flex;
@@ -37,7 +37,7 @@
   width: 36px;
   height: 36px;
   margin-right: 14px;
-  box-shadow: 0px 7px 17px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.25);
 }
 .thumbContainer img {
   border-radius: 5px;

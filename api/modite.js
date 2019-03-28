@@ -22,22 +22,17 @@ const addLocationPoint = async (modite, slackId) => {
 
   if (!location) return; // if the user hasn't populated a location no lookup can be performed
 
-  const locations = await MODITES.get('locations', 'json') || {};
-  const moditeLocationObj = locations[slackId];
+  const cachedModite = await MODITES.get(slackId, 'json') || { profile: { fields: {} } };
+  const { Location: cachedLocation, locationData: cachedLocationData } = cachedModite.profile.fields;
+  const geocode = (!cachedLocationData || cachedLocation !== location) ? await getGeocode(location) : cachedLocationData;
 
-  // if there is no saved location object or
-  // if the location changed since it was last saved to KV fetch it once more else use what was stored
-  const geocode = (!moditeLocationObj || location !== moditeLocationObj.location) ? await getGeocode(location) : moditeLocationObj.geocode;
-  const locationData = { location, geocode };
-
-  locations[slackId] = locationData;
-  await MODITES.put('locations', JSON.stringify(locations));  // cache the location data
-  modite.profile.fields.locationData = locationData;
+  modite.profile.fields.locationData = geocode;
 }
 
 // adds key / value from label / value data in the Modite profile
 const addFields = (moditeResp) => {
-  const { fields = {} } = moditeResp.profile;
+  let { fields = {} } = moditeResp.profile;
+  fields = fields || {};
 
   moditeResp.profile.fields = Object.values(fields).reduce((map, item) => {
     map[item.label] = item.value;
@@ -48,16 +43,16 @@ const addFields = (moditeResp) => {
 const getModite = async (slackId) => {
   // seems like our cache has expired. Let's fetch the slack user
   const userKey = await KEYS.get('mosquito-user-key');
-  const userRes = await fetch(`https://slack.com/api/users.profile.get?token=${userKey}&user=${slackId}&include_labels=true`, {
+  const moditeRes = await fetch(`https://slack.com/api/users.profile.get?token=${userKey}&user=${slackId}&include_labels=true`, {
     cf: { cacheTtlByStatus: { '200-299': 300, 404: 1, '500-599': 0 } },
   });
-  const user = await userRes.json();
+  const modite = await moditeRes.json();
 
-  addFields(user);
-  await addLocationPoint(user, slackId);
+  addFields(modite);
+  await addLocationPoint(modite, slackId);
+  await MODITES.put(slackId, JSON.stringify(modite)); // cache the modite instance in KV
 
-
-  return user;
+  return modite;
 };
 
 const getModiteResponse = async event => {

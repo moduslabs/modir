@@ -1,3 +1,12 @@
+const cacheActiveusers = async () => {
+  // TODO: cache the modite profiles including location data
+  // modites.forEach((modite, i) => {
+  //   setTimeout(() => {
+  //     fetch(`https://modus.app/modite/${modite.id}`);
+  //   }, i * 2 + 2);
+  // });
+};
+
 const addTacosToUsers = async (users) => {
   // fetch the tacos using the Referer header approved by HeyTaco developers
   const currentDate = new Date().getDate();
@@ -20,6 +29,17 @@ const addTacosToUsers = async (users) => {
   return users;
 };
 
+const appendModiteProfiles = async (modites) => {
+  const list = await MODITES.get('activeModitesList', 'json');
+
+  for (const modite of modites) {
+    const profileObj = await MODITES.get(modite.id, 'json');
+    if (profileObj) {
+      modite.profile = profileObj.profile;
+    }
+  }
+};
+
 const getModites = async () => {
   // seems like our cache has expired. Let's fetch slack users
   const botKey = await KEYS.get('mosquito-bot-key');
@@ -30,7 +50,13 @@ const getModites = async () => {
 
   // only ussers who are not bots, not restricted (usually clients) and not deleted
   const activeUsers = users.members.filter(user => user.name !== 'slackbot' && !user.is_bot && !user.is_restricted && !user.deleted);
+  const activeModitesList = activeUsers.map(item => item.id);
+  await MODITES.put('activeModitesList', JSON.stringify(activeModitesList));
+
   await addTacosToUsers(activeUsers);
+  await appendModiteProfiles(activeUsers);
+  await cacheActiveusers(activeUsers);
+
   return activeUsers;
 };
 
@@ -40,7 +66,10 @@ const getModitesResponse = async event => {
 
   if (!response) {
     const modites = await getModites();
-    response = new Response(JSON.stringify(modites));
+    const fullResp = {
+      modites
+    };
+    response = new Response(JSON.stringify(fullResp));
     response.headers.set('Content-Type', 'application/json');
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Cache-Control', 'max-age=3600');
