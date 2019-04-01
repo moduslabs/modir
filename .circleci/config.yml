@@ -151,6 +151,8 @@ jobs:
 
     steps:
       - checkout
+      - restore_cache: *restore-npm-cache
+
       - run:
           name: Run TSLint
           command: npm run lint
