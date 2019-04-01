@@ -5,6 +5,7 @@ import Modite, { defaultModite } from '../../models/Modite';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import './theme.css';
+import './styles.module.css';
 
 import { ModiteContextProvider } from '../../state/modite';
 import { ModitesContextProvider } from '../../state/modites';

@@ -1,14 +1,7 @@
-.detailPage {
-  display: flex;
-  align-items: stretch;
-}
-
-.globeCt {
-  height: 0;
-  width: 100%;
-  transition: height 250ms;
-}
-
-.showGlobe {
-  height: 250px;
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px !important;
+  }
 }
