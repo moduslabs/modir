@@ -151,11 +151,12 @@ jobs:
 
     steps:
       - run:
-        name: Run TSLint
-        command: npm run lint
+          name: Run TSLint
+          command: npm run lint
+
       - run:
-        name: Run Typescript Compile Test
-        command: npm run compile:once
+          name: Run Test Typescript Compile
+          command: npm run compile:once
 
 workflows:
   version: 2
