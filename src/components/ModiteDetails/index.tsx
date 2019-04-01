@@ -2,14 +2,14 @@ import { IonBadge, IonIcon } from '@ionic/react';
 import React, { lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { defaultModite } from '../../models/Modite';
-import ModiteDetailsProps from '../../models/ModiteDetailsProps';
+import IModiteDetailsProps from '../../models/ModiteDetailsProps';
 import s from './styles.module.css';
 
 const MapComponent = lazy(() =>
   import('../MapComponent' /* webpackChunkName: "maps", webpackPrefetch: true  */),
 );
 
-function ModiteDetails({ modite = defaultModite }: ModiteDetailsProps) {
+function ModiteDetails({ modite = defaultModite }: IModiteDetailsProps) {
   return (
     <>
       <div className={s.detailsMapCt}>

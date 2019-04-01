@@ -1,3 +1,3 @@
-export default interface WorkerEvent {
+export default interface IWorkerEvent {
   data: never[];
 }

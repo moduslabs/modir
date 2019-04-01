@@ -1,4 +1,10 @@
-function handleClientLoad(cb: Function) {
+const signIn = () => {
+  // Ideally the button should only show up after gapi.client.init finishes, so that this
+  // handler won't be called before OAuth is initialized.
+  return gapi.auth2.getAuthInstance().signIn();
+};
+
+function handleClientLoad(cb: () => void) {
   // Loads the client library and the auth2 library together for efficiency.
   // Loading the auth2 library is optional here since `gapi.client.init` function will load
   // it if not already loaded. Loading it upfront can save one network request.
@@ -7,18 +13,18 @@ function handleClientLoad(cb: Function) {
   });
 }
 
-function initClient(cb: Function) {
+function initClient(cb: () => void) {
   // Initialize the client with API key and People API, and initialize OAuth with an
   // OAuth 2.0 client ID and scopes (space delimited string) to request access.
   gapi.client
     .init({
-      discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
       clientId: '398317159902-tq6ld761e6f8tut1m46l09nbrdld74q1.apps.googleusercontent.com',
+      discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
       scope: 'profile',
       // @ts-ignore
       ux_mode: 'redirect',
     })
-    .then(function() {
+    .then(() => {
       // Listen for sign-in state changes.
       gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
@@ -27,7 +33,7 @@ function initClient(cb: Function) {
     });
 }
 
-function updateSigninStatus(isSignedIn: boolean, cb?: Function) {
+function updateSigninStatus(isSignedIn: boolean, cb?: () => void) {
   // When signin status changes, this function is called.
   // If the signin status is changed to signedIn, we make an API call.
   if (isSignedIn) {
@@ -40,15 +46,9 @@ function updateSigninStatus(isSignedIn: boolean, cb?: Function) {
   }
 }
 
-function signIn() {
-  // Ideally the button should only show up after gapi.client.init finishes, so that this
-  // handler won't be called before OAuth is initialized.
-  return gapi.auth2.getAuthInstance().signIn();
-}
-
-function signOut() {
+const signOut = () => {
   gapi.auth2.getAuthInstance().signOut();
-}
+};
 
 // todo: move this to the app state
 function makeApiCall() {
@@ -56,20 +56,22 @@ function makeApiCall() {
   // @ts-ignore
   gapi.client.people.people
     .get({
-      resourceName: 'people/me',
       'requestMask.includeField': 'person.names',
+      resourceName: 'people/me',
     })
     .then(
-      function(response: any) {
+      (response: any) => {
+        // tslint:disable-next-line: no-console
         console.log('Hello, ' + response.result.names[0].givenName);
       },
-      function(reason: any) {
+      (reason: any) => {
+        // tslint:disable-next-line: no-console
         console.log('Error: ' + reason.result.error.message);
       },
     );
 }
 
-function initAuth(cb: Function) {
+function initAuth(cb: () => void) {
   const head = document.getElementsByTagName('head')[0];
   const script = document.createElement('script');
   script.type = 'text/javascript';

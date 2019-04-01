@@ -1,6 +1,6 @@
-import { ModiteProfile } from './Modite';
+import { IModiteProfile } from './Modite';
 
-export default interface Project {
+export default interface IProject {
   name: string;
   id: string;
   localTime: string;
@@ -8,6 +8,6 @@ export default interface Project {
   tod: string;
   recordType: 'user' | 'project';
   users: {
-    profile: ModiteProfile;
+    profile: IModiteProfile;
   };
 }

@@ -1,7 +1,7 @@
 const lightMapStyle = [
   {
-    featureType: 'administrative',
     elementType: 'labels.text.fill',
+    featureType: 'administrative',
     stylers: [
       {
         color: '#444444',
@@ -9,8 +9,8 @@ const lightMapStyle = [
     ],
   },
   {
-    featureType: 'landscape',
     elementType: 'all',
+    featureType: 'landscape',
     stylers: [
       {
         color: '#f2f2f2',
@@ -18,8 +18,8 @@ const lightMapStyle = [
     ],
   },
   {
-    featureType: 'poi',
     elementType: 'all',
+    featureType: 'poi',
     stylers: [
       {
         visibility: 'off',
@@ -27,8 +27,8 @@ const lightMapStyle = [
     ],
   },
   {
-    featureType: 'road',
     elementType: 'all',
+    featureType: 'road',
     stylers: [
       {
         saturation: -100,
@@ -39,8 +39,8 @@ const lightMapStyle = [
     ],
   },
   {
-    featureType: 'road.highway',
     elementType: 'all',
+    featureType: 'road.highway',
     stylers: [
       {
         visibility: 'simplified',
@@ -48,8 +48,8 @@ const lightMapStyle = [
     ],
   },
   {
-    featureType: 'road.arterial',
     elementType: 'labels.icon',
+    featureType: 'road.arterial',
     stylers: [
       {
         visibility: 'off',
@@ -57,8 +57,8 @@ const lightMapStyle = [
     ],
   },
   {
+    elementType: 'all',
     featureType: 'transit',
-    elementType: 'all',
     stylers: [
       {
         visibility: 'off',
@@ -66,8 +66,8 @@ const lightMapStyle = [
     ],
   },
   {
-    featureType: 'water',
     elementType: 'all',
+    featureType: 'water',
     stylers: [
       {
         color: '#3a5268',

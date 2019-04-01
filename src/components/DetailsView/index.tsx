@@ -1,13 +1,13 @@
 import classNames from 'classnames/bind';
 import React, { useContext } from 'react';
-import Modite from '../../models/Modite';
-import ModiteProfileResp from '../../models/ModiteProfileResp';
+import IModite from '../../models/Modite';
+import IModiteProfileResp from '../../models/ModiteProfileResp';
 import ModiteContext from '../../state/modite';
 import s from './styles.module.css';
 
 // TODO: type correctly
 function Details({ className = '' }: any) {
-  const [activeModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
+  const [activeModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext);
   const { profile = {} }: any = activeModite || {};
   let { fields } = profile;
 
@@ -16,7 +16,7 @@ function Details({ className = '' }: any) {
       return;
     }
 
-    const moditeProfile: ModiteProfileResp = await fetch(
+    const moditeProfile: IModiteProfileResp = await fetch(
       `https://modus.app/modite/${activeModite.id}`,
     ).then(res => res.json());
     activeModite.profile = moditeProfile.profile;

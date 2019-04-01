@@ -1,14 +1,24 @@
 // @ts-ignore
-onmessage = function(event) {
-  const { modites, filter, date, locale } = event.data;
+onmessage = function (event) {
+  const {
+    modites,
+    filter,
+    date,
+    locale
+  } = event.data;
 
-  const getTimeOfDay = (date, timeZone, locale) => {
+  const getTimeOfDay = timeZone => {
+    // tslint:disable-next-line: no-bitwise
     const hour = ~~date.toLocaleString(locale, {
-      timeZone,
       hour: 'numeric',
       hour12: false,
+      timeZone,
     });
-    if (hour < 8 || hour > 22) { return '🌙'; }
+
+    if (hour < 8 || hour > 22) {
+      return '🌙';
+    }
+
     return '☀️';
   };
 
@@ -23,29 +33,33 @@ onmessage = function(event) {
       const prevName = isProject ? prev.name : prev.profile.last_name;
       const nextName = isProject ? next.name : next.profile.last_name;
 
-      if (prevName < nextName) { return -1; }
-      if (prevName > nextName) { return 1; }
+      if (prevName < nextName) {
+        return -1;
+      }
+      if (prevName > nextName) {
+        return 1;
+      }
       return 0;
     })
     .map(modite => ({
       ...modite,
+      localDate: isProject ?
+        '' :
+        date.toLocaleString(locale, {
+          day: 'numeric',
+          month: 'long',
+          timeZone: modite.tz,
+          year: 'numeric',
+        }),
+      localTime: isProject ?
+        '' :
+        date.toLocaleString(locale, {
+          hour: 'numeric',
+          minute: 'numeric',
+          timeZone: modite.tz,
+        }),
       real_name: modite.real_name || modite.name,
-      localTime: isProject
-        ? ''
-        : date.toLocaleString(locale, {
-            timeZone: modite.tz,
-            hour: 'numeric',
-            minute: 'numeric',
-          }),
-      localDate: isProject
-        ? ''
-        : date.toLocaleString(locale, {
-            timeZone: modite.tz,
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          }),
-      tod: isProject ? '' : getTimeOfDay(date, modite.tz, locale),
+      tod: isProject ? '' : getTimeOfDay(modite.tz),
     }));
 
   postMessage(filtered);

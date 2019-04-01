@@ -143,11 +143,29 @@ jobs:
           paths:
             - node_modules
 
+  lint:
+    docker:
+      - image: circleci/node:10
+
+    working_directory: ~/repo
+
+    steps:
+      - run:
+        name: Run TSLint
+        command: npm run lint
+      - run:
+        name: Run Typescript Compile Test
+        command: npm run compile:once
+
 workflows:
   version: 2
   build-and-test:
     jobs:
       - install-dependencies
+
+      - lint:
+          requires:
+            - lint
 
       - build-pwa:
           requires:

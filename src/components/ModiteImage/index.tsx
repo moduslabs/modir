@@ -1,14 +1,14 @@
 import cx from 'classnames';
 import React from 'react';
-import Modite from '../../models/Modite';
+import IModite from '../../models/Modite';
 import styles from './styles.module.css';
 import userIconPlaceholder from './user-icon-placeholder.png';
 
-interface Props {
-  modite: Modite;
+interface IProps {
+  modite: IModite;
 }
 
-function ModiteImage({ modite, ...other }: Props) {
+function ModiteImage({ modite, ...other }: IProps) {
   return (
     <div className={cx(styles.moditeImage, styles.loading)}>
       <picture {...other}>

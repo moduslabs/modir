@@ -34,7 +34,7 @@ function GlobeComponent() {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = color('#d6d6d6');
 
-      polygonTemplate.events.on('hit', function(event: any) {
+      polygonTemplate.events.on('hit', (event: any) => {
         map.maxZoomLevel = 1;
         event.target.isActive = false;
       });

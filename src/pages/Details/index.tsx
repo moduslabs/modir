@@ -1,6 +1,6 @@
 import { IonPage } from '@ionic/react';
 import React, { lazy, useContext } from 'react';
-import Modite from '../../models/Modite';
+import IModite from '../../models/Modite';
 import ModiteContext from '../../state/modite';
 
 const ModiteDetails = lazy(() =>
@@ -8,7 +8,7 @@ const ModiteDetails = lazy(() =>
 );
 
 function Details() {
-  const [activeModite]: [Modite] = useContext(ModiteContext);
+  const [activeModite]: [IModite] = useContext(ModiteContext);
 
   return (
     <IonPage>

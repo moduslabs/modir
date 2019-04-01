@@ -2,14 +2,14 @@ import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import { Circle, color, create } from '@amcharts/amcharts4/core';
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps';
 import React, { useEffect, useRef } from 'react';
-import Modite, { defaultModite } from '../../models/Modite';
-import MapComponentProps from './MapComponentProps';
+import IModite, { defaultModite } from '../../models/Modite';
+import IMapComponentProps from './MapComponentProps';
 import s from './styles.module.css';
 
 let map: MapChart;
 let imageSeries: any;
 
-function updateMap(map: MapChart, markerData: any) {
+const updateMap = (markerData: any) => {
   imageSeries.data = markerData;
   if (markerData.length === 1) {
     const { latitude, longitude } = markerData[0];
@@ -17,9 +17,9 @@ function updateMap(map: MapChart, markerData: any) {
   } else {
     map.goHome(500);
   }
-}
+};
 
-function MapComponent({ modites = defaultModite }: MapComponentProps) {
+const MapComponent = ({ modites = defaultModite }: IMapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = color('#d6d6d6');
 
-      polygonTemplate.events.on('hit', function(event: any) {
+      polygonTemplate.events.on('hit', (event: any) => {
         map.maxZoomLevel = 1;
         event.target.isActive = false;
       });
@@ -72,9 +72,9 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
 
     if (map && modites) {
       const isIndividual = !Array.isArray(modites);
-      (modites as Modite[]) = isIndividual ? [modites as Modite] : (modites as Modite[]);
+      (modites as IModite[]) = isIndividual ? [modites as IModite] : (modites as IModite[]);
 
-      let markerData: any = (modites as Modite[]).map(modite => {
+      let markerData: any = (modites as IModite[]).map(modite => {
         if (!modite.profile || !modite.profile.fields) {
           return;
         }
@@ -87,11 +87,11 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
       markerData = markerData.filter((item: any) => item);
 
       if (map.isReady()) {
-        updateMap(map, markerData);
+        updateMap(markerData);
       } else {
         map.events.on('ready', () => {
           requestAnimationFrame(() => {
-            updateMap(map, markerData);
+            updateMap(markerData);
           });
         });
       }
@@ -99,6 +99,6 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
   });
 
   return <div className={s.mapCt} ref={mapRef} />;
-}
+};
 
 export default MapComponent;

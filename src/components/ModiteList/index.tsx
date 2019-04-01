@@ -5,16 +5,16 @@ import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 // @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer';
-// @ts-ignore
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
+// tslint:disable-next-line
 import Worker from 'worker-loader!./formatModites.js'; // eslint-disable-line import/no-webpack-loader-syntax
 import DetailsView from '../../components/DetailsView';
-import FilterEvent from '../../models/FilterEvent';
-import Modite from '../../models/Modite';
-import ModiteListProps from '../../models/ModiteListProps';
-import Project from '../../models/Project';
-import WorkerEvent from '../../models/WorkerEvent';
+import IFilterEvent from '../../models/FilterEvent';
+import IModite from '../../models/Modite';
+import IModiteListProps from '../../models/ModiteListProps';
+import IProject from '../../models/Project';
+import IWorkerEvent from '../../models/WorkerEvent';
 import ModiteContext from '../../state/modite';
 import ModitesContext from '../../state/modites';
 import ModiteListItem from '../ModiteListItem';
@@ -28,16 +28,16 @@ const locale: string = navigator.language;
 const worker: Worker = new Worker();
 
 // keep server response for Modites here for future reference
-let rawModites: Modite[];
+let rawModites: IModite[];
 // keep server response for Projects here for future reference
-let rawProjects: Project[];
+let rawProjects: IProject[];
 // points the the active raw list data: rawModites or rawProjects
-let rawListSource: Modite[] | Project[];
+let rawListSource: IModite[] | IProject[];
 
 // get data from server
 async function getModiteData(filter: string, date: Date): Promise<void> {
   if (!rawModites || !rawModites.length) {
-    const [modites, projects]: [Modite[], Project[]] = await Promise.all([
+    const [modites, projects]: [IModite[], IProject[]] = await Promise.all([
       fetch('https://modus.app/modites/all').then(res => res.json()),
       fetch('https://modus.app/projects/all').then(res => res.json()),
     ]);
@@ -53,9 +53,9 @@ let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
 let lastScrollOffset: number = 0; // used by onScroll
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
-  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
-  const [, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
+const ModiteList: FunctionComponent<IModiteListProps & RouteComponentProps> = () => {
+  const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext);
+  const [, setModites]: [IModite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false);
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false);
@@ -78,7 +78,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
   };
 
   // get fresh time
-  const tick: Function = (): void => {
+  const tick: () => void = (): void => {
     const date: Date = new Date();
     const currentMinutes: number = date.getMinutes();
     if (minutes && currentMinutes !== minutes) {
@@ -87,7 +87,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     minutes = currentMinutes;
   };
 
-  const onFilter = (event: FilterEvent): void => {
+  const onFilter = (event: IFilterEvent): void => {
     const query: string = event.detail.value || '';
 
     setFiltered(query.length);
@@ -102,10 +102,10 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
 
     // tell worker to parse and filter
     worker.postMessage({
-      modites: rawListSource,
-      filter: query,
       date: new Date(),
+      filter: query,
       locale,
+      modites: rawListSource,
     });
   };
 
@@ -131,7 +131,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
       }
     } else {
       // initial data parsing
-      worker.onmessage = (event: WorkerEvent) => {
+      worker.onmessage = (event: IWorkerEvent) => {
         requestAnimationFrame(() => {
           setModites(event.data);
           setListData(event.data);
@@ -142,7 +142,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     }
   });
 
-  const onRowClick = (record: Modite | Project) => {
+  const onRowClick = (record: IModite | IProject) => {
     // TODO: expand this to set either the activeModite or the activeProject using record.recordType
     setActiveModite(record);
     setModites(record);
@@ -177,11 +177,11 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
           {!listData || !listData.length ? (
             <SkeletonList />
           ) : (
-            <AutoSizer aria-label='The list of Modites'>
+            <AutoSizer aria-label="The list of Modites">
               {({ height, width }: { height: number; width: number }) => (
                 <>
                   <List
-                    className='List'
+                    className="List"
                     itemSize={60}
                     itemCount={(listData && listData.length) || 10}
                     height={height}
@@ -215,18 +215,18 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
           <div className={s.globeTitle}>MODITE LAND</div>
           <IonIcon
             class={`${s.globeButton}`}
-            slot='icon-only'
-            ios='ios-globe'
-            md='ios-globe'
+            slot="icon-only"
+            ios="ios-globe"
+            md="ios-globe"
             // TODO: wire up the handling of the globe click for really realz
-            onClick={() => console.log('clicked')}
+            // onClick={() => console.log('clicked')}
           />
         </div>
         <label className={searchbarWrapCls}>
           <IonSearchbar
             debounce={200}
             value={filter}
-            placeholder='Filter Modites'
+            placeholder="Filter Modites"
             onIonChange={onFilter}
             class={s.searchbar}
           />

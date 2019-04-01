@@ -6,7 +6,7 @@ const SkeletonList: FunctionComponent<{}> = () => (
   <>
     {Array.from(new Array(10)).map((_, index) => (
       <IonItem key={index}>
-        <IonThumbnail slot='start' class={s.thumbnailContainer}>
+        <IonThumbnail slot="start" class={s.thumbnailContainer}>
           <IonSkeletonText />
         </IonThumbnail>
 

@@ -6,13 +6,16 @@
     "tslint-config-prettier"
   ],
   "rules": {
+    "jsx-no-lambda": false,
     "no-duplicate-variable": {
       "severity": "warning"
     },
+    "no-submodule-imports": false,
     "prettier": true,
     "quotemark": [
       true,
-      "single"
+      "single",
+      "jsx-double"
     ],
     "semicolon": [
       true
