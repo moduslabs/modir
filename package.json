@@ -5,14 +5,11 @@
   "scripts": {
     "autoformat": "lint-staged",
     "bundlesize": "bundlesize",
-    "compile:once": "tsc --noEmit",
-    "compile:watch": "tsc --watch --noEmit",
+    "check:versions": "node test/ci/unprefixed-versions",
+    "check:compile": "tsc --noEmit",
     "build": "react-app-rewired build",
     "eject": "react-scripts eject",
     "lint": "tslint -p .",
-    "prettier:base": "prettier 'src/**/*.{css,json,js,tsx?}'",
-    "prettier": "yarn prettier:base --write",
-    "prettier-check": "yarn prettier:base --list-different",
     "start": "react-app-rewired start",
     "test": "react-app-rewired test"
   },

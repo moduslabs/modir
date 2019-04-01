@@ -150,12 +150,16 @@ jobs:
       - restore_cache: *restore-npm-cache
 
       - run:
+          name: Run Unprefixed Version Check
+          command: npm run check:versions
+
+      - run:
           name: Run TSLint
           command: npm run lint
 
       - run:
           name: Run Test Typescript Compile
-          command: npm run compile:once
+          command: npm run check:compile
 
 workflows:
   version: 2
