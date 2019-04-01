@@ -84,12 +84,8 @@ jobs:
       - restore_cache: *restore-bundlesize
 
       - run:
-          name: Install Bundlesize
-          command: npm i bundlesize
-
-      - run:
           name: Check Sizes
-          command: yarn bundlesize
+          command: npm run bundlesize
 
       - save_cache:
           key: v1-bundlesize-master
