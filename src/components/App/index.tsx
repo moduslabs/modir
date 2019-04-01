@@ -22,7 +22,7 @@ const Globe = lazy(() =>
 );
 
 function App() {
-  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useState(defaultModite);
+  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useState();
   const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
 
   return (

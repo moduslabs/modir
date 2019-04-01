@@ -1,0 +1,30 @@
+.moditeCt {
+  position: absolute;
+  background: white;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  border-radius: 20px 20px 0 0;
+  transform: translateY(calc(100% + 36px));
+  transition: transform 400ms;
+  overflow: visible;
+  text-align: center;
+  padding: 124px 0 0 0;
+}
+.moditeCt img {
+  border-radius: 20px;
+  box-shadow: 0px 33px 18px -18px rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.activeModiteShown {
+  transform: translateY(0px);
+}
+
+.title {
+  font-weight: bold;
+  font-size: 22px;
+}

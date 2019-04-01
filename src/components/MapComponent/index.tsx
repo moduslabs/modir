@@ -75,7 +75,7 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
       (modites as Modite[]) = isIndividual ? [(modites as Modite)] : (modites as Modite[]);
 
       let markerData: any = (modites as Modite[]).map(modite => {
-        if (!modite.profile.fields) return;
+        if (!modite.profile || !modite.profile.fields) return;
 
         const { locationData = {}, Location: title } = modite.profile.fields;
         const { lat: latitude, lon: longitude } = locationData;
@@ -83,8 +83,6 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
       });
 
       markerData = markerData.filter((item: any) => item);
-
-      if (!markerData.length) return;
 
       if (map.isReady()) {
         updateMap(map, markerData);
