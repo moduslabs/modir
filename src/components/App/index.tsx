@@ -34,10 +34,10 @@ function App() {
           <ModitesContextProvider value={[modites, setModites]}>
             <main role="main">
               <Router>
-                <Route path="/" exact={true} component={Modites} />
-                <Route path="/details" exact={true} component={Details} />
+                <Route path="/" exact component={Modites} />
+                <Route path="/details" exact component={Details} />
                 <Route path="/details/:id" component={Details} />
-                <Route path="/globe" exact={true} component={Globe} />
+                <Route path="/globe" exact component={Globe} />
               </Router>
             </main>
           </ModitesContextProvider>
