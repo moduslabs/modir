@@ -150,6 +150,7 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - checkout
       - run:
           name: Run TSLint
           command: npm run lint
