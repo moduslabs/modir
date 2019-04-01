@@ -1,25 +1,32 @@
 {
-    "rules": {
-        "no-duplicate-variable": {
-            "severity": "warning"
-        },
-        "quotemark": [
-            true,
-            "single"
-        ],
-        "semicolon": [
-            true
-        ],
-        "trailing-comma": [
-            true,
-            {
-                "multiline": "always",
-                "singleline": "never",
-                "esSpecCompliant": true
-            }
-        ]
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-react-hooks",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "no-duplicate-variable": {
+      "severity": "warning"
     },
-    "rulesDirectory": [
-        "node_modules/tslint-eslint-rules/dist/rules"
+    "prettier": true,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "semicolon": [
+      true
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never",
+        "esSpecCompliant": true
+      }
     ]
+  },
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
+  ]
 }

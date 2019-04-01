@@ -1,10 +1,15 @@
 {
+  "editor.formatOnSave": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
   "files.exclude": {
     "**/.classpath": true,
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true
   },
+  "javascript.format.enable": false,
   "cSpell.words": [
     "Modite",
     "Modites",
