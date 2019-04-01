@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 // @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { IonSearchbar, IonIcon, IonPage, IonButton } from '@ionic/react';
+import { IonSearchbar, IonIcon, IonPage } from '@ionic/react';
 import classNames from 'classnames/bind';
 import Modite from '../../models/Modite';
 import WorkerEvent from '../../models/WorkerEvent';
@@ -37,20 +37,13 @@ let rawListSource: Modite[] | Project[];
 // get data from server
 async function getModiteData(filter: string, date: Date): Promise<void> {
   if (!rawModites || !rawModites.length) {
-    const fetches = [
-      new Promise(async resolve => {
-        const moditesResp: Modite[] = await fetch('https://modus.app/modites/all').then(res => res.json());
-        rawModites = moditesResp;
-        resolve();
-      }),
-      new Promise(async resolve => {
-        const projectsResp: Project[] = await fetch('https://modus.app/projects/all').then(res => res.json());
-        rawProjects = projectsResp;
-        resolve();
-      })
-    ];
+    const [modites, projects]: [Modite[], Project[]] = await Promise.all([
+      fetch('https://modus.app/modites/all').then(res => res.json()),
+      fetch('https://modus.app/projects/all').then(res => res.json())
+    ]);
 
-    await Promise.all(fetches);
+    rawModites = modites;
+    rawProjects = projects;
   }
   rawListSource = rawModites;
   worker.postMessage({ modites: rawListSource, filter, date, locale });
@@ -62,7 +55,7 @@ let lastScrollOffset: number = 0; // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
   const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
-  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
+  const [ , setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false);
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false);

@@ -1,7 +1,7 @@
 import React, { Suspense, useState, lazy } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { IonApp, IonContent } from '@ionic/react';
-import Modite, { defaultModite } from '../../models/Modite';
+import Modite from '../../models/Modite';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
 import './theme.css';

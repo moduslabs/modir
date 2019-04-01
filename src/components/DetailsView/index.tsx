@@ -7,7 +7,7 @@ import ModiteProfileResp from '../../models/ModiteProfileResp';
 
 // TODO: type correctly
 function Details({ className = '' } : any) {
-  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
+  const [activeModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
   const { profile = {} }: any = activeModite || {};
   let { fields } = profile;
 

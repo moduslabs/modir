@@ -31,7 +31,7 @@ onmessage = function(event) {
     })
     .map(modite => ({
       ...modite,
-      'real_name': modite.real_name || modite.name,
+      real_name: modite.real_name || modite.name,
       localTime: isProject ? '' : date.toLocaleString(locale, {
         timeZone: modite.tz,
         hour: 'numeric',
