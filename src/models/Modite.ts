@@ -25,6 +25,7 @@ export default interface Modite {
   tod: string;
   profile: ModiteProfile;
   tacos: number;
+  recordType: 'user' | 'project';
 }
 
 export const defaultModite: Modite = {

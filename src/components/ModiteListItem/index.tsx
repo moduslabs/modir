@@ -12,27 +12,16 @@ const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = (
   history,
 }) => {
   const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
-  const handleItemClick = async (): Promise<void> => {
-    if (modite.id !== activeModite.id) {
-      setActiveModite(defaultModite);
-      history.push(`/details/${modite.id}`);
-      const moditeProfile: ModiteProfileResp = await fetch(
-        `https://modus.app/modite/${modite.id}`,
-      ).then(res => res.json());
-      if (moditeProfile.ok) modite.profile = moditeProfile.profile;
-      setActiveModite(modite);
-    }
-  };
 
   return (
-    <button className={s.itemInnerCt} onClick={handleItemClick}>
-      <div aria-hidden="true" className={s.thumbContainer}>
+    <div className={s.itemInnerCt}>
+      {modite.profile && <div aria-hidden="true" className={s.thumbContainer}>
         <ModiteImage modite={modite} />
-      </div>
+      </div>}
       <div className={s.nameCt}>{modite.real_name}</div>
       <div aria-hidden="true" className={s.todCt}>{modite.tod}</div>
       <div className={s.localTime}>{modite.localTime}</div>
-    </button>
+    </div>
   );
 };
 export default withRouter(ModiteListItem);

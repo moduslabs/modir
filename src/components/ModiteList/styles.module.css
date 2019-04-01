@@ -61,6 +61,9 @@
 .searchbarWrapCollapsed {
   transform: translateY(0px);
 }
+.searchbarWrapHidden {
+  transform: translateY(-200%);
+}
 
 .searchbar {
   padding: 12px;
@@ -76,6 +79,7 @@
 
 .moditeListWrap {
   flex: 1;
+  background: white;
 }
 
 .mapWindow {
@@ -101,6 +105,10 @@
     rgba(188, 219, 243, 0) 100%,
     rgba(112, 178, 229, 0) 100%
   );
+  transition: transform 600ms;
+}
+.globalBarWrapHidden {
+  transform: translateY(-150%);
 }
 
 .globalSpacer {
@@ -130,4 +138,29 @@
 
 .moditeRow {
   display: flex;
+}
+
+.tabCt {
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  transition: height 500ms;
+}
+.tabCt ion-button {
+  flex: 1;
+}
+.tabCtHidden {
+  height: 0;
+}
+
+.listTypeTab {
+  color: var(--ion-color-modus-charcoal);
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: white;
+}
+.listTypeTabSelected {
+  color: var(--ion-color-modus-salmon);
 }
