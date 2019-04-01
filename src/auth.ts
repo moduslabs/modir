@@ -32,7 +32,9 @@ function updateSigninStatus(isSignedIn: boolean, cb?: Function) {
   // If the signin status is changed to signedIn, we make an API call.
   if (isSignedIn) {
     makeApiCall();
-    if (cb) cb();
+    if (cb) {
+      cb();
+    }
   } else {
     signIn();
   }

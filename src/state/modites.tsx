@@ -1,4 +1,4 @@
-import { createContext, Context } from 'react';
+import { Context, createContext } from 'react';
 
 const ModitesContext: Context<any> = createContext([{}, Function]);
 const ModitesContextProvider = ModitesContext.Provider;

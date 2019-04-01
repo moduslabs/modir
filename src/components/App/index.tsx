@@ -1,12 +1,11 @@
-import React, { Suspense, useState, lazy } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { IonApp, IonContent } from '@ionic/react';
-import Modite from '../../models/Modite';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
-import './theme.css';
+import { IonApp, IonContent } from '@ionic/react';
+import React, { lazy, Suspense, useState } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Modite from '../../models/Modite';
 import './styles.module.css';
-
+import './theme.css';
 import { ModiteContextProvider } from '../../state/modite';
 import { ModitesContextProvider } from '../../state/modites';
 
@@ -33,10 +32,10 @@ function App() {
           <ModitesContextProvider value={[modites, setModites]}>
             <main role="main">
               <Router>
-                <Route path="/" exact component={Modites} />
-                <Route path="/details" exact component={Details} />
+                <Route path="/" exact={true} component={Modites} />
+                <Route path="/details" exact={true} component={Details} />
                 <Route path="/details/:id" component={Details} />
-                <Route path="/globe" exact component={Globe} />
+                <Route path="/globe" exact={true} component={Globe} />
               </Router>
             </main>
           </ModitesContextProvider>

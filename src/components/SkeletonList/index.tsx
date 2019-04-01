@@ -1,12 +1,12 @@
-import React, { FunctionComponent } from "react";
-import { IonItem, IonThumbnail, IonSkeletonText, IonLabel } from "@ionic/react";
+import { IonItem, IonLabel, IonSkeletonText, IonThumbnail } from '@ionic/react';
+import React, { FunctionComponent } from 'react';
 import s from './styles.module.css';
 
 const SkeletonList: FunctionComponent<{}> = () => (
   <>
     {Array.from(new Array(10)).map((_, index) => (
       <IonItem key={index}>
-        <IonThumbnail slot="start" class={s.thumbnailContainer}>
+        <IonThumbnail slot='start' class={s.thumbnailContainer}>
           <IonSkeletonText />
         </IonThumbnail>
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { Circle, color, create } from '@amcharts/amcharts4/core';
-import { MapChart, projections, MapPolygonSeries, MapImageSeries } from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
+import { Circle, color, create } from '@amcharts/amcharts4/core';
+import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps';
+import React, { useEffect, useRef } from 'react';
 import s from './styles.module.css';
 
 // TODO: type the props correctly
@@ -40,11 +40,11 @@ function GlobeComponent() {
       });
 
       // Create image series
-      var imageSeries = map.series.push(new MapImageSeries());
+      const imageSeries = map.series.push(new MapImageSeries());
 
       // Create a circle image in image series template so it gets replicated to all new images
-      var imageSeriesTemplate = imageSeries.mapImages.template;
-      var circle = imageSeriesTemplate.createChild(Circle);
+      const imageSeriesTemplate = imageSeries.mapImages.template;
+      const circle = imageSeriesTemplate.createChild(Circle);
       circle.radius = 10;
       circle.fill = color('#ff5c5d');
       circle.stroke = color('#FFFFFF');

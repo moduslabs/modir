@@ -1,4 +1,4 @@
-import Modite from "./Modite";
+import Modite from './Modite';
 
 export default interface ModiteListProps {
   onModiteItemClick?: Function;

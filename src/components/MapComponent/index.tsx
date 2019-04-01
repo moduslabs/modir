@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import { Circle, color, create } from '@amcharts/amcharts4/core';
-import { MapChart, projections, MapPolygonSeries, MapImageSeries } from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
-import MapComponentProps from './MapComponentProps';
+import { Circle, color, create } from '@amcharts/amcharts4/core';
+import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps';
+import React, { useEffect, useRef } from 'react';
 import Modite, { defaultModite } from '../../models/Modite';
+import MapComponentProps from './MapComponentProps';
 import s from './styles.module.css';
 
 let map: MapChart;
@@ -11,13 +11,13 @@ let imageSeries: any;
 
 function updateMap(map: MapChart, markerData: any) {
   imageSeries.data = markerData;
-    if (markerData.length === 1) {
-      const { latitude, longitude } = markerData[0];
-      map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500);
-    } else {
-      map.goHome(500);
-    }
-};
+  if (markerData.length === 1) {
+    const { latitude, longitude } = markerData[0];
+    map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500);
+  } else {
+    map.goHome(500);
+  }
+}
 
 function MapComponent({ modites = defaultModite }: MapComponentProps) {
   const mapRef: React.MutableRefObject<null> = useRef(null);
@@ -72,14 +72,16 @@ function MapComponent({ modites = defaultModite }: MapComponentProps) {
 
     if (map && modites) {
       const isIndividual = !Array.isArray(modites);
-      (modites as Modite[]) = isIndividual ? [(modites as Modite)] : (modites as Modite[]);
+      (modites as Modite[]) = isIndividual ? [modites as Modite] : (modites as Modite[]);
 
       let markerData: any = (modites as Modite[]).map(modite => {
-        if (!modite.profile || !modite.profile.fields) return;
+        if (!modite.profile || !modite.profile.fields) {
+          return;
+        }
 
         const { locationData = {}, Location: title } = modite.profile.fields;
         const { lat: latitude, lon: longitude } = locationData;
-        return (latitude && longitude && title) ? { latitude, longitude, title } : null;
+        return latitude && longitude && title ? { latitude, longitude, title } : null;
       });
 
       markerData = markerData.filter((item: any) => item);

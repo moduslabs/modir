@@ -1,5 +1,5 @@
-import React, { lazy, useContext } from 'react';
 import { IonPage } from '@ionic/react';
+import React, { lazy, useContext } from 'react';
 import Modite from '../../models/Modite';
 import ModiteContext from '../../state/modite';
 

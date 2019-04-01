@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import initAuth from './auth';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import initAuth from './auth';
 
 function init() {
   ReactDOM.render(<App />, document.getElementById('root'));

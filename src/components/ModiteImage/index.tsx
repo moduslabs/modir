@@ -1,12 +1,12 @@
-import React from 'react';
 import cx from 'classnames';
+import React from 'react';
+import Modite from '../../models/Modite';
 import styles from './styles.module.css';
 import userIconPlaceholder from './user-icon-placeholder.png';
-import Modite from '../../models/Modite';
 
-type Props = {
+interface Props {
   modite: Modite;
-};
+}
 
 function ModiteImage({ modite, ...other }: Props) {
   return (

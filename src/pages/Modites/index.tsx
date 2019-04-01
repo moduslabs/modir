@@ -1,9 +1,9 @@
-import React, { lazy, useState, useRef, useContext } from 'react';
 import { IonPage } from '@ionic/react';
+import React, { lazy, useContext, useRef, useState } from 'react';
 import Modite, { defaultModite } from '../../models/Modite';
 import ModiteContext from '../../state/modite';
-import s from './styles.module.css';
 import ModitesContext from '../../state/modites';
+import s from './styles.module.css';
 
 const ModiteList = lazy(() =>
   import('../../components/ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
@@ -26,8 +26,8 @@ function App() {
     <IonPage>
       <div className={s.mapCt}>
         <div className={s.mapWrap}>
-          <MapComponent modites={modites}/>
-          <div className={s.mapOverlay}></div>
+          <MapComponent modites={modites} />
+          <div className={s.mapOverlay} />
         </div>
       </div>
       <ModiteList
