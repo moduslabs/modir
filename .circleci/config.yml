@@ -143,7 +143,7 @@ jobs:
           paths:
             - node_modules
 
-  lint:
+  run-lint:
     docker:
       - image: circleci/node:10
 
@@ -165,7 +165,7 @@ workflows:
 
       - lint:
           requires:
-            - lint
+            - run-lint
 
       - build-pwa:
           requires:
