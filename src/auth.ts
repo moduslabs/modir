@@ -47,7 +47,7 @@ const initClient = (cb: () => void) => {
       clientId: '398317159902-tq6ld761e6f8tut1m46l09nbrdld74q1.apps.googleusercontent.com',
       discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
       scope: 'profile',
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // @ts-ignore
       ux_mode: 'redirect',
     })
     .then(() => {

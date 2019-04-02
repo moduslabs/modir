@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
-const rewireEslint = require('react-app-rewire-eslint')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 module.exports = function override(config, env) {
-  config = rewireEslint(config, env)
-
   if (env === 'development') {
     // required for web workers to work with HMR
     config.output.globalObject = 'this'

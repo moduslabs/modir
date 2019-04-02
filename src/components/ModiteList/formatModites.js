@@ -1,4 +1,5 @@
 /* eslint-disable */
+// @ts-ignore
 onmessage = function (event) {
   const {
     modites,
