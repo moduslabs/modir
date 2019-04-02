@@ -9,7 +9,7 @@
     "check:compile": "tsc --noEmit",
     "build": "react-app-rewired build",
     "eject": "react-scripts eject",
-    "lint": "eslint 'src/**/*.js' 'src/**/*.ts' 'src/**/*.tsx' --fix",
+    "lint": "eslint 'src/**/*.js' 'src/**/*.ts' 'src/**/*.tsx'",
     "start": "react-app-rewired start",
     "test": "react-app-rewired test"
   },
