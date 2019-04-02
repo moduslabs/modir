@@ -5,9 +5,9 @@ import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
-import Modite from '../../models/Modite'
-import WorkerEvent from '../../models/WorkerEvent'
-import FilterEvent from '../../models/FilterEvent'
+import IModite from '../../models/Modite'
+import IWorkerEvent from '../../models/WorkerEvent'
+import IFilterEvent from '../../models/FilterEvent'
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js' // eslint-disable-line import/no-webpack-loader-syntax
 import s from './styles.module.css'
@@ -28,11 +28,11 @@ const locale: string = navigator.language
 const worker: Worker = new Worker()
 
 // keep server response for Modites here for future reference
-let rawModites: Modite[]
+let rawModites: IModite[]
 // keep server response for Projects here for future reference
 let rawProjects: Project[]
 // points the the active raw list data: rawModites or rawProjects
-let rawListSource: Modite[] | Project[]
+let rawListSource: IModite[] | Project[]
 
 let lastRoute: string
 
@@ -41,8 +41,8 @@ let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
-  const [, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext)
-  const [, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext)
+  const [, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
+  const [, setModites]: [IModite[], React.Dispatch<any>] = useContext(ModitesContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
@@ -58,7 +58,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   // get data from server
   async function getModiteData(filter: string, date: Date): Promise<void> {
     if (!rawModites || !rawModites.length) {
-      const [modites, projects]: [Modite[], Project[]] = await Promise.all([
+      const [modites, projects]: [IModite[], Project[]] = await Promise.all([
         fetch('https://modus.app/modites/all').then(res => res.json()),
         fetch('https://modus.app/projects/all').then(res => res.json()),
       ])
@@ -131,7 +131,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     minutes = currentMinutes
   }
 
-  const onFilter = (event: FilterEvent): void => {
+  const onFilter = (event: IFilterEvent): void => {
     const query: string = event.detail.value || ''
 
     setFiltered(query.length)
@@ -162,7 +162,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       if (listData.length) return clearTimeInterval
     } else {
       // initial data parsing
-      worker.onmessage = (event: WorkerEvent) => {
+      worker.onmessage = (event: IWorkerEvent) => {
         requestAnimationFrame(() => {
           setModites(event.data)
           setListData(event.data)

@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
 import ModiteContext from '../../state/modite'
-import Modite from '../../models/Modite'
+import IModite from '../../models/Modite'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
 
 // TODO: type correctly
 function Details({ className = '' }: any) {
-  const [activeModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext)
+  const [activeModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
 
   if (!activeModite) return null
 
