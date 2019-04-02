@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-const bot = require('circle-github-bot').create();
-const report = require('../../artifacts/lighthouse.report.json');
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const bot = require('circle-github-bot').create()
+const report = require('../../artifacts/lighthouse.report.json')
 
 const scores = Object.values(report.categories).reduce(
   (agg, category) => `${agg}
 | ${category.title} | ${category.score * 100} |`,
   '',
-);
+)
 
 bot.comment(
   process.env.GH_AUTH_TOKEN,
@@ -21,4 +23,4 @@ bot.comment(
     .artifactLink('artifacts/lighthouse.report.html', 'Full Lighthouse Report')
     .replace('/project/', '/repo/')}</strong>
 `,
-);
+)

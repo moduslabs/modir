@@ -1,40 +1,43 @@
-import React, { useContext } from 'react';
-import ModiteContext from '../../state/modite';
-import Modite from '../../models/Modite';
-import classNames from 'classnames/bind';
-import s from './styles.module.css';
-import ModiteProfileResp from '../../models/ModiteProfileResp';
+import classNames from 'classnames/bind'
+import React, { useContext } from 'react'
+import IModite from '../../models/Modite'
+import IModiteProfileResp from '../../models/ModiteProfileResp'
+import ModiteContext from '../../state/modite'
+import s from './styles.module.css'
 
 // TODO: type correctly
-function Details({ className = '' } : any) {
-  const [activeModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
-  const { profile = {} }: any = activeModite || {};
-  let { fields } = profile;
+function Details({ className = '' }: any) {
+  const [activeModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
+  const { profile = {} }: any = activeModite || {}
+  let { fields } = profile
 
   const fetchProfile = async () => {
-    if (!activeModite) return;
+    if (!activeModite) {
+      return
+    }
 
-    const moditeProfile: ModiteProfileResp = await fetch(
-      `https://modus.app/modite/${activeModite.id}`,
-    ).then(res => res.json());
-    activeModite.profile = moditeProfile.profile;
-    fields = moditeProfile.profile.fields;
+    const moditeProfile: IModiteProfileResp = await fetch(`https://modus.app/modite/${activeModite.id}`).then(res =>
+      res.json(),
+    )
+    activeModite.profile = moditeProfile.profile
+    fields = moditeProfile.profile.fields
   }
 
   if (!fields) {
-    fetchProfile();
-    fields = {};
+    fetchProfile()
+    fields = {}
   }
 
-  const image = profile && profile.image_192;
-  const name = activeModite && activeModite.real_name ? activeModite && activeModite.real_name : activeModite && activeModite.name;
-  const { Location: location } = fields;
-  const tod = activeModite && activeModite.tod;
-  const localDate = activeModite && activeModite.localDate;
-  const localTime = activeModite && activeModite.localTime;
+  const image = profile && profile.image_192
+  const name =
+    activeModite && activeModite.real_name ? activeModite && activeModite.real_name : activeModite && activeModite.name
+  const { Location: location } = fields
+  const tod = activeModite && activeModite.tod
+  const localDate = activeModite && activeModite.localDate
+  const localTime = activeModite && activeModite.localTime
 
-  const cx = classNames.bind(s);
-  className = cx('moditeCt', className);
+  const cx = classNames.bind(s)
+  className = cx('moditeCt', className)
 
   return (
     <div className={className}>
@@ -43,11 +46,11 @@ function Details({ className = '' } : any) {
 
       <div className={s.location}>{location}</div>
       <div>
-        <span>{tod}</span>{localDate} - {localTime}
+        <span>{tod}</span>
+        {localDate} - {localTime}
       </div>
-
     </div>
-  );
+  )
 }
 
-export default Details;
+export default Details

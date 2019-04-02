@@ -1,12 +1,12 @@
-import React from 'react';
-import cx from 'classnames';
-import styles from './styles.module.css';
-import userIconPlaceholder from './user-icon-placeholder.png';
-import Modite from '../../models/Modite';
+import cx from 'classnames'
+import React from 'react'
+import IModite from '../../models/Modite'
+import styles from './styles.module.css'
+import userIconPlaceholder from './user-icon-placeholder.png'
 
-type Props = {
-  modite: Modite;
-};
+interface Props {
+  modite: IModite
+}
 
 function ModiteImage({ modite, ...other }: Props) {
   return (
@@ -16,7 +16,7 @@ function ModiteImage({ modite, ...other }: Props) {
         <img src={userIconPlaceholder} alt={modite.real_name} role="presentation" />
       </picture>
     </div>
-  );
+  )
 }
 
-export default ModiteImage;
+export default ModiteImage

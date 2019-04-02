@@ -1,30 +1,25 @@
-import React, { Suspense, useState, lazy } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { IonApp, IonContent } from '@ionic/react';
-import Modite from '../../models/Modite';
-import '@ionic/core/css/core.css';
-import '@ionic/core/css/ionic.bundle.css';
-import './theme.css';
-import './styles.module.css';
+// tslint:disable-next-line: no-implicit-dependencies
+import '@ionic/core/css/core.css'
+// tslint:disable-next-line: no-implicit-dependencies
+import '@ionic/core/css/ionic.bundle.css'
+import { IonApp, IonContent } from '@ionic/react'
+import React, { lazy, Suspense, useState } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import IModite from '../../models/Modite'
+import { ModiteContextProvider } from '../../state/modite'
+import { ModitesContextProvider } from '../../state/modites'
+import './styles.module.css'
+import './theme.css'
 
-import { ModiteContextProvider } from '../../state/modite';
-import { ModitesContextProvider } from '../../state/modites';
+const Modites = lazy(() => import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */))
 
-const Modites = lazy(() =>
-  import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
-);
+const Details = lazy(() => import('../../pages/Details' /* webpackChunkName: "page-details", webpackPrefetch: true  */))
 
-const Details = lazy(() =>
-  import('../../pages/Details' /* webpackChunkName: "page-details", webpackPrefetch: true  */),
-);
-
-const Globe = lazy(() =>
-  import('../../pages/Globe' /* webpackChunkName: "page-globe", webpackPrefetch: true  */),
-);
+const Globe = lazy(() => import('../../pages/Globe' /* webpackChunkName: "page-globe", webpackPrefetch: true  */))
 
 function App() {
-  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useState();
-  const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
+  const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useState()
+  const [modites, setModites]: [IModite[], React.Dispatch<any>] = useState()
 
   return (
     <IonApp>
@@ -43,7 +38,7 @@ function App() {
         </ModiteContextProvider>
       </Suspense>
     </IonApp>
-  );
+  )
 }
 
-export default App;
+export default App
