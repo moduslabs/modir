@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, FunctionComponent } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 // @ts-ignore
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
@@ -20,6 +20,8 @@ import ModitesContext from '../../state/modites';
 import Project from '../../models/Project';
 import ModiteContext from '../../state/modite';
 import DetailsView from '../../components/DetailsView';
+import ModiteProfileResp from '../../models/ModiteProfileResp';
+import BackButton from '../BackButton';
 
 // get locale once
 const locale: string = navigator.language;
@@ -34,33 +36,79 @@ let rawProjects: Project[];
 // points the the active raw list data: rawModites or rawProjects
 let rawListSource: Modite[] | Project[];
 
-// get data from server
-async function getModiteData(filter: string, date: Date): Promise<void> {
-  if (!rawModites || !rawModites.length) {
-    const [modites, projects]: [Modite[], Project[]] = await Promise.all([
-      fetch('https://modus.app/modites/all').then(res => res.json()),
-      fetch('https://modus.app/projects/all').then(res => res.json())
-    ]);
-
-    rawModites = modites;
-    rawProjects = projects;
-  }
-  rawListSource = rawModites;
-  worker.postMessage({ modites: rawListSource, filter, date, locale });
-}
+let lastRoute: string;
 
 let minutes: number; // used by tick
 let lastFilter: string = ''; // used by onFilter
 let lastScrollOffset: number = 0; // used by onScroll
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () => {
-  const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
+const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match, history }) => {
+  const [ , setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext);
   const [ , setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext);
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false);
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false);
   const [listType, setListType]: [string, React.Dispatch<any>] = useState('modites');
   const [listData, setListData]: [any, React.Dispatch<any>] = useState();
+
+  const { url }: { url: string } = match;
+  const isDetails: boolean = url.indexOf('/details/') === 0;
+  const id: string | undefined = isDetails ? url.substring(url.lastIndexOf('/') + 1) : undefined;
+  const isProjects: boolean = url.indexOf('/projects') === 0;
+  const useProjects = isProjects || url.indexOf('/project-') >= 0;
+
+  // get data from server
+  async function getModiteData(filter: string, date: Date): Promise<void> {
+    if (!rawModites || !rawModites.length) {
+      const [modites, projects]: [Modite[], Project[]] = await Promise.all([
+        fetch('https://modus.app/modites/all').then(res => res.json()),
+        fetch('https://modus.app/projects/all').then(res => res.json())
+      ]);
+
+      rawModites = modites;
+      rawProjects = projects;
+    }
+
+    rawListSource = useProjects ? rawProjects : rawModites;
+    worker.postMessage({ modites: rawListSource, filter, date, locale });
+  }
+
+  const handleRouting = async () => {
+    lastRoute = url;
+    const date = new Date();
+    const type = isProjects ? 'projects' : 'modites';
+
+    // handle details type route
+    if (id) {
+      const record = listData.find((item: any) => item.id === id);
+
+      if (record) {
+        const { profile = {} }: any = record || {};
+        let { fields } = profile;
+
+        const fetchProfile = async () => {
+          const moditeProfile: ModiteProfileResp = await fetch(
+            `https://modus.app/modite/${id}`,
+          ).then(res => res.json());
+          record.profile = moditeProfile.profile;
+          fields = moditeProfile.profile.fields;
+        }
+
+        if (record.recordType === 'modite' && !fields) {
+          fetchProfile();
+        }
+
+        setActiveModite(record);
+        worker.postMessage({ modites: [record], filter, date, locale });
+      }
+    } else {
+      // handle list type routes
+      const rawSource = isProjects ? rawProjects : rawModites;
+      setListType(type);
+      rawListSource = rawSource;
+      worker.postMessage({ modites: rawSource, filter, date, locale });
+    }
+  }
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
     const threshold: number = 10; // scroll threshold to hit before acting on the layout
@@ -104,16 +152,6 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     });
   };
 
-  const onTabClick = (type: string): void => {
-    if (type !== listType) {
-      const date = new Date();
-      const rawSource = type === 'modites' ? rawModites : rawProjects;
-      setListType(type);
-      rawListSource = rawSource;
-      worker.postMessage({ modites: rawSource, filter, date, locale });
-    }
-  }
-
   useEffect(() => {
     // start the clock
     const intervalID: number = window.setInterval(tick, 1000);
@@ -121,6 +159,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
 
     // if we already have something, we can safely abandon fetching
     if (listData) {
+      if (url !== lastRoute) handleRouting();
       if (listData.length) return clearTimeInterval;
     } else {
       // initial data parsing
@@ -135,31 +174,27 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
     }
   });
 
-  const onRowClick = (record: Modite | Project) => {
-    // TODO: expand this to set either the activeModite or the activeProject using record.recordType
-    setActiveModite(record);
-    setModites(record);
-  }
-
   const Row = ({ index, style }: ListChildComponentProps) => (
-    <div className={s.moditeRow} style={style} onClick={() => onRowClick(listData[index])}>
+    <Link to={`/details/${listData[index].id}`} className={s.moditeRow} style={style}>
       <ModiteListItem modite={listData[index]} key={listData[index].id} />
-    </div>
+    </Link>
   );
 
   const cx = classNames.bind(s);
   const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed });
-  const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!activeModite });
-  const searchbarWrapCls = cx('searchbarWrap', { searchbarWrapCollapsed: collapsed || filtered, searchbarWrapHidden: !!activeModite });
+  const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!id });
+  const searchbarWrapCls = cx('searchbarWrap', { searchbarWrapCollapsed: collapsed || filtered, searchbarWrapHidden: !!id });
   const searchbarSpacerCls = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed || filtered });
   const moditesTabCls = cx('listTypeTab', { listTypeTabSelected: listType === 'modites' });
   const projectsTabCls = cx('listTypeTab', { listTypeTabSelected: listType === 'projects' });
-  const activeModiteCls = cx({ activeModiteShown: !!activeModite });
-  const tabCtCls = cx('tabCt', { tabCtHidden: !!activeModite });
+  const activeModiteCls = cx({ activeModiteShown: !!id });
+  const tabCtCls = cx('tabCt', { tabCtHidden: !!id });
+  const backButtonCls = cx('backButton');
 
   return (
     <>
       <IonPage className={s.moditeListCt}>
+        <BackButton className={backButtonCls}/>
         <div className={mapWindowCls}></div>
         <div className={s.moditeListWrap}>
           {!listData || !listData.length ? (
@@ -188,8 +223,14 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = () 
           <DetailsView className={activeModiteCls}/>
         </div>
         <div className={tabCtCls}>
-          <button className={moditesTabCls} onClick={() => onTabClick('modites')}>Employees</button>
-          <button className={projectsTabCls} onClick={() => onTabClick('projects')}>Projects</button>
+          <Link to="/" className={moditesTabCls}>
+            <IonIcon ios="ios-people" md="ios-people" />
+            Team
+          </Link>
+          <Link to="/projects" className={projectsTabCls}>
+            <IonIcon ios="ios-book" md="ios-book" />
+            Projects
+          </Link>
         </div>
       </IonPage>
 

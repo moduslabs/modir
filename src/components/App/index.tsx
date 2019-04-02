@@ -14,14 +14,6 @@ const Modites = lazy(() =>
   import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
 );
 
-const Details = lazy(() =>
-  import('../../pages/Details' /* webpackChunkName: "page-details", webpackPrefetch: true  */),
-);
-
-const Globe = lazy(() =>
-  import('../../pages/Globe' /* webpackChunkName: "page-globe", webpackPrefetch: true  */),
-);
-
 function App() {
   const [activeModite, setActiveModite]: [Modite, React.Dispatch<any>] = useState();
   const [modites, setModites]: [Modite[], React.Dispatch<any>] = useState();
@@ -33,10 +25,7 @@ function App() {
           <ModitesContextProvider value={[modites, setModites]}>
             <main role="main">
               <Router>
-                <Route path="/" exact component={Modites} />
-                <Route path="/details" exact component={Details} />
-                <Route path="/details/:id" component={Details} />
-                <Route path="/globe" exact component={Globe} />
+                <Route path="*" component={Modites}/>
               </Router>
             </main>
           </ModitesContextProvider>

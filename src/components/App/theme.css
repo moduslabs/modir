@@ -160,3 +160,8 @@
   --ion-toolbar-color: #fff;
   --ion-toolbar-color-activated: #fff;
 }
+
+a {
+  text-decoration: none;
+  color: var(--ion-color-modus-charcoal);
+}
