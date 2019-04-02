@@ -29,6 +29,6 @@
     "unmount",
     "vimeo"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "tslint.jsEnable": true
+  "prettier.eslintIntegration": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

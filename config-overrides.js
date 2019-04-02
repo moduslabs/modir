@@ -1,46 +1,51 @@
-const path = require('path');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path')
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
+const rewireEslint = require('react-app-rewire-eslint')
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 module.exports = function override(config, env) {
+  config = rewireEslint(config, env)
+
   if (env === 'development') {
     // required for web workers to work with HMR
-    config.output.globalObject = 'this';
+    config.output.globalObject = 'this'
   }
 
   // custom service workers
   config.plugins = config.plugins.map(plugin => {
     if (plugin.constructor.name === 'GenerateSW') {
       return new WorkboxWebpackPlugin.InjectManifest({
-        swSrc: './src/serviceWorkerCustom.js',
         swDest: 'service-worker.js',
-      });
+        swSrc: './src/serviceWorkerCustom.js',
+      })
     }
 
-    return plugin;
-  });
+    return plugin
+  })
 
   // custom alias for src/
-  config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+  config.resolve.alias['@'] = path.resolve(__dirname, 'src')
 
   // remove eslint plugin (index #1)
-  config.module.rules.splice(1, 1);
+  config.module.rules.splice(1, 1)
 
   // remove pdfmake from amcharts
   config.externals = [
     /(xlsx|canvg)/,
     function(context, request, callback) {
       if (/(pdfmake)/.test(request)) {
-        return callback(null, 'commonjs ' + request);
+        return callback(null, 'commonjs ' + request)
       }
 
-      callback();
+      callback()
     },
-  ];
+  ]
 
   // Webpack 5 will introduce something like this plugin
   // Testing this instead of creating a DLL setup
-  const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-  config.plugins.push(new HardSourceWebpackPlugin());
+
+  config.plugins.push(new HardSourceWebpackPlugin())
   config.plugins.push(
     new HardSourceWebpackPlugin.ExcludeModulePlugin([
       {
@@ -52,7 +57,7 @@ module.exports = function override(config, env) {
         test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
       },
     ]),
-  );
+  )
 
   // use this code to quickly analyze current config
   // console.log(config.module.rules);
@@ -62,5 +67,5 @@ module.exports = function override(config, env) {
   // todo: add cache-loader to babel; add DLL
   // config.module.rules[1].oneOf.map()
 
-  return config;
-};
+  return config
+}
