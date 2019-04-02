@@ -37,10 +37,10 @@ let rawListSource: Modite[] | Project[]
 let lastRoute: string
 
 let minutes: number // used by tick
-let lastFilter: string = '' // used by onFilter
-let lastScrollOffset: number = 0 // used by onScroll
+let lastFilter = '' // used by onFilter
+let lastScrollOffset = 0 // used by onScroll
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match, history }) => {
+const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
   const [, setActiveModite]: [Modite, React.Dispatch<any>] = useContext(ModiteContext)
   const [, setModites]: [Modite[], React.Dispatch<any>] = useContext(ModitesContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
@@ -107,7 +107,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   }
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
-    const threshold: number = 10 // scroll threshold to hit before acting on the layout
+    const threshold = 10 // scroll threshold to hit before acting on the layout
 
     if (
       (lastScrollOffset <= threshold && scrollOffset > threshold) ||
@@ -246,7 +246,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
             ios="ios-globe"
             md="ios-globe"
             // TODO: wire up the handling of the globe click for really realz
-            onClick={() => console.log('clicked')}
+            // onClick={() => console.log('clicked')}
           />
         </div>
         <label className={searchbarWrapCls}>
