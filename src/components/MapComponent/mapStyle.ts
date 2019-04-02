@@ -1,82 +1,82 @@
 const lightMapStyle = [
   {
-    "featureType": "administrative",
-    "elementType": "labels.text.fill",
-    "stylers": [
+    elementType: 'labels.text.fill',
+    featureType: 'administrative',
+    stylers: [
       {
-        "color": "#444444"
-      }
-    ]
+        color: '#444444',
+      },
+    ],
   },
   {
-    "featureType": "landscape",
-    "elementType": "all",
-    "stylers": [
+    elementType: 'all',
+    featureType: 'landscape',
+    stylers: [
       {
-        "color": "#f2f2f2"
-      }
-    ]
+        color: '#f2f2f2',
+      },
+    ],
   },
   {
-    "featureType": "poi",
-    "elementType": "all",
-    "stylers": [
+    elementType: 'all',
+    featureType: 'poi',
+    stylers: [
       {
-        "visibility": "off"
-      }
-    ]
+        visibility: 'off',
+      },
+    ],
   },
   {
-    "featureType": "road",
-    "elementType": "all",
-    "stylers": [
+    elementType: 'all',
+    featureType: 'road',
+    stylers: [
       {
-        "saturation": -100
+        saturation: -100,
       },
       {
-        "lightness": 45
-      }
-    ]
+        lightness: 45,
+      },
+    ],
   },
   {
-    "featureType": "road.highway",
-    "elementType": "all",
-    "stylers": [
+    elementType: 'all',
+    featureType: 'road.highway',
+    stylers: [
       {
-        "visibility": "simplified"
-      }
-    ]
+        visibility: 'simplified',
+      },
+    ],
   },
   {
-    "featureType": "road.arterial",
-    "elementType": "labels.icon",
-    "stylers": [
+    elementType: 'labels.icon',
+    featureType: 'road.arterial',
+    stylers: [
       {
-        "visibility": "off"
-      }
-    ]
+        visibility: 'off',
+      },
+    ],
   },
   {
-    "featureType": "transit",
-    "elementType": "all",
-    "stylers": [
+    elementType: 'all',
+    featureType: 'transit',
+    stylers: [
       {
-        "visibility": "off"
-      }
-    ]
+        visibility: 'off',
+      },
+    ],
   },
   {
-    "featureType": "water",
-    "elementType": "all",
-    "stylers": [
+    elementType: 'all',
+    featureType: 'water',
+    stylers: [
       {
-        "color": "#3a5268"
+        color: '#3a5268',
       },
       {
-        "visibility": "on"
-      }
-    ]
-  }
-];
+        visibility: 'on',
+      },
+    ],
+  },
+]
 
-export default lightMapStyle;
+export default lightMapStyle

@@ -1,5 +1,5 @@
-import Modite from "../../models/Modite";
+import IModite from '../../models/Modite'
 
 export default interface MapComponentProps {
-  modites: Modite | Modite[];
+  modites: IModite | IModite[]
 }

@@ -1,6 +1,5 @@
-import Modite from './Modite';
+import IModite from './Modite';
 
-export default interface ListItemProps {
-  modite: Modite;
-  style?: Object;
+export default interface IListItemProps {
+  modite: IModite;
 }
