@@ -4,11 +4,11 @@ import IModite from '../../models/Modite'
 import styles from './styles.module.css'
 import userIconPlaceholder from './user-icon-placeholder.png'
 
-interface IProps {
+interface Props {
   modite: IModite
 }
 
-function ModiteImage({ modite, ...other }: IProps) {
+function ModiteImage({ modite, ...other }: Props) {
   return (
     <div className={cx(styles.moditeImage, styles.loading)}>
       <picture {...other}>

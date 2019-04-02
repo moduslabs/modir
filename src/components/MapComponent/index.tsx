@@ -1,9 +1,9 @@
-import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow'
+import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
 import React, { useEffect, useRef } from 'react'
 import IModite, { defaultModite } from '../../models/Modite'
-import IMapComponentProps from './MapComponentProps'
+import MapComponentProps from './MapComponentProps'
 import s from './styles.module.css'
 
 let map: MapChart
@@ -19,14 +19,14 @@ const updateMap = (markerData: any) => {
   }
 }
 
-const MapComponent = ({ modites = defaultModite }: IMapComponentProps) => {
+const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
 
   useEffect(() => {
     if (!map && mapRef.current) {
       const el: any = mapRef.current
       map = create(el, MapChart)
-      map.geodata = am4geodata_worldLow
+      map.geodata = am4geodataWorldLow
       map.projection = new projections.Miller()
       const polygonSeries = map.series.push(new MapPolygonSeries())
       polygonSeries.useGeodata = true

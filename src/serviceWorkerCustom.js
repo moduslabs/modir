@@ -1,7 +1,8 @@
+/* global workbox */
 // uncoment for debugging
 // workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug);
 
-const cachedResponseWillBeUsed = ({ cache, request, cachedResponse }) => {
+const cachedResponseWillBeUsed = ({ cachedResponse }) => {
   // If there's already a match against the request URL, return it.
   if (cachedResponse) {
     return cachedResponse
@@ -18,8 +19,14 @@ const indexCachingStrategy = workbox.strategies.networkFirst({
   cacheExpiration: {
     maxEntries: 5,
   },
-  cacheableResponse: { statuses: [0, 200] },
-  plugins: [{ cachedResponseWillBeUsed }],
+  cacheableResponse: {
+    statuses: [0, 200],
+  },
+  plugins: [
+    {
+      cachedResponseWillBeUsed,
+    },
+  ],
 })
 
 workbox.routing.registerRoute(/\.(?:html|png)$/, indexCachingStrategy)

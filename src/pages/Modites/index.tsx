@@ -1,5 +1,5 @@
 import { IonPage } from '@ionic/react'
-import React, { lazy, useContext, useRef, useState } from 'react'
+import React, { lazy, useContext, useRef } from 'react'
 import IModite from '../../models/Modite'
 import ModiteContext from '../../state/modite'
 import ModitesContext from '../../state/modites'
@@ -13,8 +13,8 @@ const MapComponent = lazy(() =>
   import('../../components/MapComponent' /* webpackChunkName: "maps", webpackPrefetch: true  */),
 )
 
-function App() {
-  const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
+const App = () => {
+  const [activeModite, setActiveModite]: [IModite, React.Dispatch<IModite>] = useContext(ModiteContext)
   const [modites]: [IModite[]] = useContext(ModitesContext)
   const slidesRef: React.MutableRefObject<null> = useRef(null)
 

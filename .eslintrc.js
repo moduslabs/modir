@@ -4,17 +4,31 @@ module.exports = {
     es6: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended', 'plugin:prettier/recommended', 'prettier/@typescript-eslint', 'prettier/babel', 'prettier/react'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:jest/recommended',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'prettier/@typescript-eslint',
+    'prettier/babel',
+    'prettier/react',
+  ],
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'babel', 'prettier', 'react', 'react-hooks'],
+  plugins: ['@typescript-eslint', 'babel', 'jest', 'prettier', 'react', 'react-hooks'],
   root: true,
   rules: {
-    'prettier/prettier': 'error'
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    // TODO we need to type everything but explicit is kinda ok, implicit is the real bad one
+    '@typescript-eslint/no-explicit-any': 'off',
+    'no-console': 'error',
+    'prettier/prettier': 'error',
+    'react/prop-types': 'off',
   },
   settings: {
     react: {

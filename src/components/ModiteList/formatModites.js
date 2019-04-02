@@ -1,9 +1,13 @@
-// @ts-ignore
-onmessage = function(event) {
-  const { modites, filter, date, locale } = event.data
+/* eslint-disable */
+onmessage = function (event) {
+  const {
+    modites,
+    filter,
+    date,
+    locale
+  } = event.data
 
   const getTimeOfDay = timeZone => {
-    // tslint:disable-next-line: no-bitwise
     const hour = ~~date.toLocaleString(locale, {
       hour: 'numeric',
       hour12: false,
@@ -38,21 +42,20 @@ onmessage = function(event) {
     })
     .map(modite => ({
       ...modite,
-      localDate: isProject
-        ? ''
-        : date.toLocaleString(locale, {
-            day: 'numeric',
-            month: 'long',
-            timeZone: modite.tz,
-            year: 'numeric',
-          }),
-      localTime: isProject
-        ? ''
-        : date.toLocaleString(locale, {
-            hour: 'numeric',
-            minute: 'numeric',
-            timeZone: modite.tz,
-          }),
+      localDate: isProject ?
+        '' : date.toLocaleString(locale, {
+          day: 'numeric',
+          month: 'long',
+          timeZone: modite.tz,
+          year: 'numeric',
+        }),
+      localTime: isProject ?
+        '' : date.toLocaleString(locale, {
+          hour: 'numeric',
+          minute: 'numeric',
+          timeZone: modite.tz,
+        }),
+      // eslint-disable-next-line @typescript-eslint/camelcase
       real_name: modite.real_name || modite.name,
       tod: isProject ? '' : getTimeOfDay(modite.tz),
     }))

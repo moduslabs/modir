@@ -1,4 +1,4 @@
-import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow'
+import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
 import React, { useEffect, useRef } from 'react'
@@ -13,7 +13,7 @@ function GlobeComponent() {
     if (!map && mapRef.current) {
       const el: any = mapRef.current
       map = create(el, MapChart)
-      map.geodata = am4geodata_worldLow
+      map.geodata = am4geodataWorldLow
       map.projection = new projections.Orthographic()
       const polygonSeries = map.series.push(new MapPolygonSeries())
       polygonSeries.useGeodata = true
