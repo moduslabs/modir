@@ -77,6 +77,6 @@ const lightMapStyle = [
       },
     ],
   },
-];
+]
 
-export default lightMapStyle;
+export default lightMapStyle

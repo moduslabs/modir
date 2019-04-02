@@ -1,11 +1,11 @@
-import cx from 'classnames';
-import React from 'react';
-import IModite from '../../models/Modite';
-import styles from './styles.module.css';
-import userIconPlaceholder from './user-icon-placeholder.png';
+import cx from 'classnames'
+import React from 'react'
+import IModite from '../../models/Modite'
+import styles from './styles.module.css'
+import userIconPlaceholder from './user-icon-placeholder.png'
 
 interface IProps {
-  modite: IModite;
+  modite: IModite
 }
 
 function ModiteImage({ modite, ...other }: IProps) {
@@ -16,7 +16,7 @@ function ModiteImage({ modite, ...other }: IProps) {
         <img src={userIconPlaceholder} alt={modite.real_name} role="presentation" />
       </picture>
     </div>
-  );
+  )
 }
 
-export default ModiteImage;
+export default ModiteImage

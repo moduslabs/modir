@@ -1,6 +1,6 @@
-import { IonItem, IonLabel, IonSkeletonText, IonThumbnail } from '@ionic/react';
-import React, { FunctionComponent } from 'react';
-import s from './styles.module.css';
+import { IonItem, IonLabel, IonSkeletonText, IonThumbnail } from '@ionic/react'
+import React, { FunctionComponent } from 'react'
+import s from './styles.module.css'
 
 const SkeletonList: FunctionComponent<{}> = () => (
   <>
@@ -22,6 +22,6 @@ const SkeletonList: FunctionComponent<{}> = () => (
       </IonItem>
     ))}
   </>
-);
+)
 
-export default SkeletonList;
+export default SkeletonList

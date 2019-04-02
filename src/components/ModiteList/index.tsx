@@ -1,38 +1,38 @@
-import { IonIcon, IonPage, IonSearchbar } from '@ionic/react';
-import classNames from 'classnames/bind';
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router';
-import { withRouter } from 'react-router-dom';
+import { IonIcon, IonPage, IonSearchbar } from '@ionic/react'
+import classNames from 'classnames/bind'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
+import { RouteComponentProps } from 'react-router'
+import { withRouter } from 'react-router-dom'
 // @ts-ignore
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
 // @ts-ignore
 // tslint:disable-next-line
-import Worker from 'worker-loader!./formatModites.js'; // eslint-disable-line import/no-webpack-loader-syntax
-import DetailsView from '../../components/DetailsView';
-import IFilterEvent from '../../models/FilterEvent';
-import IModite from '../../models/Modite';
-import IModiteListProps from '../../models/ModiteListProps';
-import IProject from '../../models/Project';
-import IWorkerEvent from '../../models/WorkerEvent';
-import ModiteContext from '../../state/modite';
-import ModitesContext from '../../state/modites';
-import ModiteListItem from '../ModiteListItem';
-import SkeletonList from '../SkeletonList';
-import s from './styles.module.css';
+import Worker from 'worker-loader!./formatModites.js' // eslint-disable-line import/no-webpack-loader-syntax
+import DetailsView from '../../components/DetailsView'
+import IFilterEvent from '../../models/FilterEvent'
+import IModite from '../../models/Modite'
+import IModiteListProps from '../../models/ModiteListProps'
+import IProject from '../../models/Project'
+import IWorkerEvent from '../../models/WorkerEvent'
+import ModiteContext from '../../state/modite'
+import ModitesContext from '../../state/modites'
+import ModiteListItem from '../ModiteListItem'
+import SkeletonList from '../SkeletonList'
+import s from './styles.module.css'
 
 // get locale once
-const locale: string = navigator.language;
+const locale: string = navigator.language
 
 // reference to the worker that formats and filters modite data
-const worker: Worker = new Worker();
+const worker: Worker = new Worker()
 
 // keep server response for Modites here for future reference
-let rawModites: IModite[];
+let rawModites: IModite[]
 // keep server response for Projects here for future reference
-let rawProjects: IProject[];
+let rawProjects: IProject[]
 // points the the active raw list data: rawModites or rawProjects
-let rawListSource: IModite[] | IProject[];
+let rawListSource: IModite[] | IProject[]
 
 // get data from server
 async function getModiteData(filter: string, date: Date): Promise<void> {
@@ -40,65 +40,65 @@ async function getModiteData(filter: string, date: Date): Promise<void> {
     const [modites, projects]: [IModite[], IProject[]] = await Promise.all([
       fetch('https://modus.app/modites/all').then(res => res.json()),
       fetch('https://modus.app/projects/all').then(res => res.json()),
-    ]);
+    ])
 
-    rawModites = modites;
-    rawProjects = projects;
+    rawModites = modites
+    rawProjects = projects
   }
-  rawListSource = rawModites;
-  worker.postMessage({ modites: rawListSource, filter, date, locale });
+  rawListSource = rawModites
+  worker.postMessage({ modites: rawListSource, filter, date, locale })
 }
 
-let minutes: number; // used by tick
-let lastFilter: string = ''; // used by onFilter
-let lastScrollOffset: number = 0; // used by onScroll
+let minutes: number // used by tick
+let lastFilter = '' // used by onFilter
+let lastScrollOffset = 0 // used by onScroll
 
 const ModiteList: FunctionComponent<IModiteListProps & RouteComponentProps> = () => {
-  const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext);
-  const [, setModites]: [IModite[], React.Dispatch<any>] = useContext(ModitesContext);
-  const [filter, setFilter]: [string, React.Dispatch<any>] = useState('');
-  const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false);
-  const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false);
-  const [listType, setListType]: [string, React.Dispatch<any>] = useState('modites');
-  const [listData, setListData]: [any, React.Dispatch<any>] = useState();
+  const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
+  const [, setModites]: [IModite[], React.Dispatch<any>] = useContext(ModitesContext)
+  const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
+  const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
+  const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
+  const [listType, setListType]: [string, React.Dispatch<any>] = useState('modites')
+  const [listData, setListData]: [any, React.Dispatch<any>] = useState()
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
-    const threshold: number = 10; // scroll threshold to hit before acting on the layout
+    const threshold = 10 // scroll threshold to hit before acting on the layout
 
     if (
       (lastScrollOffset <= threshold && scrollOffset > threshold) ||
       (lastScrollOffset >= threshold && scrollOffset < threshold)
     ) {
       requestAnimationFrame(() => {
-        setCollapsed(scrollOffset > threshold);
-      });
+        setCollapsed(scrollOffset > threshold)
+      })
     }
 
-    lastScrollOffset = scrollOffset;
-  };
+    lastScrollOffset = scrollOffset
+  }
 
   // get fresh time
   const tick: () => void = (): void => {
-    const date: Date = new Date();
-    const currentMinutes: number = date.getMinutes();
+    const date: Date = new Date()
+    const currentMinutes: number = date.getMinutes()
     if (minutes && currentMinutes !== minutes) {
-      worker.postMessage({ modites: rawListSource, filter: lastFilter, date, locale });
+      worker.postMessage({ modites: rawListSource, filter: lastFilter, date, locale })
     }
-    minutes = currentMinutes;
-  };
+    minutes = currentMinutes
+  }
 
   const onFilter = (event: IFilterEvent): void => {
-    const query: string = event.detail.value || '';
+    const query: string = event.detail.value || ''
 
-    setFiltered(query.length);
+    setFiltered(query.length)
 
     if (query === lastFilter) {
-      return;
+      return
     }
-    lastFilter = query;
+    lastFilter = query
 
     // save filter
-    setFilter(query);
+    setFilter(query)
 
     // tell worker to parse and filter
     worker.postMessage({
@@ -106,68 +106,68 @@ const ModiteList: FunctionComponent<IModiteListProps & RouteComponentProps> = ()
       filter: query,
       locale,
       modites: rawListSource,
-    });
-  };
+    })
+  }
 
   const onTabClick = (type: string): void => {
     if (type !== listType) {
-      const date = new Date();
-      const rawSource = type === 'modites' ? rawModites : rawProjects;
-      setListType(type);
-      rawListSource = rawSource;
-      worker.postMessage({ modites: rawSource, filter, date, locale });
+      const date = new Date()
+      const rawSource = type === 'modites' ? rawModites : rawProjects
+      setListType(type)
+      rawListSource = rawSource
+      worker.postMessage({ modites: rawSource, filter, date, locale })
     }
-  };
+  }
 
   useEffect(() => {
     // start the clock
-    const intervalID: number = window.setInterval(tick, 1000);
-    const clearTimeInterval = (): void => clearInterval(intervalID);
+    const intervalID: number = window.setInterval(tick, 1000)
+    const clearTimeInterval = (): void => clearInterval(intervalID)
 
     // if we already have something, we can safely abandon fetching
     if (listData) {
       if (listData.length) {
-        return clearTimeInterval;
+        return clearTimeInterval
       }
     } else {
       // initial data parsing
       worker.onmessage = (event: IWorkerEvent) => {
         requestAnimationFrame(() => {
-          setModites(event.data);
-          setListData(event.data);
-        });
-      };
+          setModites(event.data)
+          setListData(event.data)
+        })
+      }
       // get data from the api
-      getModiteData(filter, new Date());
+      getModiteData(filter, new Date())
     }
-  });
+  })
 
   const onRowClick = (record: IModite | IProject) => {
     // TODO: expand this to set either the activeModite or the activeProject using record.recordType
-    setActiveModite(record);
-    setModites(record);
-  };
+    setActiveModite(record)
+    setModites(record)
+  }
 
   const Row = ({ index, style }: ListChildComponentProps) => (
     <div className={s.moditeRow} style={style} onClick={() => onRowClick(listData[index])}>
       <ModiteListItem modite={listData[index]} key={listData[index].id} />
     </div>
-  );
+  )
 
-  const cx = classNames.bind(s);
-  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed });
-  const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!activeModite });
+  const cx = classNames.bind(s)
+  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed })
+  const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!activeModite })
   const searchbarWrapCls = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filtered,
     searchbarWrapHidden: !!activeModite,
-  });
+  })
   const searchbarSpacerCls = cx('searchbarSpacer', {
     searchbarSpacerCollapsed: collapsed || filtered,
-  });
-  const moditesTabCls = cx('listTypeTab', { listTypeTabSelected: listType === 'modites' });
-  const projectsTabCls = cx('listTypeTab', { listTypeTabSelected: listType === 'projects' });
-  const activeModiteCls = cx({ activeModiteShown: !!activeModite });
-  const tabCtCls = cx('tabCt', { tabCtHidden: !!activeModite });
+  })
+  const moditesTabCls = cx('listTypeTab', { listTypeTabSelected: listType === 'modites' })
+  const projectsTabCls = cx('listTypeTab', { listTypeTabSelected: listType === 'projects' })
+  const activeModiteCls = cx({ activeModiteShown: !!activeModite })
+  const tabCtCls = cx('tabCt', { tabCtHidden: !!activeModite })
 
   return (
     <>
@@ -234,7 +234,7 @@ const ModiteList: FunctionComponent<IModiteListProps & RouteComponentProps> = ()
         </label>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default withRouter(ModiteList);
+export default withRouter(ModiteList)

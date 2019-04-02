@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useContext } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
-import IListItemProps from '../../models/ListItemProps';
-import ModiteImage from '../ModiteImage';
-import s from './styles.module.css';
+import React, { FunctionComponent, useContext } from 'react'
+import { RouteComponentProps, withRouter } from 'react-router'
+import IListItemProps from '../../models/ListItemProps'
+import ModiteImage from '../ModiteImage'
+import s from './styles.module.css'
 
 const ModiteListItem: FunctionComponent<IListItemProps & RouteComponentProps> = ({ modite }) => (
   <div className={s.itemInnerCt}>
@@ -17,6 +17,6 @@ const ModiteListItem: FunctionComponent<IListItemProps & RouteComponentProps> = 
     </div>
     <div className={s.localTime}>{modite.localTime}</div>
   </div>
-);
+)
 
-export default withRouter(ModiteListItem);
+export default withRouter(ModiteListItem)

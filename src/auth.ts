@@ -1,16 +1,16 @@
 const signIn = () => {
   // Ideally the button should only show up after gapi.client.init finishes, so that this
   // handler won't be called before OAuth is initialized.
-  return gapi.auth2.getAuthInstance().signIn();
-};
+  return gapi.auth2.getAuthInstance().signIn()
+}
 
 function handleClientLoad(cb: () => void) {
   // Loads the client library and the auth2 library together for efficiency.
   // Loading the auth2 library is optional here since `gapi.client.init` function will load
   // it if not already loaded. Loading it upfront can save one network request.
   gapi.load('client:auth2', () => {
-    initClient(cb);
-  });
+    initClient(cb)
+  })
 }
 
 function initClient(cb: () => void) {
@@ -26,29 +26,29 @@ function initClient(cb: () => void) {
     })
     .then(() => {
       // Listen for sign-in state changes.
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus)
 
       // Handle the initial sign-in state.
-      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get(), cb);
-    });
+      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get(), cb)
+    })
 }
 
 function updateSigninStatus(isSignedIn: boolean, cb?: () => void) {
   // When signin status changes, this function is called.
   // If the signin status is changed to signedIn, we make an API call.
   if (isSignedIn) {
-    makeApiCall();
+    makeApiCall()
     if (cb) {
-      cb();
+      cb()
     }
   } else {
-    signIn();
+    signIn()
   }
 }
 
 const signOut = () => {
-  gapi.auth2.getAuthInstance().signOut();
-};
+  gapi.auth2.getAuthInstance().signOut()
+}
 
 // todo: move this to the app state
 function makeApiCall() {
@@ -62,25 +62,25 @@ function makeApiCall() {
     .then(
       (response: any) => {
         // tslint:disable-next-line: no-console
-        console.log('Hello, ' + response.result.names[0].givenName);
+        console.log('Hello, ' + response.result.names[0].givenName)
       },
       (reason: any) => {
         // tslint:disable-next-line: no-console
-        console.log('Error: ' + reason.result.error.message);
+        console.log('Error: ' + reason.result.error.message)
       },
-    );
+    )
 }
 
 function initAuth(cb: () => void) {
-  const head = document.getElementsByTagName('head')[0];
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.async = true;
+  const head = document.getElementsByTagName('head')[0]
+  const script = document.createElement('script')
+  script.type = 'text/javascript'
+  script.async = true
   script.onload = () => {
-    handleClientLoad(cb);
-  };
-  script.src = 'https://apis.google.com/js/api.js';
-  head.appendChild(script);
+    handleClientLoad(cb)
+  }
+  script.src = 'https://apis.google.com/js/api.js'
+  head.appendChild(script)
 }
 
-export default initAuth;
+export default initAuth
