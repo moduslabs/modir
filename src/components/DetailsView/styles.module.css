@@ -6,8 +6,9 @@
   left: 12px;
   right: 12px;
   border-radius: 20px 20px 0 0;
-  transform: translateY(calc(100% + 36px));
+  transform: translateY(calc(100% + 52px));
   transition: transform 400ms;
+  transition-delay: 300ms;
   overflow: visible;
   text-align: center;
   padding: 124px 0 0 0;
@@ -18,10 +19,17 @@
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -35%);
+  opacity: 0;
+  transition: all 400ms;
 }
 .activeModiteShown {
   transform: translateY(0px);
+}
+.activeModiteShown img {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition-delay: 500ms;
 }
 
 .title {

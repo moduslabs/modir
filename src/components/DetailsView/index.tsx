@@ -1,40 +1,24 @@
-import classNames from 'classnames/bind'
 import React, { useContext } from 'react'
-import IModite from '../../models/Modite'
-import IModiteProfileResp from '../../models/ModiteProfileResp'
 import ModiteContext from '../../state/modite'
+import IModite from '../../models/Modite'
+import classNames from 'classnames/bind'
 import s from './styles.module.css'
 
 // TODO: type correctly
 function Details({ className = '' }: any) {
   const [activeModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
-  const { profile = {} }: any = activeModite || {}
-  let { fields } = profile
 
-  const fetchProfile = async () => {
-    if (!activeModite) {
-      return
-    }
+  if (!activeModite) return null
 
-    const moditeProfile: IModiteProfileResp = await fetch(`https://modus.app/modite/${activeModite.id}`).then(res =>
-      res.json(),
-    )
-    activeModite.profile = moditeProfile.profile
-    fields = moditeProfile.profile.fields
-  }
+  const { profile = {} }: any = activeModite
+  let { fields = {}, title } = profile
 
-  if (!fields) {
-    fetchProfile()
-    fields = {}
-  }
-
-  const image = profile && profile.image_192
-  const name =
-    activeModite && activeModite.real_name ? activeModite && activeModite.real_name : activeModite && activeModite.name
-  const { Location: location } = fields
-  const tod = activeModite && activeModite.tod
-  const localDate = activeModite && activeModite.localDate
-  const localTime = activeModite && activeModite.localTime
+  const image = profile.image_192
+  const name = activeModite.real_name ? activeModite.real_name : activeModite.name
+  const { Location: location, Title, 'GitHub User': gitHubUser } = fields
+  const tod = activeModite.tod
+  const localDate = activeModite.localDate
+  const localTime = activeModite.localTime
 
   const cx = classNames.bind(s)
   className = cx('moditeCt', className)
@@ -49,6 +33,11 @@ function Details({ className = '' }: any) {
         <span>{tod}</span>
         {localDate} - {localTime}
       </div>
+
+      <div>{Title}</div>
+      <div>{gitHubUser}</div>
+
+      <div>{title}</div>
     </div>
   )
 }

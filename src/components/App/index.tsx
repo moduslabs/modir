@@ -1,6 +1,4 @@
-// tslint:disable-next-line: no-implicit-dependencies
 import '@ionic/core/css/core.css'
-// tslint:disable-next-line: no-implicit-dependencies
 import '@ionic/core/css/ionic.bundle.css'
 import { IonApp, IonContent } from '@ionic/react'
 import React, { lazy, Suspense, useState } from 'react'
@@ -13,10 +11,6 @@ import './theme.css'
 
 const Modites = lazy(() => import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */))
 
-const Details = lazy(() => import('../../pages/Details' /* webpackChunkName: "page-details", webpackPrefetch: true  */))
-
-const Globe = lazy(() => import('../../pages/Globe' /* webpackChunkName: "page-globe", webpackPrefetch: true  */))
-
 function App() {
   const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useState()
   const [modites, setModites]: [IModite[], React.Dispatch<any>] = useState()
@@ -28,10 +22,7 @@ function App() {
           <ModitesContextProvider value={[modites, setModites]}>
             <main role="main">
               <Router>
-                <Route path="/" exact component={Modites} />
-                <Route path="/details" exact component={Details} />
-                <Route path="/details/:id" component={Details} />
-                <Route path="/globe" exact component={Globe} />
+                <Route path="*" component={Modites} />
               </Router>
             </main>
           </ModitesContextProvider>

@@ -143,24 +143,35 @@
 .tabCt {
   display: flex;
   flex-direction: row;
-  height: 36px;
+  height: 52px;
   transition: height 500ms;
+  background-color: rgba(248, 248, 248, 0.82);
+  font-weight: bold;
+  font-size: 12px;
 }
-.tabCt ion-button {
+.tabCt a {
   flex: 1;
+  text-align: center;
+  padding: 8px 0;
+}
+.tabCt ion-icon {
+  display: block;
+  margin: 0 auto;
+  font-size: 24px;
 }
 .tabCtHidden {
   height: 0;
 }
 
 .listTypeTab {
-  color: var(--ion-color-modus-charcoal);
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: white;
+  color: #8e8e93;
 }
 .listTypeTabSelected {
   color: var(--ion-color-modus-salmon);
+}
+
+.backButton {
+  position: absolute;
+  top: 20px;
+  left: 0px;
 }
