@@ -136,10 +136,6 @@
   margin-left: 7px;
 }
 
-.moditeRow {
-  display: flex;
-}
-
 .tabCt {
   display: flex;
   flex-direction: row;

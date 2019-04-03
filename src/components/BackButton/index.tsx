@@ -1,4 +1,6 @@
 import React from 'react'
+// @ts-ignore
+import { useLastLocation } from 'react-router-last-location'
 import { IonIcon } from '@ionic/react'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
@@ -7,12 +9,13 @@ import { withRouter } from 'react-router'
 // TODO: type correctly
 function BackButton({ history, className = '' }: any) {
   const cx = classNames.bind(s)
+  const lastLocation = useLastLocation()
 
   const onBackClick = () => {
-    if (history.action === 'POP') {
-      history.push('/')
-    } else {
+    if (lastLocation) {
       history.goBack()
+    } else {
+      history.push('/')
     }
   }
 

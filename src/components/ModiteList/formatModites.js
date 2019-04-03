@@ -1,12 +1,7 @@
 /* eslint-disable */
 // @ts-ignore
-onmessage = function (event) {
-  const {
-    modites,
-    filter,
-    date,
-    locale
-  } = event.data
+onmessage = function(event) {
+  const { modites, filter, date, locale } = event.data
 
   const getTimeOfDay = timeZone => {
     const hour = ~~date.toLocaleString(locale, {
@@ -24,42 +19,52 @@ onmessage = function (event) {
 
   const isProject = modites.length && modites[0].recordType === 'project'
 
-  const filtered = modites
-    .filter(modite => {
-      const name = isProject ? 'name' : 'real_name'
-      return modite[name].toLowerCase().indexOf(filter.toLowerCase()) > -1
-    })
-    .sort((prev, next) => {
-      const prevName = isProject ? prev.name : prev.profile.last_name
-      const nextName = isProject ? next.name : next.profile.last_name
+  const filterRecords = modites => {
+    const filtered = modites
+      .filter(modite => {
+        const name = isProject ? 'name' : 'real_name'
+        return modite[name].toLowerCase().indexOf(filter.toLowerCase()) > -1
+      })
+      .sort((prev, next) => {
+        const prevName = isProject ? prev.name : prev.profile.last_name
+        const nextName = isProject ? next.name : next.profile.last_name
 
-      if (prevName < nextName) {
-        return -1
-      }
-      if (prevName > nextName) {
-        return 1
-      }
-      return 0
-    })
-    .map(modite => ({
-      ...modite,
-      localDate: isProject ?
-        '' : date.toLocaleString(locale, {
+        if (prevName < nextName) {
+          return -1
+        }
+        if (prevName > nextName) {
+          return 1
+        }
+        return 0
+      })
+      .map(modite => ({
+        ...modite,
+        localDate: date.toLocaleString(locale, {
           day: 'numeric',
           month: 'long',
           timeZone: modite.tz,
           year: 'numeric',
         }),
-      localTime: isProject ?
-        '' : date.toLocaleString(locale, {
+        localTime: date.toLocaleString(locale, {
           hour: 'numeric',
           minute: 'numeric',
           timeZone: modite.tz,
         }),
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      real_name: modite.real_name || modite.name,
-      tod: isProject ? '' : getTimeOfDay(modite.tz),
-    }))
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        real_name: modite.real_name || modite.name,
+        tod: getTimeOfDay(modite.tz),
+      }))
 
-  postMessage(filtered)
+    return filtered
+  }
+
+  if (isProject) {
+    modites.forEach(project => {
+      project.users = filterRecords(project.users)
+    })
+
+    postMessage(modites)
+  } else {
+    postMessage(filterRecords(modites))
+  }
 }

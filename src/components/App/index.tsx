@@ -3,6 +3,8 @@ import '@ionic/core/css/ionic.bundle.css'
 import { IonApp, IonContent } from '@ionic/react'
 import React, { lazy, Suspense, useState } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+// @ts-ignore
+import { LastLocationProvider } from 'react-router-last-location'
 import IModite from '../../models/Modite'
 import { ModiteContextProvider } from '../../state/modite'
 import { ModitesContextProvider } from '../../state/modites'
@@ -22,7 +24,9 @@ function App() {
           <ModitesContextProvider value={[modites, setModites]}>
             <main role="main">
               <Router>
-                <Route path="*" component={Modites} />
+                <LastLocationProvider>
+                  <Route path="*" component={Modites} />
+                </LastLocationProvider>
               </Router>
             </main>
           </ModitesContextProvider>

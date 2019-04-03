@@ -1,5 +1,6 @@
-import IModite from './Modite';
+import IModite from './Modite'
+import IProject from './Project'
 
 export default interface IListItemProps {
-  modite: IModite;
+  modite: IModite | IProject
 }
