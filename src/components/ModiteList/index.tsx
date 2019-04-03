@@ -22,9 +22,9 @@ let lastRoute: string
 let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
+const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }): JSX.Element => {
   const [activeModite, setActiveModite]: [IModite | null, React.Dispatch<any>] = useContext(ActiveModiteContext)
-  const modites: IModite[] = useContext(ModitesContext)
+  const [modites, filterModites]: [IModite[], (filter: string) => void] = useContext(ModitesContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
@@ -88,13 +88,15 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const onFilter = (event: IFilterEvent): void => {
     const query: string = event.detail.value || ''
 
-    setFiltered(query.length)
+    setFiltered(Boolean(query.length))
 
     if (query !== lastFilter) {
       lastFilter = query
 
       // save filter
       setFilter(query)
+
+      filterModites(query)
     }
   }
 
