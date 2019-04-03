@@ -45,15 +45,15 @@ const moditesReducer = (state: IModitesState, action: IModitesAction): IModitesS
     case 'on-filter':
       if (action.filter) {
         return {
-          moditesSource: state.modites,
           ...state,
+          moditesSource: state.moditesSource || state.modites,
           filter: action.filter,
         }
       } else {
         // filter was cleared, let's get back to all modites
         return {
           ...state,
-          filter: action.filter,
+          filter: undefined,
           modites: state.moditesSource || [],
           moditesSource: undefined,
         }
@@ -115,7 +115,7 @@ const ModitesProvider = ({ children }: { children?: React.ReactNode }) => {
     workerState.addCallback(loadCallback)
 
     // get data from the api
-    getModiteData(postMessage)
+    getModiteData(workerState.postMessage)
   }, [])
 
   return <ModitesContext.Provider value={[state, props]}>{children}</ModitesContext.Provider>
