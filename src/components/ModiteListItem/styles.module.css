@@ -54,10 +54,21 @@
 }
 
 .localTime {
-  font-size: 17px;
+  font-size: 15px;
   opacity: 0.5;
   width: 78px;
   text-align: right;
+}
+.projectUserCount {
+  font-size: 15px;
+  opacity: 0.5;
+  width: 23px;
+  text-align: right;
+}
+
+.itemInnerCt ion-icon {
+  opacity: 0.35;
+  margin-left: 14px;
 }
 
 @keyframes appear {

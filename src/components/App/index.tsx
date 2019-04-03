@@ -3,6 +3,8 @@ import '@ionic/core/css/ionic.bundle.css'
 import { IonApp, IonContent } from '@ionic/react'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+// @ts-ignore
+import { LastLocationProvider } from 'react-router-last-location'
 import { ActiveModiteProvider } from '../../state/ActiveModite'
 import { ModitesProvider } from '../../state/Modites'
 import { WorkerProvider } from '../../state/Worker'
@@ -19,7 +21,9 @@ const App = () => (
           <ActiveModiteProvider>
             <main role="main">
               <Router>
-                <Route path="*" component={Modites} />
+                <LastLocationProvider>
+                  <Route path="*" component={Modites} />
+                </LastLocationProvider>
               </Router>
             </main>
           </ActiveModiteProvider>

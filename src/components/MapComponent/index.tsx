@@ -1,8 +1,8 @@
 import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
-import React, { useContext, useEffect, useRef } from 'react'
-import IModite, { defaultModite } from '../../models/Modite'
+import React, { useEffect, useRef, useContext } from 'react'
+import IModite from '../../models/Modite'
 import MapComponentProps from './MapComponentProps'
 import s from './styles.module.css'
 import ActiveModiteContext from '../../state/ActiveModite'
@@ -12,15 +12,17 @@ let imageSeries: any
 
 const updateMap = (markerData: any) => {
   imageSeries.data = markerData
+
   if (markerData.length === 1) {
     const { latitude, longitude } = markerData[0]
+
     map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
   } else {
     map.goHome(500)
   }
 }
 
-const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
+const MapComponent = ({ modites }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
   const [activeModite]: [IModite | null] = useContext(ActiveModiteContext)
 
@@ -30,6 +32,7 @@ const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
       map = create(el, MapChart)
       map.geodata = am4geodataWorldLow
       map.projection = new projections.Miller()
+
       const polygonSeries = map.series.push(new MapPolygonSeries())
       polygonSeries.useGeodata = true
       polygonSeries.exclude = ['AQ']
@@ -73,10 +76,9 @@ const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
     }
 
     if (map && modites) {
-      const markerDataArr = activeModite ? [activeModite] : modites
-
-      const markerData: any = (markerDataArr as IModite[])
-        .map(modite => {
+      const mapData: IModite[] = activeModite ? [activeModite] : modites
+      const markerData: any = mapData
+        .map((modite: IModite) => {
           if (!modite.profile || !modite.profile.fields) {
             return
           }

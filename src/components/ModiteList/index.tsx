@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext, FunctionComponent } from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
-import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
 import IModite from '../../models/Modite'
@@ -10,19 +8,19 @@ import IFilterEvent from '../../models/FilterEvent'
 import s from './styles.module.css'
 import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
-import ModiteListItem from '../ModiteListItem'
 import ActiveModiteContext from '../../state/ActiveModite'
 import ModitesContext, { IModitesProps, IModitesState } from '../../state/Modites'
 import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
+import VirtualizedList from '../VirtualizedList'
 
 let lastRoute: string
 
 let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }): JSX.Element => {
+const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
   const [activeModite, setActiveModite]: [IModite | null, React.Dispatch<any>] = useContext(ActiveModiteContext)
   const [{ modites }, { filter: filterModites }]: [IModitesState, IModitesProps] = useContext(ModitesContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
@@ -35,11 +33,15 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const id: string | undefined = isDetails ? url.substring(url.lastIndexOf('/') + 1) : undefined
 
   const handleRouting = async () => {
+    if (url === lastRoute || !modites) {
+      return
+    }
+
     lastRoute = url
 
     // handle details type route
     if (id) {
-      const record = modites.find((item: any) => item.id === id)
+      const record: any = modites.find((item: any) => item.id === id)
 
       if (record) {
         const { profile = {} }: any = record || {}
@@ -51,9 +53,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
           fields = moditeProfile.profile.fields
         }
 
-        if (record.recordType === 'user' && !fields) {
-          fetchProfile()
-        }
+        if (record.recordType === 'user' && !fields) fetchProfile()
 
         setActiveModite(record)
       }
@@ -61,7 +61,6 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       const isProjects: boolean = url.indexOf('/projects') === 0
       const type = isProjects ? 'projects' : 'modites'
 
-      // handle list type routes
       setListType(type)
 
       if (activeModite) {
@@ -70,7 +69,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     }
   }
 
-  const onScroll = ({ scrollOffset }: { scrollOffset: number }) => {
+  const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
     const threshold = 10 // scroll threshold to hit before acting on the layout
 
     if (
@@ -88,30 +87,23 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const onFilter = (event: IFilterEvent): void => {
     const query: string = event.detail.value || ''
 
-    setFiltered(Boolean(query.length))
+    setFiltered(query.length)
 
-    if (query !== lastFilter) {
-      lastFilter = query
+    if (query === lastFilter) return
+    lastFilter = query
 
-      // save filter
-      setFilter(query)
+    // save filter
+    setFilter(query)
 
-      filterModites(query)
-    }
+    filterModites(query)
   }
 
   useEffect(() => {
     // if we already have something, we can safely abandon fetching
-    if (modites.length && url !== lastRoute) {
+    if (modites.length) {
       handleRouting()
     }
   })
-
-  const Row = ({ index, style }: ListChildComponentProps) => (
-    <Link to={`/details/${modites[index].id}`} className={s.moditeRow} style={style}>
-      <ModiteListItem modite={modites[index]} key={modites[index].id} />
-    </Link>
-  )
 
   const cx = classNames.bind(s)
   const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed })
@@ -136,25 +128,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
           {!modites.length ? (
             <SkeletonList />
           ) : (
-            <AutoSizer aria-label="The list of Modites">
-              {({ height, width }: { height: number; width: number }) => (
-                <>
-                  <List
-                    className="List"
-                    itemSize={60}
-                    itemCount={modites.length || 10}
-                    height={height}
-                    width={width}
-                    initialScrollOffset={lastScrollOffset}
-                    onScroll={onScroll}
-                    itemKey={(index: number) => modites[index].id}
-                    overscanCount={30}
-                  >
-                    {Row}
-                  </List>
-                </>
-              )}
-            </AutoSizer>
+            <VirtualizedList records={modites} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
           )}
           <DetailsView className={activeModiteCls} />
         </div>
@@ -164,7 +138,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
             Team
           </Link>
           <Link to="/projects" className={projectsTabCls}>
-            <IonIcon ios="ios-book" md="ios-book" />
+            <IonIcon ios="md-clipboard" md="md-clipboard" />
             Projects
           </Link>
         </div>
@@ -173,7 +147,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       <div className={s.searchbarCt}>
         <div className={globalBarWrapCls}>
           <div className={s.globalSpacer} />
-          <div className={s.globeTitle}>MODITE LAND</div>
+          <div className={s.globeTitle}>MODUS LAND</div>
           <IonIcon
             class={`${s.globeButton}`}
             slot="icon-only"
@@ -185,6 +159,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
         </div>
         <label className={searchbarWrapCls}>
           <IonSearchbar
+            mode="md"
             debounce={200}
             value={filter}
             placeholder="Filter Modites"

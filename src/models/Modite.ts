@@ -16,20 +16,19 @@ export interface IModiteProfile {
 export default interface IModite {
   real_name?: string
   name?: string
-  id: string
+  id?: string
   tz?: string
   tz_offset?: number
   color?: string
   localTime?: string
   localDate?: string
   tod?: string
-  profile: IModiteProfile
+  profile?: IModiteProfile
   tacos?: number
   recordType?: 'user' | 'project'
 }
 
 export const defaultModite: IModite = {
-  id: '',
   profile: {
     fields: {},
     image_192: profilePlaceholder,

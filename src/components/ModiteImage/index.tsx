@@ -9,10 +9,14 @@ interface Props {
 }
 
 function ModiteImage({ modite, ...other }: Props) {
+  if (!modite) return null
+
+  const { profile = {} }: any = modite
+
   return (
     <div className={cx(styles.moditeImage, styles.loading)}>
       <picture {...other}>
-        <source srcSet={`${modite.profile.image_72}, ${modite.profile.image_192} 2x`} />
+        <source srcSet={`${profile.image_72}, ${profile.image_192} 2x`} />
         <img src={userIconPlaceholder} alt={modite.real_name} role="presentation" />
       </picture>
     </div>
