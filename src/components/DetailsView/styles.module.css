@@ -11,9 +11,8 @@
   transition-delay: 300ms;
   overflow: visible;
   text-align: center;
-  padding: 124px 0 0 0;
 }
-.moditeCt img {
+.moditeCt > img {
   border-radius: 20px;
   box-shadow: 0px 33px 18px -18px rgba(0, 0, 0, 0.6);
   position: absolute;
@@ -26,13 +25,71 @@
 .activeModiteShown {
   transform: translateY(0px);
 }
-.activeModiteShown img {
+.activeModiteShown > img {
   opacity: 1;
   transform: translate(-50%, -50%);
   transition-delay: 500ms;
 }
 
-.title {
+.isModite {
+  padding: 124px 20px 20px 20px;
+}
+.isProject {
+  padding: 50px 0 0 0;
+}
+
+.moditeDetails {
+  opacity: 0;
+}
+.moditeDetailsShown {
+  opacity: 1;
+}
+
+.projectDetails {
+  opacity: 0;
+  height: 100%;
+}
+.projectDetailsShown {
+  opacity: 1;
+}
+
+.name {
   font-weight: bold;
   font-size: 22px;
+}
+
+.location {
+  font-size: 15px;
+  opacity: .5;
+  margin-top: 12px;
+}
+
+.todWrap {
+  font-size: 15px;
+  opacity: .5;
+  margin-top: 8px;
+}
+
+.tod {
+  font-size: 23px;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+.fieldTitle {
+  margin-top: 12px;
+}
+
+.gitUser {
+  margin-top: 2px;
+}
+
+.title {
+  margin-top: 12px;
+}
+
+.userCount {
+  font-size: 15px;
+  opacity: .5;
+  margin: 18px 0;
 }

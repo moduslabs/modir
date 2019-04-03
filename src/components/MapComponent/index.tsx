@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react'
 import IModite, { defaultModite } from '../../models/Modite'
 import MapComponentProps from './MapComponentProps'
 import s from './styles.module.css'
+import IProject from '../../models/Project'
 
 let map: MapChart
 let imageSeries: any
@@ -19,7 +20,7 @@ const updateMap = (markerData: any) => {
   }
 }
 
-const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
+const MapComponent = ({ modites }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
 
   useEffect(() => {
@@ -72,9 +73,20 @@ const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
 
     if (map && modites) {
       const isIndividual = !Array.isArray(modites)
-      ;(modites as IModite[]) = isIndividual ? [modites as IModite] : (modites as IModite[])
+      const sampleRecord: any = isIndividual ? modites : (modites as (IProject | IModite)[])[0]
+      let mapData: IModite | IModite[] | IProject[]
 
-      let markerData: any = (modites as IModite[]).map(modite => {
+      // if the modites data passed in is a user or users then just use it directly
+      // else find the users list on the record passed in and use that for the map data
+      if (sampleRecord.recordType === 'user') {
+        mapData = modites
+      } else {
+        mapData = sampleRecord.users || []
+      }
+
+      ;(mapData as IModite[]) = isIndividual ? [mapData as IModite] : (mapData as IModite[])
+
+      let markerData: any = (mapData as IModite[]).map(modite => {
         if (!modite.profile || !modite.profile.fields) {
           return
         }
