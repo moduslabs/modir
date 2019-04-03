@@ -12,7 +12,7 @@ import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
 import ModiteListItem from '../ModiteListItem'
 import ActiveModiteContext from '../../state/ActiveModite'
-import ModitesContext from '../../state/modites'
+import ModitesContext, { IModitesProps, IModitesState } from '../../state/modites'
 import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
@@ -24,7 +24,7 @@ let lastScrollOffset = 0 // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }): JSX.Element => {
   const [activeModite, setActiveModite]: [IModite | null, React.Dispatch<any>] = useContext(ActiveModiteContext)
-  const [modites, filterModites]: [IModite[], (filter: string) => void] = useContext(ModitesContext)
+  const [{ modites }, { filter: filterModites }]: [IModitesState, IModitesProps] = useContext(ModitesContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
