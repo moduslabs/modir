@@ -3,7 +3,7 @@ import { IonPage } from '@ionic/react'
 import IModite from '../../models/Modite'
 import ActiveModiteContext from '../../state/ActiveModite'
 import s from './styles.module.css'
-import ModitesContext, { IModitesState } from '../../state/modites'
+import ModitesContext, { IModitesState } from '../../state/Modites'
 
 const ModiteList = lazy(() =>
   import('../../components/ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
