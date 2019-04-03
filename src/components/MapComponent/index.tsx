@@ -1,10 +1,11 @@
 import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import IModite, { defaultModite } from '../../models/Modite'
 import MapComponentProps from './MapComponentProps'
 import s from './styles.module.css'
+import ActiveModiteContext from '../../state/ActiveModite'
 
 let map: MapChart
 let imageSeries: any
@@ -21,6 +22,7 @@ const updateMap = (markerData: any) => {
 
 const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
+  const [activeModite]: [IModite | null] = useContext(ActiveModiteContext)
 
   useEffect(() => {
     if (!map && mapRef.current) {
@@ -71,20 +73,19 @@ const MapComponent = ({ modites = defaultModite }: MapComponentProps) => {
     }
 
     if (map && modites) {
-      const isIndividual = !Array.isArray(modites)
-      ;(modites as IModite[]) = isIndividual ? [modites as IModite] : (modites as IModite[])
+      const markerDataArr = activeModite ? [activeModite] : modites
 
-      let markerData: any = (modites as IModite[]).map(modite => {
-        if (!modite.profile || !modite.profile.fields) {
-          return
-        }
+      const markerData: any = (markerDataArr as IModite[])
+        .map(modite => {
+          if (!modite.profile || !modite.profile.fields) {
+            return
+          }
 
-        const { locationData = {}, Location: title } = modite.profile.fields
-        const { lat: latitude, lon: longitude } = locationData
-        return latitude && longitude && title ? { latitude, longitude, title } : null
-      })
-
-      markerData = markerData.filter((item: any) => item)
+          const { locationData = {}, Location: title } = modite.profile.fields
+          const { lat: latitude, lon: longitude } = locationData
+          return latitude && longitude && title ? { latitude, longitude, title } : null
+        })
+        .filter((item: any) => item)
 
       if (map.isReady()) {
         updateMap(markerData)

@@ -15,7 +15,7 @@ const MapComponent = lazy(() =>
 
 function Modites({ view }: { view?: string }) {
   const [activeModite, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
-  const [modites]: [IModite[]] = useContext(ModitesContext)
+  const modites: IModite[] = useContext(ModitesContext)
   const slidesRef: React.MutableRefObject<null> = useRef(null)
 
   const onModiteClick = (modite: IModite) => {
