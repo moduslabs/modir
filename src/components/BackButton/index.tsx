@@ -7,7 +7,7 @@ import s from './styles.module.css'
 import { withRouter } from 'react-router'
 
 // TODO: type correctly
-function BackButton({ location, history, className = '' }: any) {
+function BackButton({ history, className = '' }: any) {
   const cx = classNames.bind(s)
   const lastLocation = useLastLocation()
 
