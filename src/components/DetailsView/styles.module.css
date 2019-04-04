@@ -11,6 +11,7 @@
   transition-delay: 300ms;
   overflow: visible;
   text-align: center;
+  box-shadow: 0px 16px 48px 0px rgba(0, 0, 0, .50);
 }
 .moditeCt > img {
   border-radius: 20px;

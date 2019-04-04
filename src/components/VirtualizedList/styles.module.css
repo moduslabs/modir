@@ -1,3 +1,7 @@
 .moditeRow {
   display: flex;
 }
+
+div[class="List"] {
+  transition: opacity 200ms;
+}
