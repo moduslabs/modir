@@ -3,13 +3,12 @@ import { withRouter, Link } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
-import IModite from '../../models/Modite'
 import IFilterEvent from '../../models/FilterEvent'
 import s from './styles.module.css'
 import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
-import ActiveModiteContext from '../../state/ActiveModite'
-import ModitesContext, { IModitesProps, IModitesState } from '../../state/Modites'
+import DataContext from '../../service/Data'
+import { IModitesProps, IModitesState } from '../../types/service/Data'
 import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
@@ -21,8 +20,10 @@ let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
-  const [activeModite, setActiveModite]: [IModite | null, React.Dispatch<any>] = useContext(ActiveModiteContext)
-  const [{ modites }, { filter: filterModites }]: [IModitesState, IModitesProps] = useContext(ModitesContext)
+  const [
+    { activeModite, activeProject, modites, projects },
+    { filterModites, filterProjects, setActiveModite, setActiveProject },
+  ]: [IModitesState, IModitesProps] = useContext(DataContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
@@ -31,6 +32,10 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const { url }: { url: string } = match
   const isDetails: boolean = url.indexOf('/details/') === 0
   const id: string | undefined = isDetails ? url.substring(url.lastIndexOf('/') + 1) : undefined
+  const isProjects: boolean = url.indexOf('/projects') === 0
+  const data = isProjects ? projects : modites
+  const filterer = isProjects ? filterProjects : filterModites
+  const activeItem = isProjects ? activeProject : activeModite
 
   const handleRouting = async () => {
     if (url === lastRoute || !modites) {
@@ -53,18 +58,29 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
           fields = moditeProfile.profile.fields
         }
 
-        if (record.recordType === 'user' && !fields) fetchProfile()
+        if (record.recordType === 'user' && !fields) {
+          fetchProfile()
+        }
 
-        setActiveModite(record)
+        if (isProjects) {
+          setActiveProject(record)
+        } else {
+          setActiveModite(record)
+        }
       }
     } else {
-      const isProjects: boolean = url.indexOf('/projects') === 0
       const type = isProjects ? 'projects' : 'modites'
 
       setListType(type)
 
-      if (activeModite) {
-        setActiveModite(null)
+      if (isProjects) {
+        if (activeItem) {
+          setActiveProject(null)
+        }
+      } else {
+        if (activeItem) {
+          setActiveModite(null)
+        }
       }
     }
   }
@@ -95,7 +111,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     // save filter
     setFilter(query)
 
-    filterModites(query)
+    filterer(query)
   }
 
   useEffect(() => {
@@ -125,10 +141,10 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
         <BackButton className={backButtonCls} />
         <div className={mapWindowCls} />
         <div className={s.moditeListWrap}>
-          {!modites.length ? (
+          {!data.length ? (
             <SkeletonList />
           ) : (
-            <VirtualizedList records={modites} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
+            <VirtualizedList records={data} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
           )}
           <DetailsView className={activeModiteCls} />
         </div>

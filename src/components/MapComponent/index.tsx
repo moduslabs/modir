@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useContext } from 'react'
 import IModite from '../../models/Modite'
 import MapComponentProps from './MapComponentProps'
 import s from './styles.module.css'
-import ActiveModiteContext from '../../state/ActiveModite'
+import DataContext from '../../service/Data'
 
 let map: MapChart
 let imageSeries: any
@@ -24,7 +24,7 @@ const updateMap = (markerData: any) => {
 
 const MapComponent = ({ modites }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
-  const [activeModite]: [IModite | null] = useContext(ActiveModiteContext)
+  const [activeModite]: [IModite | null] = useContext(DataContext)
 
   useEffect(() => {
     if (!map && mapRef.current) {

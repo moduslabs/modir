@@ -1,7 +1,14 @@
 /* eslint-disable */
 // @ts-ignore
-onmessage = function(event) {
-  const { modites, filter, date, locale } = event.data
+onmessage = function (event) {
+  const {
+    date,
+    filter,
+    filterType,
+    locale,
+    modites,
+    projects
+  } = event.data
 
   const getTimeOfDay = timeZone => {
     const hour = ~~date.toLocaleString(locale, {
@@ -17,14 +24,14 @@ onmessage = function(event) {
     return '☀️'
   }
 
-  const isProject = modites.length && modites[0].recordType === 'project'
+  const isProject = filterType === 'project'
+  const name = isProject ? 'name' : 'real_name'
+  const filterLowered = filter.toLowerCase()
 
-  const filterRecords = modites => {
-    const filtered = modites
-      .filter(modite => {
-        const name = isProject ? 'name' : 'real_name'
-        return modite[name].toLowerCase().indexOf(filter.toLowerCase()) > -1
-      })
+  const filterRecords = data => {
+    const filtered = data
+      // TODO don't filter if no filter
+      .filter(item => item[name].toLowerCase().indexOf(filterLowered) > -1)
       .sort((prev, next) => {
         const prevName = isProject ? prev.name : prev.profile.last_name
         const nextName = isProject ? next.name : next.profile.last_name
@@ -37,34 +44,40 @@ onmessage = function(event) {
         }
         return 0
       })
-      .map(modite => ({
-        ...modite,
+      .map(item => ({
+        ...item,
         localDate: date.toLocaleString(locale, {
           day: 'numeric',
           month: 'long',
-          timeZone: modite.tz,
+          timeZone: item.tz,
           year: 'numeric',
         }),
         localTime: date.toLocaleString(locale, {
           hour: 'numeric',
           minute: 'numeric',
-          timeZone: modite.tz,
+          timeZone: item.tz,
         }),
         // eslint-disable-next-line @typescript-eslint/camelcase
-        real_name: modite.real_name || modite.name,
-        tod: getTimeOfDay(modite.tz),
+        real_name: item[name],
+        tod: getTimeOfDay(item.tz),
       }))
 
     return filtered
   }
 
   if (isProject) {
-    modites.forEach(project => {
+    projects.forEach(project => {
       project.users = filterRecords(project.users)
     })
 
-    postMessage(modites)
+    postMessage({
+      modites,
+      projects,
+    })
   } else {
-    postMessage(filterRecords(modites))
+    postMessage({
+      modites: filterRecords(modites),
+      projects,
+    })
   }
 }

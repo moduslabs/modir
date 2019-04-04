@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import ActiveModiteContext from '../../state/ActiveModite'
+import DataContext from '../../service/Data'
 import IModite from '../../models/Modite'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
@@ -15,7 +15,7 @@ const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
 
 // TODO: type correctly
 function DetailsView({ className = '' }: any) {
-  const [activeModite]: [IModite, React.Dispatch<any>] = useContext(ActiveModiteContext)
+  const [activeModite]: [IModite, React.Dispatch<any>] = useContext(DataContext)
 
   if (!activeModite) return null
 

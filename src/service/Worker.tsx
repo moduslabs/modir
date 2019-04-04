@@ -3,6 +3,7 @@ import React, { Context, createContext } from 'react'
 import Worker from 'worker-loader!../components/ModiteList/formatModites.js' // eslint-disable-line import/no-webpack-loader-syntax
 import IWorkerEvent from '../models/WorkerEvent'
 import IModite from '../models/Modite'
+import IProject from '../models/Project'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const WorkerContext: Context<any> = createContext([{}, Function])
@@ -12,8 +13,10 @@ type WorkerCallback = (event: IWorkerEvent) => void
 export interface IWorkerPostMessage {
   date: Date
   filter: string
+  filterType: string
   locale: string
   modites: IModite[]
+  projects: IProject[]
 }
 
 type PostMessage = (message: IWorkerPostMessage) => void

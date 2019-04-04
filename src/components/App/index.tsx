@@ -5,9 +5,8 @@ import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 // @ts-ignore
 import { LastLocationProvider } from 'react-router-last-location'
-import { ActiveModiteProvider } from '../../state/ActiveModite'
-import { ModitesProvider } from '../../state/Modites'
-import { WorkerProvider } from '../../state/Worker'
+import { DataProvider } from '../../service/Data'
+import { WorkerProvider } from '../../service/Worker'
 import './styles.module.css'
 import './theme.css'
 
@@ -17,17 +16,15 @@ const App = () => (
   <IonApp>
     <Suspense fallback={<IonContent>Loading...</IonContent>}>
       <WorkerProvider>
-        <ModitesProvider>
-          <ActiveModiteProvider>
-            <main role="main">
-              <Router>
-                <LastLocationProvider>
-                  <Route path="*" component={Modites} />
-                </LastLocationProvider>
-              </Router>
-            </main>
-          </ActiveModiteProvider>
-        </ModitesProvider>
+        <DataProvider>
+          <main role="main">
+            <Router>
+              <LastLocationProvider>
+                <Route path="*" component={Modites} />
+              </LastLocationProvider>
+            </Router>
+          </main>
+        </DataProvider>
       </WorkerProvider>
     </Suspense>
   </IonApp>
