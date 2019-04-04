@@ -24,13 +24,13 @@ function Modites({ view }: { view?: string }) {
 
   return (
     <IonPage>
-      <div className={s.mapCt}>
+      <ModiteList onModiteItemClick={onModiteClick} activeModite={activeModite} slides={slidesRef} view={view} />
+      <div className={`MapCt ${s.mapCt}`}>
         <div className={s.mapWrap}>
           <MapComponent modites={modites} />
           <div className={s.mapOverlay} />
         </div>
       </div>
-      <ModiteList onModiteItemClick={onModiteClick} activeModite={activeModite} slides={slidesRef} view={view} />
     </IonPage>
   )
 }

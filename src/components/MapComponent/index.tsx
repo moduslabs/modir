@@ -2,7 +2,7 @@ import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
 import React, { useEffect, useRef } from 'react'
-import IModite, { defaultModite } from '../../models/Modite'
+import IModite from '../../models/Modite'
 import MapComponentProps from './MapComponentProps'
 import s from './styles.module.css'
 import IProject from '../../models/Project'
@@ -110,7 +110,7 @@ const MapComponent = ({ modites }: MapComponentProps) => {
     }
   })
 
-  return <div className={s.mapCt} ref={mapRef} />
+  return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 }
 
 export default MapComponent

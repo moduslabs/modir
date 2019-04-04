@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
 import IModite from '../../models/Modite'
-import IWorkerEvent from '../../models/WorkerEvent'
+import IWorkerEvent, { IWorkerEventData } from '../../models/WorkerEvent'
 import IFilterEvent from '../../models/FilterEvent'
 // @ts-ignore
 import Worker from 'worker-loader!./formatModites.js' // eslint-disable-line import/no-webpack-loader-syntax
@@ -26,11 +26,9 @@ const locale: string = navigator.language
 const worker: Worker = new Worker()
 
 // keep server response for Modites here for future reference
-let rawModites: IModite[]
+let rawModites: IModite[] = []
 // keep server response for Projects here for future reference
-let projects: IProject[]
-// points the the active raw list data: rawModites or projects
-let rawListSource: IModite[] | IProject[]
+let rawProjects: IProject[] = []
 // map of modite records by ID
 const moditeMap: { [id: string]: IModite } = {}
 
@@ -39,6 +37,10 @@ let lastRoute: string
 let minutes: number // used by tick
 let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
+let listType: 'projects' | 'modites'
+let isProjects: boolean
+let workerView: 'list' | 'details'
+let workerActiveModite: IModite | IProject
 
 const createModiteMap = () => {
   rawModites.forEach((modite: IModite) => {
@@ -47,7 +49,7 @@ const createModiteMap = () => {
 }
 
 const populateProjects = () => {
-  projects.forEach((project: IProject) => {
+  rawProjects.forEach((project: IProject) => {
     project.users = !project.users.length ? [] : project.users.map((user: IModite) => moditeMap[user.id as string])
     project.users = project.users.filter((project: IModite) => project) // remove any non-matched users (user could exist in Harvest and not in Slack)
   })
@@ -55,21 +57,35 @@ const populateProjects = () => {
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
   const [, setActiveModite]: [IModite, React.Dispatch<any>] = useContext(ModiteContext)
-  const [modites, setModites]: [IModite[], React.Dispatch<any>] = useContext(ModitesContext)
+  const [, setModites]: [IModite[], React.Dispatch<any>] = useContext(ModitesContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
-  const [listType, setListType]: [string, React.Dispatch<any>] = useState('modites')
   const [listData, setListData]: [any, React.Dispatch<any>] = useState()
+  const [view, setView]: ['list' | 'details', React.Dispatch<any>] = useState()
 
   const { url }: { url: string } = match
   const isDetails: boolean = url.indexOf('/details/') === 0
   const id: string | undefined = isDetails ? url.substring(url.lastIndexOf('/') + 1) : undefined
-  const isProjects: boolean = url.indexOf('/projects') === 0
+  isProjects = url.indexOf('/projects') === 0
   const useProjects = isProjects || url.indexOf('/project-') >= 0
 
+  const setViewValues = (val: 'list' | 'details') => {
+    workerView = val
+    setView(val)
+  }
+
+  const setActiveModiteValues = (val: IModite | IProject) => {
+    workerActiveModite = val
+    setActiveModite(val)
+  }
+
+  const processRecords = (filterValue: string = filter): void => {
+    worker.postMessage({ modites: rawModites, projects: rawProjects, filter: filterValue, date: new Date(), locale })
+  }
+
   // get data from server
-  async function getModiteData(filter: string, date: Date): Promise<void> {
+  async function getModiteData(): Promise<void> {
     if (!rawModites || !rawModites.length) {
       const [moditesResp, projectsResp]: [IModite[], IProject[]] = await Promise.all([
         fetch('https://modus.app/modites/all').then(res => res.json()),
@@ -77,47 +93,53 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       ])
 
       rawModites = moditesResp
-      projects = projectsResp
+      rawProjects = projectsResp
       createModiteMap()
       populateProjects()
     }
 
-    rawListSource = useProjects ? projects : rawModites
-    worker.postMessage({ modites: rawListSource, filter, date, locale })
+    processRecords()
+  }
+
+  const handleDetailsRoute = () => {
+    if (!id) {
+      return
+    }
+
+    const recordSrc: IModite[] | IProject = useProjects ? rawProjects : rawModites
+    const record: any = recordSrc.find((item: any) => item.id === id)
+
+    if (record) {
+      const { profile = {} }: any = record || {}
+      let { fields } = profile
+
+      const fetchProfile = async () => {
+        const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${id}`).then(res => res.json())
+        record.profile = moditeProfile.profile
+        fields = moditeProfile.profile.fields
+      }
+
+      if (record.recordType === 'user' && !fields) fetchProfile()
+      setActiveModiteValues(record)
+      setViewValues('details')
+    }
   }
 
   const handleRouting = async () => {
-    if (url === lastRoute || !modites) return
+    if (url === lastRoute) return
 
     lastRoute = url
-    const date = new Date()
     const type = isProjects ? 'projects' : 'modites'
 
     // handle details type route
     if (id) {
-      const record: any = modites.find((item: any) => item.id === id)
-
-      if (record) {
-        const { profile = {} }: any = record || {}
-        let { fields } = profile
-
-        const fetchProfile = async () => {
-          const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${id}`).then(res => res.json())
-          record.profile = moditeProfile.profile
-          fields = moditeProfile.profile.fields
-        }
-
-        if (record.recordType === 'user' && !fields) fetchProfile()
-
-        setActiveModite(record)
-        worker.postMessage({ modites: [record], filter, date, locale })
-      }
+      handleDetailsRoute()
+      processRecords()
     } else {
       // handle list type routes
-      const rawSource = isProjects ? projects : rawModites
-      setListType(type)
-      rawListSource = rawSource
-      worker.postMessage({ modites: rawSource, filter, date, locale })
+      listType = type
+      processRecords()
+      setViewValues('list')
     }
   }
 
@@ -140,8 +162,9 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const tick: Function = (): void => {
     const date: Date = new Date()
     const currentMinutes: number = date.getMinutes()
+
     if (minutes && currentMinutes !== minutes) {
-      worker.postMessage({ modites: rawListSource, filter: lastFilter, date, locale })
+      processRecords(lastFilter)
     }
     minutes = currentMinutes
   }
@@ -156,14 +179,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
     // save filter
     setFilter(query)
-
-    //tell worker to parse and filter
-    worker.postMessage({
-      modites: rawListSource,
-      filter: query,
-      date: new Date(),
-      locale,
-    })
+    processRecords(query)
   }
 
   useEffect(() => {
@@ -177,19 +193,39 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       if (listData.length) return clearTimeInterval
     } else {
       // initial data parsing
-      worker.onmessage = (event: IWorkerEvent) => {
+      worker.onmessage = ({ data }: IWorkerEvent): void => {
+        const {
+          allModites = [],
+          filteredModites = [],
+          allProjects = [],
+          filteredProjects = [],
+        }: IWorkerEventData = data
+
         requestAnimationFrame(() => {
-          setModites(event.data)
-          setListData(event.data)
+          rawModites = allModites
+          rawProjects = allProjects
+
+          const listSrc = isProjects ? filteredProjects : filteredModites
+          setListData(listSrc)
+          let mapData: IModite | IModite[] | IProject = filteredModites
+
+          if (workerView === 'details') {
+            mapData = workerActiveModite
+            mapData = useProjects ? (workerActiveModite as IProject).users : workerActiveModite
+          }
+
+          setModites(mapData)
+          handleDetailsRoute()
         })
       }
       // get data from the api
-      getModiteData(filter, new Date())
+      getModiteData()
     }
   })
 
   const cx = classNames.bind(s)
-  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed })
+  const moditeListCtCls = cx('moditeListCt', { detailsView: view === 'details' })
+  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && view !== 'details' })
   const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!id })
   const searchbarWrapCls = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filtered,
@@ -204,7 +240,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
   return (
     <>
-      <IonPage className={s.moditeListCt}>
+      <IonPage className={moditeListCtCls}>
         <BackButton className={backButtonCls} />
         <div className={mapWindowCls} />
         <div className={s.moditeListWrap}>
