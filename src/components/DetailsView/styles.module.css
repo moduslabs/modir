@@ -13,7 +13,8 @@
   text-align: center;
   box-shadow: 0px 16px 48px 0px rgba(0, 0, 0, .50);
 }
-.moditeCt > img {
+
+.moditeCt>img {
   border-radius: 20px;
   box-shadow: 0px 33px 18px -18px rgba(0, 0, 0, 0.6);
   position: absolute;
@@ -23,10 +24,12 @@
   opacity: 0;
   transition: all 400ms;
 }
+
 .activeModiteShown {
   transform: translateY(0px);
 }
-.activeModiteShown > img {
+
+.activeModiteShown>img {
   opacity: 1;
   transform: translate(-50%, -50%);
   transition-delay: 500ms;
@@ -35,6 +38,7 @@
 .isModite {
   padding: 124px 20px 20px 20px;
 }
+
 .isProject {
   padding: 50px 0 0 0;
 }
@@ -42,6 +46,7 @@
 .moditeDetails {
   opacity: 0;
 }
+
 .moditeDetailsShown {
   opacity: 1;
 }
@@ -50,6 +55,7 @@
   opacity: 0;
   height: 100%;
 }
+
 .projectDetailsShown {
   opacity: 1;
 }
@@ -83,6 +89,14 @@
 
 .gitUser {
   margin-top: 2px;
+}
+
+.gitUser a {
+  color: var(--ion-color-modus-salmon);
+}
+
+.gitUser ion-icon {
+  margin-right: 5px;
 }
 
 .title {
