@@ -4,7 +4,7 @@ import { IWorkerState } from '../../service/Worker'
 
 type ModiteFilter = (filter: string) => void
 
-export interface IModitesState {
+export interface IDataState {
   activeModite?: IModite | null
   activeProject?: IProject | null
   modites: IModite[]
@@ -15,8 +15,10 @@ export interface IModitesState {
   projectsSource?: IProject[]
 }
 
-export interface IModitesAction {
-  type: 'on-filter-modites' | 'on-filter-projects' | 'on-load' | 'set-active-modite' | 'set-active-project'
+type DataActions = 'on-filter-modites' | 'on-filter-projects' | 'on-load' | 'set-active-modite' | 'set-active-project'
+
+export interface IDataAction {
+  type: DataActions
   filter?: string
   modite?: IModite | null
   modites?: IModite[]
@@ -24,7 +26,7 @@ export interface IModitesAction {
   projects?: IProject[]
 }
 
-export interface IModitesProps {
+export interface IDataProps {
   filterModites: ModiteFilter
   filterProjects: ModiteFilter
 

@@ -3,7 +3,7 @@ import IModite from '../models/Modite'
 import IWorkerEvent from '../models/WorkerEvent'
 import WorkerContext, { IWorkerPostMessage } from './Worker'
 import IProject from '../models/Project'
-import { IModitesAction, IModitesProps, IModitesState, IFilterFnProps } from '../types/service/Data'
+import { IDataAction, IDataProps, IDataState, IFilterFnProps } from '../types/service/Data'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -32,12 +32,12 @@ const getData = async (postMessage: any) => {
   postMessage(message)
 }
 
-const initialState: IModitesState = {
+const initialState: IDataState = {
   modites: [],
   projects: [],
 }
 
-const moditesReducer = (state: IModitesState, action: IModitesAction): IModitesState => {
+const moditesReducer = (state: IDataState, action: IDataAction): IDataState => {
   switch (action.type) {
     case 'on-filter-modites':
       if (action.filter) {
@@ -117,7 +117,7 @@ const createFilterFn = ({ dispatch, modites, type, workerState: { postMessage } 
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
   const [state, dispatch] = React.useReducer(moditesReducer, initialState)
   const workerState = React.useContext(WorkerContext)
-  const props: IModitesProps = {
+  const props: IDataProps = {
     filterModites: createFilterFn({
       dispatch,
       // we need to use all modites so if filtered, use the cached array

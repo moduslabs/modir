@@ -8,7 +8,7 @@ import s from './styles.module.css'
 import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
 import DataContext from '../../service/Data'
-import { IModitesProps, IModitesState } from '../../types/service/Data'
+import { IDataProps, IDataState } from '../../types/service/Data'
 import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
@@ -23,7 +23,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const [
     { activeModite, activeProject, modites, projects },
     { filterModites, filterProjects, setActiveModite, setActiveProject },
-  ]: [IModitesState, IModitesProps] = useContext(DataContext)
+  ]: [IDataState, IDataProps] = useContext(DataContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
