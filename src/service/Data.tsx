@@ -143,7 +143,6 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
   React.useEffect(() => {
     const loadCallback = (event: IWorkerEvent) => {
-      console.log(event)
       dispatch({
         type: 'on-load',
         ...event.data,

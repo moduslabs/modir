@@ -5,6 +5,7 @@ import classNames from 'classnames/bind'
 import s from './styles.module.css'
 import VirtualizedList from '../VirtualizedList'
 import IProject from '../../models/Project'
+import { IDataState } from '../../types/service/Data'
 
 let lastScrollOffset = 0 // used by onScroll
 
@@ -15,29 +16,44 @@ const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
 
 // TODO: type correctly
 function DetailsView({ className = '' }: any) {
-  const [activeModite]: [IModite, React.Dispatch<any>] = useContext(DataContext)
+  const [{ activeModite, activeProject }]: [IDataState] = useContext(DataContext)
+  const isProject = Boolean(activeProject)
+  const activeItem = isProject ? activeProject : activeModite
 
-  if (!activeModite) return null
+  if (!activeItem) {
+    return null
+  }
 
   const { profile = {}, users = [] }: any = activeModite
-  let { fields = {}, title } = profile
+  const { fields = {}, title } = profile
 
   const userCount = users.length
   const image = profile.image_192
-  const name = (activeModite as IModite).real_name ? (activeModite as IModite).real_name : activeModite.name
   const { Location: location, Title, 'GitHub User': gitHubUser } = fields
-  const { tod, localDate, localTime, recordType } = activeModite
-  const isModite = recordType === 'user'
+  const { tod, localDate, localTime } = activeItem
+  const name = activeItem.real_name || activeItem.name
 
   const cx = classNames.bind(s)
-  className = cx('moditeCt', className, { isModite: isModite, isProject: !isModite })
-  const moditeDetailsWrapCLs = cx('moditeDetails', { moditeDetailsShown: isModite })
-  const projectDetailsWrapCLs = cx('projectDetails', { projectDetailsShown: !isModite })
+  className = cx('moditeCt', className, { isModite: !isProject, isProject: isProject })
+  const moditeDetailsWrapCLs = cx('moditeDetails', { moditeDetailsShown: !isProject })
+  const projectDetailsWrapCLs = cx('projectDetails', { projectDetailsShown: isProject })
 
   return (
     <div className={className}>
       {image && <img src={image} />}
-      {isModite && (
+      {isProject ? (
+        <div className={projectDetailsWrapCLs}>
+          <div className={s.name}>{name}</div>
+
+          <div className={s.userCount}>{userCount}</div>
+
+          <VirtualizedList
+            records={(activeModite as IProject).users}
+            onScroll={onScroll}
+            initialScrollOffset={lastScrollOffset}
+          />
+        </div>
+      ) : (
         <div className={moditeDetailsWrapCLs}>
           <div className={s.name}>{name}</div>
 
@@ -53,22 +69,6 @@ function DetailsView({ className = '' }: any) {
           <div className={s.title}>{title}</div>
         </div>
       )}
-
-      {/* {!isModite && (
-        <div className={projectDetailsWrapCLs}>
-          <div className={s.name}>{name}</div>
-
-          <div className={s.userCount}>{userCount}</div>
-
-          {!isModite && (
-            <VirtualizedList
-              records={(activeModite as IProject).users}
-              onScroll={onScroll}
-              initialScrollOffset={lastScrollOffset}
-            />
-          )}
-        </div>
-      )} */}
     </div>
   )
 }

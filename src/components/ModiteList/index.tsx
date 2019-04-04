@@ -38,7 +38,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const activeItem = isProjects ? activeProject : activeModite
 
   const handleRouting = async () => {
-    if (url === lastRoute || !modites) {
+    if (url === lastRoute || !data.length) {
       return
     }
 
@@ -141,10 +141,10 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
         <BackButton className={backButtonCls} />
         <div className={mapWindowCls} />
         <div className={s.moditeListWrap}>
-          {!data.length ? (
-            <SkeletonList />
-          ) : (
+          {data.length ? (
             <VirtualizedList records={data} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
+          ) : (
+            <SkeletonList />
           )}
           <DetailsView className={activeModiteCls} />
         </div>
