@@ -7,6 +7,7 @@ onmessage = function (event) {
     filterType,
     locale,
     modites,
+    moditeMap,
     projects
   } = event.data
 
@@ -26,12 +27,13 @@ onmessage = function (event) {
 
   const isProject = filterType === 'project'
   const name = isProject ? 'name' : 'real_name'
-  const filterLowered = filter.toLowerCase()
+  const filterLowered = filter && filter.toLowerCase()
 
   const filterRecords = data => {
-    const filtered = data
-      // TODO don't filter if no filter
-      .filter(item => item[name].toLowerCase().indexOf(filterLowered) > -1)
+    // only filter if there is a filter
+    const workingArray = filter ? data.filter(item => item[name].toLowerCase().indexOf(filterLowered) > -1) : data
+
+    return workingArray
       .sort((prev, next) => {
         const prevName = isProject ? prev.name : prev.profile.last_name
         const nextName = isProject ? next.name : next.profile.last_name
@@ -61,23 +63,26 @@ onmessage = function (event) {
         real_name: item[name],
         tod: getTimeOfDay(item.tz),
       }))
-
-    return filtered
   }
 
-  if (isProject) {
-    projects.forEach(project => {
-      project.users = filterRecords(project.users)
+  const message = {
+    modites: filterRecords(modites),
+    projects,
+  }
+
+  if (!moditeMap) {
+    const map = {}
+
+    modites.forEach(modite => {
+      map[modite.id] = modite
     })
 
-    postMessage({
-      modites,
-      projects,
-    })
-  } else {
-    postMessage({
-      modites: filterRecords(modites),
-      projects,
-    })
+    message.moditeMap = map
   }
+
+  projects.forEach(project => {
+    project.users = project.users.length ? filterRecords(project.users.map(user => message.moditeMap[user.id]).filter(Boolean)) : []
+  })
+
+  postMessage(message)
 }

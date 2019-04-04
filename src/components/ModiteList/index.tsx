@@ -13,6 +13,7 @@ import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
 import VirtualizedList from '../VirtualizedList'
+import IProject from '../../models/Project'
 
 let lastRoute: string
 
@@ -32,7 +33,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const { url }: { url: string } = match
   const isDetails: boolean = url.indexOf('/details/') === 0
   const id: string | undefined = isDetails ? url.substring(url.lastIndexOf('/') + 1) : undefined
-  const isProjects: boolean = url.indexOf('/projects') === 0
+  const isProjects: boolean = id ? id.indexOf('project-') === 0 : url.indexOf('/projects') === 0
   const data = isProjects ? projects : modites
   const filterer = isProjects ? filterProjects : filterModites
   const activeItem = isProjects ? activeProject : activeModite
@@ -46,25 +47,31 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
     // handle details type route
     if (id) {
-      const record: any = modites.find((item: any) => item.id === id)
+      if (isProjects) {
+        const project = projects.find((project: IProject) => project.id === id)
 
-      if (record) {
-        const { profile = {} }: any = record || {}
-        let { fields } = profile
-
-        const fetchProfile = async () => {
-          const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${id}`).then(res => res.json())
-          record.profile = moditeProfile.profile
-          fields = moditeProfile.profile.fields
+        if (project) {
+          setActiveProject(project)
         }
+      } else {
+        const record: any = modites.find((item: any) => item.id === id)
 
-        if (record.recordType === 'user' && !fields) {
-          fetchProfile()
-        }
+        if (record) {
+          const { profile = {} }: any = record || {}
+          let { fields } = profile
 
-        if (isProjects) {
-          setActiveProject(record)
-        } else {
+          const fetchProfile = async () => {
+            const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${id}`).then(res =>
+              res.json(),
+            )
+            record.profile = moditeProfile.profile
+            fields = moditeProfile.profile.fields
+          }
+
+          if (record.recordType === 'user' && !fields) {
+            fetchProfile()
+          }
+
           setActiveModite(record)
         }
       }
@@ -73,15 +80,8 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
       setListType(type)
 
-      if (isProjects) {
-        if (activeItem) {
-          setActiveProject(null)
-        }
-      } else {
-        if (activeItem) {
-          setActiveModite(null)
-        }
-      }
+      setActiveModite(null)
+      setActiveProject(null)
     }
   }
 

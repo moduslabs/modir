@@ -25,7 +25,8 @@ const updateMap = (markerData: any) => {
 
 const MapComponent = ({ modites }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
-  const [{ activeModite }]: [IDataState] = useContext(DataContext)
+  const [{ activeModite, activeProject }]: [IDataState] = useContext(DataContext)
+  const data = activeProject ? activeProject.users : modites
 
   useEffect(() => {
     if (!map && mapRef.current) {
@@ -76,8 +77,8 @@ const MapComponent = ({ modites }: MapComponentProps) => {
       imageSeriesTemplate.propertyFields.longitude = 'longitude'
     }
 
-    if (map && modites) {
-      const mapData: IModite[] = activeModite ? [activeModite] : modites
+    if (map && data) {
+      const mapData: IModite[] = activeModite ? [activeModite] : data
       const markerData: any = mapData
         .map((modite: IModite) => {
           if (!modite.profile || !modite.profile.fields) {

@@ -24,7 +24,7 @@ function DetailsView({ className = '' }: any) {
     return null
   }
 
-  const { profile = {}, users = [] }: any = activeModite
+  const { profile = {}, users = [] }: any = activeItem
   const { fields = {}, title } = profile
 
   const userCount = users.length
@@ -48,7 +48,7 @@ function DetailsView({ className = '' }: any) {
           <div className={s.userCount}>{userCount}</div>
 
           <VirtualizedList
-            records={(activeModite as IProject).users}
+            records={(activeItem as IProject).users}
             onScroll={onScroll}
             initialScrollOffset={lastScrollOffset}
           />
