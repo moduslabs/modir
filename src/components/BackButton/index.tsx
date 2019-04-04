@@ -14,7 +14,10 @@ function BackButton({ history, className = '' }: any) {
   const onBackClick = (e: SyntheticEvent) => {
     const target = e.target as HTMLElement
     const btnEl = (target && target.tagName === 'BUTTON' ? target : target.parentNode) as HTMLElement
-    btnEl && btnEl.blur()
+
+    if (btnEl) {
+      btnEl.blur()
+    }
 
     if (lastLocation) {
       history.goBack()
@@ -24,7 +27,7 @@ function BackButton({ history, className = '' }: any) {
   }
 
   return (
-    <button className={cx('backButton', className)} onClick={e => onBackClick(e)}>
+    <button className={cx('backButton', className)} onClick={onBackClick}>
       <IonIcon ios="md-arrow-back" md="md-arrow-back" />
     </button>
   )
