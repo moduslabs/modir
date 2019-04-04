@@ -11,15 +11,6 @@ const DataContext: Context<any> = createContext([{}, Function])
 // get locale once
 const locale: string = navigator.language
 
-// get data from server
-// const getModiteData = async (postMessage: any, filter: string = ''): Promise<void> => {
-//   const date = new Date()
-//   const modites = await fetch('https://modus.app/modites/all').then(res => res.json())
-//   const message: WorkerPostMessage = { data: modites, date, filter, locale, type: 'modite' }
-
-//   postMessage(message)
-// }
-
 const getData = async (postMessage: any) => {
   const date = new Date()
   const [modites, projects] = await Promise.all([
@@ -99,11 +90,11 @@ const moditesReducer = (state: DataState, action: DataAction): DataState => {
   }
 }
 
-const createFilterFn = ({ dispatch, modites, type, workerState: { postMessage } }: FilterFnProps) => (
+const createFilterFn = ({ dispatch, modites, projects, type, workerState: { postMessage } }: FilterFnProps) => (
   filter: string,
 ) => {
   const date = new Date()
-  const message: WorkerPostMessage = { date, filter, filterType: 'modites', locale, modites, projects: [] } // TODO
+  const message: WorkerPostMessage = { date, filter, filterType: 'modites', locale, modites, projects }
 
   dispatch({
     type: `on-filter-${type}`,
@@ -124,6 +115,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       dispatch,
       // we need to use all modites so if filtered, use the cached array
       modites: state.moditesSource || state.modites,
+      projects: state.projectsSource || state.projects,
       type: 'modites',
       workerState: workerState,
     }),

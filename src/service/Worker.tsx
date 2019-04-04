@@ -55,7 +55,7 @@ const initialState: WorkerState = {
 const WorkerProvider = ({ children }: { children?: React.ReactNode }) => {
   const [state, dispatch] = React.useReducer(workerReducer, initialState)
 
-  if (!state.worker) {
+  if (!state.postMessage) {
     dispatch({
       type: 'initialize',
     })

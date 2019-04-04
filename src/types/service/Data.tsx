@@ -37,6 +37,7 @@ export interface DataProps {
 export interface FilterFnProps {
   dispatch: any
   modites: Modite[]
+  projects: Project[]
   type: 'modites' | 'projects'
   workerState: WorkerState
 }

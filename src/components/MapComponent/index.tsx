@@ -34,7 +34,6 @@ const MapComponent = ({ modites }: MapComponentProps) => {
       map = create(el, MapChart)
       map.geodata = am4geodataWorldLow
       map.projection = new projections.Miller()
-
       const polygonSeries = map.series.push(new MapPolygonSeries())
       polygonSeries.useGeodata = true
       polygonSeries.exclude = ['AQ']
@@ -89,7 +88,7 @@ const MapComponent = ({ modites }: MapComponentProps) => {
           const { lat: latitude, lon: longitude } = locationData
           return latitude && longitude && title ? { latitude, longitude, title } : null
         })
-        .filter((item: any) => item)
+        .filter(Boolean)
 
       if (map.isReady()) {
         updateMap(markerData)
@@ -103,7 +102,7 @@ const MapComponent = ({ modites }: MapComponentProps) => {
     }
   })
 
-  return <div className={s.mapCt} ref={mapRef} />
+  return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 }
 
 export default MapComponent

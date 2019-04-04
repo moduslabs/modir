@@ -7,12 +7,12 @@ import FilterEvent from '../../models/FilterEvent'
 import s from './styles.module.css'
 import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
-import DataContext from '../../service/Data'
-import { DataProps, DataState } from '../../types/service/Data'
 import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
 import VirtualizedList from '../VirtualizedList'
+import DataContext from '../../service/Data'
+import { DataProps, DataState } from '../../types/service/Data'
 import Project from '../../models/Project'
 
 let lastRoute: string
@@ -50,6 +50,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
         const project = projects.find((project: Project) => project.id === id)
 
         if (project) {
+          setActiveModite(null)
           setActiveProject(project)
         }
       } else {
@@ -72,6 +73,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
           }
 
           setActiveModite(record)
+          setActiveProject(null)
         }
       }
     } else {
@@ -104,7 +106,10 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
     setFiltered(query.length)
 
-    if (query === lastFilter) return
+    if (query === lastFilter) {
+      return
+    }
+
     lastFilter = query
 
     // save filter
@@ -115,13 +120,14 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
   useEffect(() => {
     // if we already have something, we can safely abandon fetching
-    if (modites.length) {
+    if (data) {
       handleRouting()
     }
   })
 
   const cx = classNames.bind(s)
-  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed })
+  const moditeListCtCls = cx('moditeListCt', { detailsView: listType === 'details' })
+  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && listType !== 'details' })
   const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!id })
   const searchbarWrapCls = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filtered,
@@ -136,7 +142,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
   return (
     <>
-      <IonPage className={s.moditeListCt}>
+      <IonPage className={moditeListCtCls}>
         <BackButton className={backButtonCls} />
         <div className={mapWindowCls} />
         <div className={s.moditeListWrap}>
