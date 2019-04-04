@@ -165,7 +165,3 @@ a {
   text-decoration: none;
   color: var(--ion-color-modus-charcoal);
 }
-
-*:focus {
-  outline: transparent;
-}

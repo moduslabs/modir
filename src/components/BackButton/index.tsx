@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { SyntheticEvent } from 'react'
 // @ts-ignore
 import { useLastLocation } from 'react-router-last-location'
 import { IonIcon } from '@ionic/react'
@@ -11,7 +11,11 @@ function BackButton({ history, className = '' }: any) {
   const cx = classNames.bind(s)
   const lastLocation = useLastLocation()
 
-  const onBackClick = () => {
+  const onBackClick = (e: SyntheticEvent) => {
+    const target = e.target as HTMLElement
+    const btnEl = (target && target.tagName === 'BUTTON' ? target : target.parentNode) as HTMLElement
+    btnEl && btnEl.blur()
+
     if (lastLocation) {
       history.goBack()
     } else {
@@ -20,7 +24,7 @@ function BackButton({ history, className = '' }: any) {
   }
 
   return (
-    <button className={cx('backButton', className)} onClick={() => onBackClick()}>
+    <button className={cx('backButton', className)} onClick={e => onBackClick(e)}>
       <IonIcon ios="md-arrow-back" md="md-arrow-back" />
     </button>
   )
