@@ -29,8 +29,6 @@ const worker: Worker = new Worker()
 let rawModites: IModite[] = []
 // keep server response for Projects here for future reference
 let rawProjects: IProject[] = []
-// points the the active raw list data: rawModites or projects
-let rawListSource: IModite[] | IProject[] = []
 // map of modite records by ID
 const moditeMap: { [id: string]: IModite } = {}
 
@@ -139,9 +137,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       processRecords()
     } else {
       // handle list type routes
-      const rawSource = isProjects ? rawProjects : rawModites
       listType = type
-      rawListSource = rawSource
       processRecords()
       setViewValues('list')
     }
