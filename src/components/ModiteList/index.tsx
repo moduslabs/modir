@@ -28,7 +28,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
-  const [listType, setListType]: [string, React.Dispatch<any>] = useState('modites')
+  const [listType, setListType]: [string, React.Dispatch<any>] = useState('modites') // listType can be 'modites' or 'projects'
 
   const { url }: { url: string } = match
   const isDetails: boolean = url.indexOf('/details/') === 0
@@ -126,8 +126,9 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   })
 
   const cx = classNames.bind(s)
-  const moditeListCtCls = cx('moditeListCt', { detailsView: listType === 'details' })
-  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && listType !== 'details' })
+  console.log(isDetails)
+  const moditeListCtCls = cx('moditeListCt', { detailsView: isDetails })
+  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && !isDetails })
   const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!id })
   const searchbarWrapCls = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filtered,
