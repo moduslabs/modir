@@ -65,6 +65,7 @@ const moditesReducer = (state: DataState, action: DataAction): DataState => {
     case 'on-load':
       const modites = action.modites ? action.modites : []
       const projects = action.projects ? action.projects : []
+      // if there was an activeModite, we need to find the new object
       const activeModite = state.activeModite
         ? modites.find((modite: Modite) => {
             if (state.activeModite) {
@@ -74,6 +75,7 @@ const moditesReducer = (state: DataState, action: DataAction): DataState => {
             return false
           })
         : undefined
+      // if there was an activeProject, we need to find the new object
       const activeProject = state.activeProject
         ? projects.find((project: Project) => {
             if (state.activeProject) {
@@ -165,6 +167,8 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
     let minute: number
 
+    // this will run every second but only trigger
+    // the getData function when the minute changes
     const tick = () => {
       const date = new Date()
       const currentMinutes = date.getMinutes()
