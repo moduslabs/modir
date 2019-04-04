@@ -1,42 +1,42 @@
-import IModite from '../../models/Modite'
-import IProject from '../../models/Project'
-import { IWorkerState } from '../../service/Worker'
+import Modite from '../../models/Modite'
+import Project from '../../models/Project'
+import { WorkerState } from '../../service/Worker'
 
 type ModiteFilter = (filter: string) => void
 
-export interface IDataState {
-  activeModite?: IModite | null
-  activeProject?: IProject | null
-  modites: IModite[]
+export interface DataState {
+  activeModite?: Modite | null
+  activeProject?: Project | null
+  modites: Modite[]
   moditesFilter?: string
-  moditesSource?: IModite[]
-  projects: IProject[]
+  moditesSource?: Modite[]
+  projects: Project[]
   projectsFilter?: string
-  projectsSource?: IProject[]
+  projectsSource?: Project[]
 }
 
 type DataActions = 'on-filter-modites' | 'on-filter-projects' | 'on-load' | 'set-active-modite' | 'set-active-project'
 
-export interface IDataAction {
+export interface DataAction {
   type: DataActions
   filter?: string
-  modite?: IModite | null
-  modites?: IModite[]
-  project?: IProject | null
-  projects?: IProject[]
+  modite?: Modite | null
+  modites?: Modite[]
+  project?: Project | null
+  projects?: Project[]
 }
 
-export interface IDataProps {
+export interface DataProps {
   filterModites: ModiteFilter
   filterProjects: ModiteFilter
 
-  setActiveModite: (modite: IModite | null) => void
-  setActiveProject: (project: IProject | null) => void
+  setActiveModite: (modite: Modite | null) => void
+  setActiveProject: (project: Project | null) => void
 }
 
-export interface IFilterFnProps {
+export interface FilterFnProps {
   dispatch: any
-  modites: IModite[]
+  modites: Modite[]
   type: 'modites' | 'projects'
-  workerState: IWorkerState
+  workerState: WorkerState
 }

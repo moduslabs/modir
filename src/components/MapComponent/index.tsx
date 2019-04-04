@@ -2,11 +2,11 @@ import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
 import React, { useEffect, useRef, useContext } from 'react'
-import IModite from '../../models/Modite'
-import MapComponentProps from './MapComponentProps'
+import Modite from '../../models/Modite'
+import MapComponentProps from '../../types/components/MapComponent'
 import s from './styles.module.css'
 import DataContext from '../../service/Data'
-import { IDataState } from '../../types/service/Data'
+import { DataState } from '../../types/service/Data'
 
 let map: MapChart
 let imageSeries: any
@@ -25,7 +25,7 @@ const updateMap = (markerData: any) => {
 
 const MapComponent = ({ modites }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
-  const [{ activeModite, activeProject }]: [IDataState] = useContext(DataContext)
+  const [{ activeModite, activeProject }]: [DataState] = useContext(DataContext)
   const data = activeProject ? activeProject.users : modites
 
   useEffect(() => {
@@ -78,9 +78,9 @@ const MapComponent = ({ modites }: MapComponentProps) => {
     }
 
     if (map && data) {
-      const mapData: IModite[] = activeModite ? [activeModite] : data
+      const mapData: Modite[] = activeModite ? [activeModite] : data
       const markerData: any = mapData
-        .map((modite: IModite) => {
+        .map((modite: Modite) => {
           if (!modite.profile || !modite.profile.fields) {
             return
           }

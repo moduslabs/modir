@@ -1,6 +1,6 @@
 import profilePlaceholder from '../assets/images/modus-neon.gif'
 
-export interface IModiteProfile {
+export interface ModiteProfile {
   title?: string
   last_name?: string
   phone?: string
@@ -13,7 +13,7 @@ export interface IModiteProfile {
   fields: { [key: string]: any }
 }
 
-export default interface IModite {
+export default interface Modite {
   real_name?: string
   name?: string
   id?: string
@@ -23,14 +23,15 @@ export default interface IModite {
   localTime?: string
   localDate?: string
   tod?: string
-  profile?: IModiteProfile
+  profile?: ModiteProfile
   tacos?: number
   recordType?: 'user' | 'project'
 }
 
-export const defaultModite: IModite = {
+export const defaultModite: Modite = {
   profile: {
     fields: {},
+    // eslint-disable-next-line @typescript-eslint/camelcase
     image_192: profilePlaceholder,
   },
 }

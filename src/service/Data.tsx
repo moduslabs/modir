@@ -1,9 +1,9 @@
 import React, { Context, createContext } from 'react'
-import IModite from '../models/Modite'
-import IWorkerEvent from '../models/WorkerEvent'
-import WorkerContext, { IWorkerPostMessage } from './Worker'
-import IProject from '../models/Project'
-import { IDataAction, IDataProps, IDataState, IFilterFnProps } from '../types/service/Data'
+import Modite from '../models/Modite'
+import WorkerEvent from '../models/WorkerEvent'
+import WorkerContext, { WorkerPostMessage } from './Worker'
+import Project from '../models/Project'
+import { DataAction, DataProps, DataState, FilterFnProps } from '../types/service/Data'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -15,7 +15,7 @@ const locale: string = navigator.language
 // const getModiteData = async (postMessage: any, filter: string = ''): Promise<void> => {
 //   const date = new Date()
 //   const modites = await fetch('https://modus.app/modites/all').then(res => res.json())
-//   const message: IWorkerPostMessage = { data: modites, date, filter, locale, type: 'modite' }
+//   const message: WorkerPostMessage = { data: modites, date, filter, locale, type: 'modite' }
 
 //   postMessage(message)
 // }
@@ -27,17 +27,17 @@ const getData = async (postMessage: any) => {
     fetch('https://modus.app/projects/all').then(res => res.json()),
   ])
 
-  const message: IWorkerPostMessage = { date, filter: '', filterType: 'modites', locale, modites, projects }
+  const message: WorkerPostMessage = { date, filter: '', filterType: 'modites', locale, modites, projects }
 
   postMessage(message)
 }
 
-const initialState: IDataState = {
+const initialState: DataState = {
   modites: [],
   projects: [],
 }
 
-const moditesReducer = (state: IDataState, action: IDataAction): IDataState => {
+const moditesReducer = (state: DataState, action: DataAction): DataState => {
   switch (action.type) {
     case 'on-filter-modites':
       if (action.filter) {
@@ -72,7 +72,9 @@ const moditesReducer = (state: IDataState, action: IDataAction): IDataState => {
         }
       }
     case 'on-load':
+      // eslint-disable-next-line no-case-declarations
       const modites = action.modites ? action.modites : []
+      // eslint-disable-next-line no-case-declarations
       const projects = action.projects ? action.projects : []
 
       return {
@@ -97,11 +99,11 @@ const moditesReducer = (state: IDataState, action: IDataAction): IDataState => {
   }
 }
 
-const createFilterFn = ({ dispatch, modites, type, workerState: { postMessage } }: IFilterFnProps) => (
+const createFilterFn = ({ dispatch, modites, type, workerState: { postMessage } }: FilterFnProps) => (
   filter: string,
 ) => {
   const date = new Date()
-  const message: IWorkerPostMessage = { date, filter, filterType: 'modites', locale, modites, projects: [] } // TODO
+  const message: WorkerPostMessage = { date, filter, filterType: 'modites', locale, modites, projects: [] } // TODO
 
   dispatch({
     type: `on-filter-${type}`,
@@ -117,7 +119,7 @@ const createFilterFn = ({ dispatch, modites, type, workerState: { postMessage } 
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
   const [state, dispatch] = React.useReducer(moditesReducer, initialState)
   const workerState = React.useContext(WorkerContext)
-  const props: IDataProps = {
+  const props: DataProps = {
     filterModites: createFilterFn({
       dispatch,
       // we need to use all modites so if filtered, use the cached array
@@ -127,13 +129,13 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     }),
     filterProjects: () => {},
 
-    setActiveModite: (modite: IModite | null) => {
+    setActiveModite: (modite: Modite | null) => {
       dispatch({
         type: 'set-active-modite',
         modite,
       })
     },
-    setActiveProject: (project: IProject | null) => {
+    setActiveProject: (project: Project | null) => {
       dispatch({
         type: 'set-active-project',
         project,
@@ -142,7 +144,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
   }
 
   React.useEffect(() => {
-    const loadCallback = (event: IWorkerEvent) => {
+    const loadCallback = (event: WorkerEvent) => {
       dispatch({
         type: 'on-load',
         ...event.data,

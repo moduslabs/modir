@@ -1,11 +1,11 @@
-import IModite from './Modite'
-import IProject from './Project'
+import Modite from './Modite'
+import Project from './Project'
 
-interface IWorkerData {
-  modites: IModite[]
-  projects: IProject[]
+interface WorkerData {
+  modites: Modite[]
+  projects: Project[]
 }
 
-export default interface IWorkerEvent {
-  data: IWorkerData
+export default interface WorkerEvent {
+  data: WorkerData
 }

@@ -1,9 +1,9 @@
 import React, { lazy, useRef, useContext } from 'react'
 import { IonPage } from '@ionic/react'
-import IModite from '../../models/Modite'
+import Modite from '../../models/Modite'
 import s from './styles.module.css'
 import DataContext from '../../service/Data'
-import { IDataProps, IDataState } from '../../types/service/Data'
+import { DataProps, DataState } from '../../types/service/Data'
 
 const ModiteList = lazy(() =>
   import('../../components/ModiteList' /* webpackChunkName: "modite-list", webpackPrefetch: true  */),
@@ -14,10 +14,10 @@ const MapComponent = lazy(() =>
 )
 
 function Modites({ view }: { view?: string }) {
-  const [{ modites }, { setActiveModite }]: [IDataState, IDataProps] = useContext(DataContext)
+  const [{ modites }, { setActiveModite }]: [DataState, DataProps] = useContext(DataContext)
   const slidesRef: React.MutableRefObject<null> = useRef(null)
 
-  const onModiteClick = (modite: IModite) => {
+  const onModiteClick = (modite: Modite) => {
     setActiveModite(modite)
   }
 

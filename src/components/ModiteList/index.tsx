@@ -3,17 +3,17 @@ import { withRouter, Link } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
-import IFilterEvent from '../../models/FilterEvent'
+import FilterEvent from '../../models/FilterEvent'
 import s from './styles.module.css'
 import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
 import DataContext from '../../service/Data'
-import { IDataProps, IDataState } from '../../types/service/Data'
+import { DataProps, DataState } from '../../types/service/Data'
 import DetailsView from '../../components/DetailsView'
 import ModiteProfileResp from '../../models/ModiteProfileResp'
 import BackButton from '../BackButton'
 import VirtualizedList from '../VirtualizedList'
-import IProject from '../../models/Project'
+import Project from '../../models/Project'
 
 let lastRoute: string
 
@@ -21,10 +21,10 @@ let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
-  const [
-    { activeModite, activeProject, modites, projects },
-    { filterModites, filterProjects, setActiveModite, setActiveProject },
-  ]: [IDataState, IDataProps] = useContext(DataContext)
+  const [{ modites, projects }, { filterModites, filterProjects, setActiveModite, setActiveProject }]: [
+    DataState,
+    DataProps
+  ] = useContext(DataContext)
   const [filter, setFilter]: [string, React.Dispatch<any>] = useState('')
   const [filtered, setFiltered]: [boolean, React.Dispatch<any>] = useState(false)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
@@ -36,7 +36,6 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const isProjects: boolean = id ? id.indexOf('project-') === 0 : url.indexOf('/projects') === 0
   const data = isProjects ? projects : modites
   const filterer = isProjects ? filterProjects : filterModites
-  const activeItem = isProjects ? activeProject : activeModite
 
   const handleRouting = async () => {
     if (url === lastRoute || !data.length) {
@@ -48,7 +47,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     // handle details type route
     if (id) {
       if (isProjects) {
-        const project = projects.find((project: IProject) => project.id === id)
+        const project = projects.find((project: Project) => project.id === id)
 
         if (project) {
           setActiveProject(project)
@@ -100,7 +99,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     lastScrollOffset = scrollOffset
   }
 
-  const onFilter = (event: IFilterEvent): void => {
+  const onFilter = (event: FilterEvent): void => {
     const query: string = event.detail.value || ''
 
     setFiltered(query.length)

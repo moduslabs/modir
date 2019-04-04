@@ -1,46 +1,43 @@
 import React, { Context, createContext } from 'react'
 // @ts-ignore
 import Worker from 'worker-loader!./worker.js' // eslint-disable-line import/no-webpack-loader-syntax
-import IWorkerEvent from '../models/WorkerEvent'
-import IModite from '../models/Modite'
-import IProject from '../models/Project'
+import WorkerEvent from '../models/WorkerEvent'
+import Modite from '../models/Modite'
+import Project from '../models/Project'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const WorkerContext: Context<any> = createContext([{}, Function])
 
-type WorkerCallback = (event: IWorkerEvent) => void
+type WorkerCallback = (event: WorkerEvent) => void
 
-export interface IWorkerPostMessage {
+export interface WorkerPostMessage {
   date: Date
   filter: string
   filterType: string
   locale: string
-  modites: IModite[]
-  projects: IProject[]
+  modites: Modite[]
+  projects: Project[]
 }
 
-type PostMessage = (message: IWorkerPostMessage) => void
+type PostMessage = (message: WorkerPostMessage) => void
 
-export interface IWorkerState {
+export interface WorkerState {
   addCallback: (callback: WorkerCallback) => void
   postMessage?: PostMessage
   removeCallback: (callback: WorkerCallback) => void
-  worker?: Worker
+  worker: Worker
 }
 
-interface IWorkerAction {
+interface WorkerAction {
   type: string
 }
 
-const workerReducer = (state: IWorkerState, action: IWorkerAction): IWorkerState => {
+const workerReducer = (state: WorkerState, action: WorkerAction): WorkerState => {
   switch (action.type) {
     case 'initialize':
-      const worker = new Worker()
-
       return {
         ...state,
-        postMessage: (message: IWorkerPostMessage) => worker.postMessage(message),
-        worker,
+        postMessage: (message: WorkerPostMessage) => state.worker.postMessage(message),
       }
     default:
       throw new Error()
@@ -49,9 +46,10 @@ const workerReducer = (state: IWorkerState, action: IWorkerAction): IWorkerState
 
 const callbacks: WorkerCallback[] = []
 
-const initialState: IWorkerState = {
+const initialState: WorkerState = {
   addCallback: (callback: WorkerCallback) => callbacks.push(callback),
   removeCallback: (callback: WorkerCallback) => callbacks.splice(callbacks.indexOf(callback), 1),
+  worker: new Worker(),
 }
 
 const WorkerProvider = ({ children }: { children?: React.ReactNode }) => {
@@ -65,7 +63,7 @@ const WorkerProvider = ({ children }: { children?: React.ReactNode }) => {
     return null
   }
 
-  state.worker.onmessage = (event: IWorkerEvent) => {
+  state.worker.onmessage = (event: WorkerEvent) => {
     requestAnimationFrame(() => {
       callbacks.forEach(callback => callback(event))
     })

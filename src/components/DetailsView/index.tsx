@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
 import DataContext from '../../service/Data'
-import IModite from '../../models/Modite'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
 import VirtualizedList from '../VirtualizedList'
-import IProject from '../../models/Project'
-import { IDataState } from '../../types/service/Data'
+import Project from '../../models/Project'
+import { DataState } from '../../types/service/Data'
 
 let lastScrollOffset = 0 // used by onScroll
 
@@ -16,7 +15,7 @@ const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
 
 // TODO: type correctly
 function DetailsView({ className = '' }: any) {
-  const [{ activeModite, activeProject }]: [IDataState] = useContext(DataContext)
+  const [{ activeModite, activeProject }]: [DataState] = useContext(DataContext)
   const isProject = Boolean(activeProject)
   const activeItem = isProject ? activeProject : activeModite
 
@@ -48,7 +47,7 @@ function DetailsView({ className = '' }: any) {
           <div className={s.userCount}>{userCount}</div>
 
           <VirtualizedList
-            records={(activeItem as IProject).users}
+            records={(activeItem as Project).users}
             onScroll={onScroll}
             initialScrollOffset={lastScrollOffset}
           />

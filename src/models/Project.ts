@@ -1,4 +1,4 @@
-export default interface IProject {
+export default interface Project {
   name: string
   real_name?: string
   id: string

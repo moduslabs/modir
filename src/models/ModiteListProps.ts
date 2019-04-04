@@ -1,7 +1,7 @@
-import IModite from './Modite'
+import Modite from './Modite'
 
-export default interface IModiteListProps {
-  onModiteItemClick?: (modite: IModite) => void
+export default interface ModiteListProps {
+  onModiteItemClick?: (modite: Modite) => void
   slides: React.MutableRefObject<any>
   view?: string
 }

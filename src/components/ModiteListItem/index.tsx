@@ -1,16 +1,16 @@
 import React, { FunctionComponent } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
-import IListItemProps from '../../models/ListItemProps'
+import ListItemProps from '../../models/ListItemProps'
 import ModiteImage from '../ModiteImage'
 import s from './styles.module.css'
-import IModite from '../../models/Modite'
-import IProject from '../../models/Project'
+import Modite from '../../models/Modite'
+import Project from '../../models/Project'
 import { IonIcon } from '@ionic/react'
 
-const ModiteListItem: FunctionComponent<IListItemProps & RouteComponentProps> = ({ modite }) => {
+const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = ({ modite }) => {
   const isProject: boolean = modite.recordType === 'project'
   const hasUserAvatar: boolean = !isProject
-  const name: string = isProject ? (modite.name as string) : ((modite as IModite).real_name as string)
+  const name: string = isProject ? (modite.name as string) : ((modite as Modite).real_name as string)
 
   return (
     <div className={s.itemInnerCt}>
@@ -28,7 +28,7 @@ const ModiteListItem: FunctionComponent<IListItemProps & RouteComponentProps> = 
       {modite.localTime && <div className={s.localTime}>{modite.localTime}</div>}
 
       {isProject && <div>👤</div>}
-      {isProject && <div className={s.projectUserCount}>{(modite as IProject).users.length}</div>}
+      {isProject && <div className={s.projectUserCount}>{(modite as Project).users.length}</div>}
 
       <IonIcon ios="ios-arrow-forward" md="ios-arrow-forward" />
     </div>

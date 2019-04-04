@@ -1,11 +1,11 @@
 import cx from 'classnames'
 import React from 'react'
-import IModite from '../../models/Modite'
+import Modite from '../../models/Modite'
 import styles from './styles.module.css'
 import userIconPlaceholder from './user-icon-placeholder.png'
 
 interface Props {
-  modite: IModite
+  modite: Modite
 }
 
 function ModiteImage({ modite, ...other }: Props) {
