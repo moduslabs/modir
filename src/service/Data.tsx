@@ -63,15 +63,33 @@ const moditesReducer = (state: DataState, action: DataAction): DataState => {
         }
       }
     case 'on-load':
-      // eslint-disable-next-line no-case-declarations
       const modites = action.modites ? action.modites : []
-      // eslint-disable-next-line no-case-declarations
       const projects = action.projects ? action.projects : []
+      const activeModite = state.activeModite
+        ? modites.find((modite: Modite) => {
+            if (state.activeModite) {
+              return modite.id === state.activeModite.id
+            }
+
+            return false
+          })
+        : undefined
+      const activeProject = state.activeProject
+        ? projects.find((project: Project) => {
+            if (state.activeProject) {
+              return project.id === state.activeProject.id
+            }
+
+            return false
+          })
+        : undefined
 
       return {
         moditesSource: state.moditesFilter ? state.moditesSource : modites,
         projectsSource: state.projectsFilter ? state.projectsSource : projects,
         ...state,
+        activeModite,
+        activeProject,
         modites,
         projects,
       }
@@ -144,6 +162,21 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     }
 
     workerState.addCallback(loadCallback)
+
+    let minute: number
+
+    const tick = () => {
+      const date = new Date()
+      const currentMinutes = date.getMinutes()
+
+      if (minute && currentMinutes !== minute) {
+        getData(workerState.postMessage)
+      }
+
+      minute = currentMinutes
+    }
+
+    window.setInterval(tick, 1000)
 
     // get data from the api
     getData(workerState.postMessage)

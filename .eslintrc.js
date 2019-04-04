@@ -27,6 +27,7 @@ module.exports = {
     // TODO we need to type everything but explicit is kinda ok, implicit is the real bad one
     '@typescript-eslint/no-explicit-any': 'off',
     'no-console': 'error',
+    'no-case-declarations': 'off',
     'prettier/prettier': 'error',
     'react/prop-types': 'off',
   },
