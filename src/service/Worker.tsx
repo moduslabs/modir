@@ -23,47 +23,25 @@ type PostMessage = (message: WorkerPostMessage) => void
 
 export interface WorkerState {
   addCallback: (callback: WorkerCallback) => void
-  postMessage?: PostMessage
+  postMessage: PostMessage
   removeCallback: (callback: WorkerCallback) => void
   worker: Worker
 }
 
-interface WorkerAction {
-  type: string
-}
-
-const workerReducer = (state: WorkerState, action: WorkerAction): WorkerState => {
-  switch (action.type) {
-    case 'initialize':
-      return {
-        ...state,
-        postMessage: (message: WorkerPostMessage) => state.worker.postMessage(message),
-      }
-    default:
-      throw new Error()
-  }
-}
-
 const callbacks: WorkerCallback[] = []
+const worker = new Worker()
 
 const initialState: WorkerState = {
   addCallback: (callback: WorkerCallback) => callbacks.push(callback),
+  postMessage: (message: WorkerPostMessage) => worker.postMessage(message),
   removeCallback: (callback: WorkerCallback) => callbacks.splice(callbacks.indexOf(callback), 1),
-  worker: new Worker(),
+  worker,
 }
 
 const WorkerProvider = ({ children }: { children?: React.ReactNode }) => {
-  const [state, dispatch] = React.useReducer(workerReducer, initialState)
+  const [state] = React.useState(initialState)
 
-  if (!state.postMessage) {
-    dispatch({
-      type: 'initialize',
-    })
-
-    return null
-  }
-
-  state.worker.onmessage = (event: WorkerEvent) => {
+  worker.onmessage = (event: WorkerEvent) => {
     requestAnimationFrame(() => {
       callbacks.forEach(callback => callback(event))
     })
