@@ -126,7 +126,6 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   })
 
   const cx = classNames.bind(s)
-  console.log(isDetails)
   const moditeListCtCls = cx('moditeListCt', { detailsView: isDetails })
   const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && !isDetails })
   const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!id })

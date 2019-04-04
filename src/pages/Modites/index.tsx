@@ -15,7 +15,6 @@ const MapComponent = lazy(() =>
 
 function Modites({ view }: { view?: string }) {
   const [{ modites }, { setActiveModite }]: [DataState, DataProps] = useContext(DataContext)
-  const slidesRef: React.MutableRefObject<null> = useRef(null)
 
   const onModiteClick = (modite: Modite) => {
     setActiveModite(modite)
@@ -23,7 +22,7 @@ function Modites({ view }: { view?: string }) {
 
   return (
     <IonPage>
-      <ModiteList onModiteItemClick={onModiteClick} slides={slidesRef} view={view} />
+      <ModiteList onModiteItemClick={onModiteClick} view={view} />
       <div className={`MapCt ${s.mapCt}`}>
         <div className={s.mapWrap}>
           <MapComponent modites={modites} />
