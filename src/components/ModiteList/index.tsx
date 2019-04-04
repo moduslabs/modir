@@ -211,12 +211,11 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
           const listSrc = isProjects ? filteredProjects : filteredModites
           setListData(listSrc)
-          let mapData: IModite | IModite[] | IProject[] | IProject = []
+          let mapData: IModite | IModite[] | IProject[] | IProject = [] = filteredModites
 
           if (workerView === 'details') {
             mapData = workerActiveModite
-          } else {
-            mapData = isProjects ? filteredProjects : filteredModites
+            mapData = useProjects ? (workerActiveModite as IProject).users : workerActiveModite
           }
 
           setModites(mapData)
