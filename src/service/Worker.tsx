@@ -1,6 +1,6 @@
 import React, { Context, createContext } from 'react'
 // @ts-ignore
-import Worker from 'worker-loader!../components/ModiteList/formatModites.js' // eslint-disable-line import/no-webpack-loader-syntax
+import Worker from 'worker-loader!./worker.js' // eslint-disable-line import/no-webpack-loader-syntax
 import IWorkerEvent from '../models/WorkerEvent'
 import IModite from '../models/Modite'
 import IProject from '../models/Project'
