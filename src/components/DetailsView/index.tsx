@@ -99,11 +99,11 @@ const ProjectDetail = ({ className, project }: { className?: string; project?: P
 function DetailsView({ className }: { className?: string }) {
   const [{ activeModite, activeProject }]: [DataState] = useContext(DataContext)
 
-  if (activeProject) {
-    return <ProjectDetail className={className} project={activeProject} />
-  } else {
-    return <ModiteDetail className={className} modite={activeModite} />
-  }
+  return activeProject ? (
+    <ProjectDetail className={className} project={activeProject} />
+  ) : (
+    <ModiteDetail className={className} modite={activeModite} />
+  )
 }
 
 export default DetailsView
