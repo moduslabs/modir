@@ -88,8 +88,8 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   async function getModiteData(): Promise<void> {
     if (!rawModites || !rawModites.length) {
       const [moditesResp, projectsResp]: [IModite[], IProject[]] = await Promise.all([
-        fetch('https://modus.app/modites/all').then(res => res.json()),
-        fetch('https://modus.app/projects/all').then(res => res.json()),
+        fetch('https://dir.modus.app/modites/all').then(res => res.json()),
+        fetch('https://dir.modus.app/projects/all').then(res => res.json()),
       ])
 
       rawModites = moditesResp
@@ -114,7 +114,9 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
       let { fields } = profile
 
       const fetchProfile = async () => {
-        const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${id}`).then(res => res.json())
+        const moditeProfile: ModiteProfileResp = await fetch(`https://dir.modus.app/modite/${id}`).then(res =>
+          res.json(),
+        )
         record.profile = moditeProfile.profile
         fields = moditeProfile.profile.fields
       }
