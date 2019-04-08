@@ -99,7 +99,6 @@ onmessage = function(event) {
     modites: filterRecords(modites),
     projects: filterRecords(projects),
   }
-  console.log(filter, message.projects.length)
 
   if (!moditeMap) {
     const map = {}
@@ -117,6 +116,5 @@ onmessage = function(event) {
       : []
   })
 
-  console.log(new Date() - start)
   postMessage(message)
 }

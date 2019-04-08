@@ -21,7 +21,7 @@ functions:
       SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
     events:
       - http:
-          url: modus.app/modites/all
+          url: dir.modus.app/modites/all
           method: GET
   getModite:
     name: getModite
@@ -33,6 +33,6 @@ functions:
       SLACK_SIGNING_SECRET: ${env:SLACK_SIGNING_SECRET}
     events:
       - http:
-          url: modus.app/modite/*
+          url: dir.modus.app/modite/*
           method: GET
 

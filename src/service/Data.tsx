@@ -4,6 +4,7 @@ import WorkerEvent from '../models/WorkerEvent'
 import WorkerContext, { WorkerPostMessage } from './Worker'
 import Project from '../models/Project'
 import { DataAction, DataProps, DataState, FilterFnProps } from '../types/service/Data'
+import { MockModites, MockProjects } from './mockData'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -13,10 +14,18 @@ const locale: string = navigator.language
 
 const getData = async (postMessage: any) => {
   const date = new Date()
-  const [modites, projects] = await Promise.all([
-    fetch('https://modus.app/modites/all').then(res => res.json()),
-    fetch('https://modus.app/projects/all').then(res => res.json()),
-  ])
+  // const headers = new Headers({
+  //   'CF-Access-Client-Id': `${process.env.CLOUDFLARE_ID}`,
+  //   'CF-Access-Client-Secret': `${process.env.CLOUDFLARE_SECRET}`,
+  // })
+  // const [modites, projects] = await Promise.all([
+  //   fetch('https://dir.modus.app/modites/all', { headers }).then(res => res.json()),
+  //   fetch('https://dir.modus.app/projects/all', { headers }).then(res => res.json()),
+  // ])
+
+  // fallback for connection issues to continue dev
+  const modites: any = MockModites
+  const projects: any = MockProjects
 
   const message: WorkerPostMessage = { date, filter: '', filterType: 'modites', locale, modites, projects }
 

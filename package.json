@@ -31,7 +31,7 @@
     "@types/classnames": "2.2.7",
     "@types/d3-geo": "1.11.1",
     "@types/gapi.auth2": "0.0.50",
-    "@types/react": "16.8.12",
+    "@types/react": "16.8.13",
     "@types/react-dom": "16.8.3",
     "@types/react-router": "4.4.5",
     "@types/react-router-dom": "4.3.1",

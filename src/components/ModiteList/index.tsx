@@ -61,7 +61,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
           let { fields } = profile
 
           const fetchProfile = async () => {
-            const moditeProfile: ModiteProfileResp = await fetch(`https://modus.app/modite/${id}`).then(res =>
+            const moditeProfile: ModiteProfileResp = await fetch(`https://dir.modus.app/modite/${id}`).then(res =>
               res.json(),
             )
             record.profile = moditeProfile.profile

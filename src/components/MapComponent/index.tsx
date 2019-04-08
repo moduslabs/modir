@@ -75,32 +75,32 @@ const MapComponent = ({ modites }: MapComponentProps) => {
       imageSeriesTemplate.propertyFields.latitude = 'latitude'
       imageSeriesTemplate.propertyFields.longitude = 'longitude'
     }
-
-    if (map && data) {
-      const mapData: Modite[] = activeModite ? [activeModite] : data
-      const markerData: any = mapData
-        .map((modite: Modite) => {
-          if (!modite.profile || !modite.profile.fields) {
-            return
-          }
-
-          const { locationData = {}, Location: title } = modite.profile.fields
-          const { lat: latitude, lon: longitude } = locationData
-          return latitude && longitude && title ? { latitude, longitude, title } : null
-        })
-        .filter(Boolean)
-
-      if (map.isReady()) {
-        updateMap(markerData)
-      } else {
-        map.events.on('ready', () => {
-          requestAnimationFrame(() => {
-            updateMap(markerData)
-          })
-        })
-      }
-    }
   }, [])
+
+  if (map && data) {
+    const mapData: Modite[] = activeModite ? [activeModite] : data
+    const markerData: any = mapData
+      .map((modite: Modite) => {
+        if (!modite.profile || !modite.profile.fields) {
+          return
+        }
+
+        const { locationData = {}, Location: title } = modite.profile.fields
+        const { lat: latitude, lon: longitude } = locationData
+        return latitude && longitude && title ? { latitude, longitude, title } : null
+      })
+      .filter(Boolean)
+
+    if (map.isReady()) {
+      updateMap(markerData)
+    } else {
+      map.events.on('ready', () => {
+        requestAnimationFrame(() => {
+          updateMap(markerData)
+        })
+      })
+    }
+  }
 
   return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 }
