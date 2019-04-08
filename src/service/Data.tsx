@@ -139,7 +139,14 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       type: 'modites',
       workerState: workerState,
     }),
-    filterProjects: () => {},
+    filterProjects: createFilterFn({
+      dispatch,
+      // we need to use all projects so if filtered, use the cached array
+      modites: state.moditesSource || state.modites,
+      projects: state.projectsSource || state.projects,
+      type: 'projects',
+      workerState: workerState,
+    }),
 
     setActiveModite: (modite: Modite | null) => {
       dispatch({

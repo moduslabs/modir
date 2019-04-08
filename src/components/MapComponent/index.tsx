@@ -100,7 +100,7 @@ const MapComponent = ({ modites }: MapComponentProps) => {
         })
       }
     }
-  })
+  }, [])
 
   return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 }

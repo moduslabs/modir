@@ -104,8 +104,6 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   const onFilter = (event: FilterEvent): void => {
     const query: string = event.detail.value || ''
 
-    setFiltered(query.length)
-
     if (query === lastFilter) {
       return
     }
@@ -114,7 +112,7 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
 
     // save filter
     setFilter(query)
-
+    setFiltered(query.length)
     filterer(query)
   }
 
