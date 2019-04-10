@@ -81,10 +81,6 @@
       "maxSize": "50 kB"
     },
     {
-      "path": "./build/*.worker.js",
-      "maxSize": "10 kB"
-    },
-    {
       "path": "./build/static/js/*.chunk.js",
       "maxSize": "300 kB"
     },

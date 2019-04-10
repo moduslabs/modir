@@ -2,16 +2,10 @@ import React, { Context, createContext, useEffect } from 'react'
 import { MockModites, MockProjects } from './mockData'
 import Modite from '../models/Modite'
 import Project from '../models/Project'
-import { getUrlInfo } from '../utils/util'
+import { getUrlInfo, getActiveView } from '../utils/util'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
-
-const getActiveView = (): string => {
-  const { isDetails, isProjects } = getUrlInfo()
-  const suffix = isDetails ? '' : 's'
-  return isProjects ? `project${suffix}` : `modite${suffix}`
-}
 
 let rawModites: Modite[] = []
 let rawProjects: Project[] = []

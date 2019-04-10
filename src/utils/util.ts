@@ -14,4 +14,13 @@ const getUrlInfo = (): Url => {
   return { pathname, isDetails, id, isProjects }
 }
 
-export { getUrlInfo }
+const getActiveView = (): 'project' | 'projects' | 'modite' | 'modites' => {
+  const { isDetails, isProjects } = getUrlInfo()
+  if (isProjects) {
+    return isDetails ? 'project' : 'projects'
+  } else {
+    return isDetails ? 'modite' : 'modites'
+  }
+}
+
+export { getUrlInfo, getActiveView }
