@@ -6,6 +6,7 @@ import s from './styles.module.css'
 import Project from '../../models/Project'
 import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
+import { RECORD_TYPES } from '../../constants/constants'
 
 const ModiteItem = ({ modite }: { modite: Modite }) => (
   <div className={s.itemInnerCt}>
@@ -29,7 +30,7 @@ const ProjectItem = ({ project }: { project: Project }) => (
 )
 
 const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = ({ item }) => {
-  const isProject = item.recordType === 'project'
+  const isProject = item.recordType === RECORD_TYPES.project
 
   if (isProject) {
     const project = item as Project

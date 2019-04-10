@@ -1,3 +1,5 @@
+import { VIEW_TYPES } from '../constants/constants'
+
 interface Url {
   pathname: string
   isDetails: boolean
@@ -17,9 +19,9 @@ const getUrlInfo = (): Url => {
 const getActiveView = (): 'project' | 'projects' | 'modite' | 'modites' => {
   const { isDetails, isProjects } = getUrlInfo()
   if (isProjects) {
-    return isDetails ? 'project' : 'projects'
+    return isDetails ? VIEW_TYPES.project : VIEW_TYPES.projects
   } else {
-    return isDetails ? 'modite' : 'modites'
+    return isDetails ? VIEW_TYPES.modite : VIEW_TYPES.modites
   }
 }
 

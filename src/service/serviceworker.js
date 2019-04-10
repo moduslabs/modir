@@ -1,3 +1,5 @@
+import { VIEW_TYPES } from '../constants/constants'
+
 /* eslint-disable */
 // @ts-ignore
 
@@ -51,8 +53,6 @@ onmessage = function(event) {
     return '☀️'
   }
 
-  // const isProject = filterType === 'project'
-  // const name = isProject ? 'name' : 'real_name'
   const filterLowered = filter && filter.toLowerCase()
 
   const filterRecords = data => {
@@ -61,7 +61,7 @@ onmessage = function(event) {
 
     // only filter if there is a filter
     const workingArray =
-      filter && filterType === 'modites'
+      filter && filterType === VIEW_TYPES.modites
         ? data.filter(item => item[name].toLowerCase().indexOf(filterLowered) > -1)
         : data
 

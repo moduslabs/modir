@@ -10,6 +10,7 @@ import SkeletonList from '../SkeletonList'
 import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import DataContext from '../../service/Data'
+import { VIEW_TYPES } from '../../constants/constants'
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
@@ -21,8 +22,8 @@ let lastScrollOffset = 0 // used by onScroll
 const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
   const [{ filter, modites, projects, activeView }, { setFilter, setActiveView }]: any = useContext(DataContext)
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
-  const isDetails: boolean = activeView === 'project' || activeView === 'modite'
-  const data = activeView === 'projects' ? projects : modites
+  const isDetails: boolean = activeView === VIEW_TYPES.project || activeView === VIEW_TYPES.modite
+  const data = activeView === VIEW_TYPES.projects ? projects : modites
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
     const threshold = 10 // scroll threshold to hit before acting on the layout
@@ -63,8 +64,8 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     searchbarWrapHidden: !!isDetails,
   })
   const searchbarSpacerCls = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed || filter.length })
-  const moditesTabCls = cx('listTypeTab', { listTypeTabSelected: activeView === 'modites' })
-  const projectsTabCls = cx('listTypeTab', { listTypeTabSelected: activeView === 'projects' })
+  const moditesTabCls = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.modites })
+  const projectsTabCls = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.projects })
   const activeModiteCls = cx({ activeModiteShown: !!isDetails })
   const tabCtCls = cx('tabCt', { tabCtHidden: !!isDetails })
   const backButtonCls = cx('backButton')

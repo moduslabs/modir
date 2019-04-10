@@ -1,3 +1,5 @@
+import { RecordTypes } from './Modite'
+
 export default interface Project {
   name: string
   real_name?: string
@@ -5,6 +7,6 @@ export default interface Project {
   localTime?: string
   localDate?: string
   tod?: string
-  recordType: 'user' | 'project'
+  recordType: RecordTypes
   users: any
 }

@@ -1,8 +1,9 @@
 import React, { Context, createContext, useEffect } from 'react'
 import { MockModites, MockProjects } from './mockData'
-import Modite from '../models/Modite'
+import Modite, { ListTypes } from '../models/Modite'
 import Project from '../models/Project'
 import { getUrlInfo, getActiveView } from '../utils/util'
+import { VIEW_TYPES, RECORD_TYPES } from '../constants/constants'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -12,7 +13,7 @@ let rawProjects: Project[] = []
 
 const sortRecords = (records: (Modite | Project)[]): void => {
   if (records.length) {
-    const isProject: boolean = records[0].recordType === 'project'
+    const isProject: boolean = records[0].recordType === RECORD_TYPES.project
 
     records.sort((prev: any, next: any) => {
       const prevName: string = isProject ? prev.name : prev.profile.last_name
@@ -27,23 +28,27 @@ const sortRecords = (records: (Modite | Project)[]): void => {
 
 let moditeMap: { [key: string]: Modite } = {}
 
-const filterRecords = (
-  records: (Modite | Project)[],
-  type: 'modites' | 'projects',
-  filter: string = '',
-): (Modite | Project)[] => {
+const filterRecords = ({
+  records,
+  type,
+  filter = '',
+}: {
+  records: (Modite | Project)[]
+  type: ListTypes
+  filter?: string
+}): (Modite | Project)[] => {
   const filterLowered: string = filter.toLowerCase()
-  const name: 'real_name' | 'name' = type === 'modites' ? 'real_name' : 'name'
+  const name: 'real_name' | 'name' = type === VIEW_TYPES.modites ? 'real_name' : 'name'
 
   return filter.length
     ? (records as (Modite | Project)[]).filter(item => (item[name] as string).toLowerCase().indexOf(filterLowered) > -1)
     : records
 }
 const filterModites = (filter: string): Modite[] => {
-  const filteredModites = filterRecords([...rawModites], 'modites', filter)
-  return filteredModites
+  return filterRecords({ records: [...rawModites], type: VIEW_TYPES.modites, filter })
 }
-const filterProjects = (filter: string): Project[] => filterRecords([...rawProjects], 'projects', filter) as Project[]
+const filterProjects = (filter: string): Project[] =>
+  filterRecords({ records: [...rawProjects], type: VIEW_TYPES.projects, filter }) as Project[]
 
 function monthDayYear(date: Date): string {
   const months = [
@@ -96,14 +101,6 @@ const processRecords = (
   modites: Modite[]
   projects: Project[]
 } => {
-  if (!Object.keys(moditeMap).length) {
-    rawModites.forEach((modite: Modite) => (moditeMap[modite.id as string] = modite))
-    rawProjects.forEach((project: Project) => {
-      project.users = project.users.map((modite: Modite) => moditeMap[modite.id as string])
-      project.users = project.users.filter(Boolean)
-    })
-  }
-
   const date = new Date()
   const modites: Modite[] = filterModites(filter)
   const projects: Project[] = filterProjects(filter)
@@ -137,7 +134,7 @@ const reducer = (state: any, action: any) => {
       const { id } = getUrlInfo()
       const date = new Date()
 
-      if (activeView === 'modite') {
+      if (activeView === VIEW_TYPES.modite) {
         const activeModite = rawModites.find((modite: Modite) => modite.id === id)
         // TODO: fetch modite profile details if a record is found and the profile details are not
         processTimestamps([activeModite as Modite], date)
@@ -146,7 +143,7 @@ const reducer = (state: any, action: any) => {
           activeModite,
           mapRecords: activeModite,
         }
-      } else if (activeView === 'project') {
+      } else if (activeView === VIEW_TYPES.project) {
         const activeProject = rawProjects.find((project: Project) => project.id === id)
         processTimestamps((activeProject as Project).users, date)
         return {
@@ -204,6 +201,14 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     rawProjects.forEach((project: Project) => {
       if (project.users) sortRecords(project.users)
     })
+
+    if (!Object.keys(moditeMap).length) {
+      rawModites.forEach((modite: Modite) => (moditeMap[modite.id as string] = modite))
+      rawProjects.forEach((project: Project) => {
+        project.users = project.users.map((modite: Modite) => moditeMap[modite.id as string])
+        project.users = project.users.filter(Boolean)
+      })
+    }
 
     dispatch({
       type: 'on-load',

@@ -1,4 +1,4 @@
-import Modite from '../../models/Modite'
+import Modite, { ListTypes } from '../../models/Modite'
 import Project from '../../models/Project'
 import { WorkerState } from '../../service/Worker'
 
@@ -38,6 +38,6 @@ export interface FilterFnProps {
   dispatch: any
   modites: Modite[]
   projects: Project[]
-  type: 'modites' | 'projects'
+  type: ListTypes
   workerState: WorkerState
 }

@@ -25,6 +25,9 @@ export interface ModiteProfile {
   fields?: { [key: string]: any }
 }
 
+export type RecordTypes = 'user' | 'project'
+export type ListTypes = 'projects' | 'modites'
+
 export default interface Modite {
   real_name?: string
   name?: string
@@ -40,7 +43,7 @@ export default interface Modite {
   tod?: string
   profile?: ModiteProfile
   tacos?: number
-  recordType?: 'user' | 'project'
+  recordType?: RecordTypes
   is_admin?: boolean
   is_owner?: boolean
   is_primary_owner?: boolean
