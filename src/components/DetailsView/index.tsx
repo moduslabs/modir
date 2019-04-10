@@ -1,11 +1,11 @@
-import React, { useContext, lazy } from 'react'
-import DataContext from '../../service/Data'
+import React, { lazy } from 'react'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
 // import VirtualizedList from '../VirtualizedList'
 import Project from '../../models/Project'
 import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
+import { RECORD_TYPES } from '../../constants/constants'
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
@@ -100,13 +100,13 @@ const ProjectDetail = ({ className, project }: { className?: string; project?: P
   )
 }
 
-function DetailsView({ className }: { className?: string }) {
-  const [{ activeModite, activeProject }]: any = useContext(DataContext)
+function DetailsView({ record, className }: { record: Modite | Project | null; className?: string }) {
+  const isProject: boolean = Boolean(record) && (record as Modite).recordType === RECORD_TYPES.project
 
   return (
     <>
-      <ProjectDetail className={className} project={activeProject} />
-      <ModiteDetail className={className} modite={activeModite} />
+      <ProjectDetail className={className} project={record && isProject ? (record as Project) : null} />
+      <ModiteDetail className={className} modite={record && !isProject ? (record as Modite) : null} />
     </>
   )
 }

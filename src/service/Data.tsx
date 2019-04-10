@@ -2,7 +2,6 @@ import React, { Context, createContext, useEffect } from 'react'
 import { MockModites, MockProjects } from './mockData'
 import Modite, { ListTypes } from '../models/Modite'
 import Project from '../models/Project'
-import { getUrlInfo, getActiveView } from '../utils/util'
 import { VIEW_TYPES, RECORD_TYPES } from '../constants/constants'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -116,55 +115,20 @@ const reducer = (state: any, action: any) => {
     case 'on-filter':
       processed = processRecords(action.filter)
       return {
-        ...state,
         filter: action.filter,
         modites: processed.modites,
         projects: processed.projects,
-        mapRecords: processed.modites,
-      }
-    case 'on-active-view':
-      const activeView = getActiveView()
-      const obj = {
-        ...state,
-        activeView,
-        activeModite: undefined,
-        activeProject: undefined,
-        mapRecords: state.modites,
-      }
-      const { id } = getUrlInfo()
-      const date = new Date()
-
-      if (activeView === VIEW_TYPES.modite) {
-        const activeModite = rawModites.find((modite: Modite) => modite.id === id)
-        // TODO: fetch modite profile details if a record is found and the profile details are not
-        processTimestamps([activeModite as Modite], date)
-        return {
-          ...obj,
-          activeModite,
-          mapRecords: activeModite,
-        }
-      } else if (activeView === VIEW_TYPES.project) {
-        const activeProject = rawProjects.find((project: Project) => project.id === id)
-        processTimestamps((activeProject as Project).users, date)
-        return {
-          ...obj,
-          activeProject,
-          mapRecords: (activeProject as Project).users,
-        }
-      } else {
-        processed = processRecords(state.filter)
-        return {
-          ...obj,
-          projects: processed.projects,
-          mapRecords: processed.modites,
-        }
+        rawModites,
+        rawProjects,
       }
     case 'on-load':
-      processed = processRecords('')
+      processed = processRecords(state.filter)
       return {
         ...state,
         modites: processed.modites,
         projects: processed.projects,
+        rawModites,
+        rawProjects,
       }
     default:
       throw new Error()
@@ -175,9 +139,8 @@ const initialState = {
   filter: '',
   modites: [],
   projects: [],
-  activeView: getActiveView(),
-  activeModite: undefined,
-  activeProject: undefined,
+  rawModites: [],
+  rawProjects: [],
 }
 
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
@@ -222,9 +185,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
         filter,
       })
     },
-    setActiveView: () => {
-      dispatch({ type: 'on-active-view' })
-    },
+    processTimestamps,
   }
 
   useEffect(() => {
@@ -239,7 +200,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       const currentMinutes = date.getMinutes()
 
       if (minute && currentMinutes !== minute) {
-        dispatch({ type: 'on-active-view' })
+        dispatch({ type: 'on-load' })
       }
 
       minute = currentMinutes

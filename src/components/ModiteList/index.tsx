@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext, FunctionComponent, lazy } from 'react'
-import { withRouter, Link } from 'react-router-dom'
-import { RouteComponentProps } from 'react-router'
+import React, { useState, FunctionComponent, lazy } from 'react'
+import { Link } from 'react-router-dom'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
 import FilterEvent from '../../models/FilterEvent'
@@ -9,7 +8,6 @@ import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
 import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
-import DataContext from '../../service/Data'
 import { VIEW_TYPES } from '../../constants/constants'
 
 const VirtualizedList = lazy(() =>
@@ -19,11 +17,15 @@ const VirtualizedList = lazy(() =>
 let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
-const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ match }) => {
-  const [{ filter, modites, projects, activeView }, { setFilter, setActiveView }]: any = useContext(DataContext)
+const ModiteList: FunctionComponent<ModiteListProps> = ({
+  activeView,
+  filter,
+  listRecords,
+  activeRecord,
+  setFilter,
+}) => {
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
   const isDetails: boolean = activeView === VIEW_TYPES.project || activeView === VIEW_TYPES.modite
-  const data = activeView === VIEW_TYPES.projects ? projects : modites
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
     const threshold = 10 // scroll threshold to hit before acting on the layout
@@ -51,10 +53,6 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
     setFilter(query)
   }
 
-  useEffect(() => {
-    setActiveView()
-  }, [match])
-
   const cx = classNames.bind(s)
   const moditeListCtCls = cx('moditeListCt', { detailsView: isDetails })
   const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && !isDetails })
@@ -76,12 +74,12 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
         <BackButton className={backButtonCls} />
         <div className={mapWindowCls} />
         <div className={s.moditeListWrap}>
-          {data.length ? (
-            <VirtualizedList records={data} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
+          {listRecords.length ? (
+            <VirtualizedList records={listRecords} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
           ) : (
             <SkeletonList />
           )}
-          <DetailsView className={activeModiteCls} />
+          <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
         <div className={tabCtCls}>
           <Link to="/" className={moditesTabCls}>
@@ -124,4 +122,4 @@ const ModiteList: FunctionComponent<ModiteListProps & RouteComponentProps> = ({ 
   )
 }
 
-export default withRouter(ModiteList)
+export default ModiteList
