@@ -1,185 +1,235 @@
-import React, { Context, createContext } from 'react'
-import Modite from '../models/Modite'
-import WorkerEvent from '../models/WorkerEvent'
-import WorkerContext, { WorkerPostMessage } from './Worker'
-import Project from '../models/Project'
-import { DataAction, DataProps, DataState, FilterFnProps } from '../types/service/Data'
+import React, { Context, createContext, useEffect } from 'react'
 import { MockModites, MockProjects } from './mockData'
+import Modite from '../models/Modite'
+import Project from '../models/Project'
+import { getUrlInfo } from '../utils/util'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
 
-// get locale once
-const locale: string = navigator.language
+const getActiveView = (): string => {
+  const { isDetails, isProjects } = getUrlInfo()
+  const suffix = isDetails ? '' : 's'
+  return isProjects ? `project${suffix}` : `modite${suffix}`
+}
 
-const getData = async (postMessage: any) => {
+let rawModites: Modite[] = []
+let rawProjects: Project[] = []
+
+const sortRecords = (records: (Modite | Project)[]): void => {
+  if (records.length) {
+    const isProject: boolean = records[0].recordType === 'project'
+
+    records.sort((prev: any, next: any) => {
+      const prevName: string = isProject ? prev.name : prev.profile.last_name
+      const nextName: string = isProject ? next.name : next.profile.last_name
+
+      if (prevName < nextName) return -1
+      if (prevName > nextName) return 1
+      return 0
+    })
+  }
+}
+
+let moditeMap: { [key: string]: Modite } = {}
+
+const filterRecords = (
+  records: (Modite | Project)[],
+  type: 'modites' | 'projects',
+  filter: string = '',
+): (Modite | Project)[] => {
+  const filterLowered: string = filter.toLowerCase()
+  const name: 'real_name' | 'name' = type === 'modites' ? 'real_name' : 'name'
+
+  return filter.length
+    ? (records as (Modite | Project)[]).filter(item => (item[name] as string).toLowerCase().indexOf(filterLowered) > -1)
+    : records
+}
+const filterModites = (filter: string): Modite[] => {
+  const filteredModites = filterRecords([...rawModites], 'modites', filter)
+  return filteredModites
+}
+const filterProjects = (filter: string): Project[] => filterRecords([...rawProjects], 'projects', filter) as Project[]
+
+function monthDayYear(date: Date): string {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+  const month: string = months[date.getMonth()]
+  const day: number = date.getDate()
+  const year: number = date.getFullYear()
+  return `${month} ${day}, ${year}`
+}
+
+function formatAMPM(date: Date): string {
+  let hours: number = date.getHours()
+  let minutes: number | string = date.getMinutes()
+  const ampm: string = hours >= 12 ? 'pm' : 'am'
+  hours = hours % 12
+  hours = hours ? hours : 12 // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes
+  return `${hours}:${minutes} ${ampm}`
+}
+
+const processTimestamps = (records: Modite[] = [], date: Date) => {
+  const nowUtc: any = new Date(date.getTime() + date.getTimezoneOffset())
+
+  records.forEach((item: Modite) => {
+    const itemDate = new Date(nowUtc - (item.tz_offset as number) * 60000)
+    const localTime = formatAMPM(itemDate)
+    const tod = localTime.includes('pm') ? '🌙' : '☀️'
+
+    item.localDate = monthDayYear(itemDate)
+    item.localTime = localTime
+    item.tod = tod
+  })
+}
+
+const processRecords = (
+  filter: string,
+): {
+  modites: Modite[]
+  projects: Project[]
+} => {
+  if (!Object.keys(moditeMap).length) {
+    rawModites.forEach((modite: Modite) => (moditeMap[modite.id as string] = modite))
+    rawProjects.forEach((project: Project) => {
+      project.users = project.users.map((modite: Modite) => moditeMap[modite.id as string])
+      project.users = project.users.filter(Boolean)
+    })
+  }
+
   const date = new Date()
-  // const headers = new Headers({
-  //   'CF-Access-Client-Id': `${process.env.CLOUDFLARE_ID}`,
-  //   'CF-Access-Client-Secret': `${process.env.CLOUDFLARE_SECRET}`,
-  // })
-  // const [modites, projects] = await Promise.all([
-  //   fetch('https://dir.modus.app/modites/all', { headers }).then(res => res.json()),
-  //   fetch('https://dir.modus.app/projects/all', { headers }).then(res => res.json()),
-  // ])
+  const modites: Modite[] = filterModites(filter)
+  const projects: Project[] = filterProjects(filter)
+  processTimestamps(modites, date)
 
-  // fallback for connection issues to continue dev
-  const modites: any = MockModites
-  const projects: any = MockProjects
-
-  const message: WorkerPostMessage = { date, filter: '', filterType: 'modites', locale, modites, projects }
-
-  postMessage(message)
+  return { modites, projects }
 }
 
-const initialState: DataState = {
-  modites: [],
-  projects: [],
-}
+const reducer = (state: any, action: any) => {
+  let processed: { modites: Modite[]; projects: Project[] }
 
-const moditesReducer = (state: DataState, action: DataAction): DataState => {
   switch (action.type) {
-    case 'on-filter-modites':
-      if (action.filter) {
-        return {
-          ...state,
-          moditesFilter: action.filter,
-          moditesSource: state.moditesSource || state.modites,
-        }
-      } else {
-        // filter was cleared, let's get back to all modites
-        return {
-          ...state,
-          modites: state.moditesSource || [],
-          moditesFilter: undefined,
-          moditesSource: undefined,
-        }
+    case 'on-filter':
+      processed = processRecords(action.filter)
+      return {
+        ...state,
+        filter: action.filter,
+        modites: processed.modites,
+        projects: processed.projects,
+        mapRecords: processed.modites,
       }
-    case 'on-filter-projects':
-      if (action.filter) {
+    case 'on-active-view':
+      const activeView = getActiveView()
+      const obj = {
+        ...state,
+        activeView,
+        activeModite: undefined,
+        activeProject: undefined,
+        mapRecords: state.modites,
+      }
+      const { id } = getUrlInfo()
+      const date = new Date()
+
+      if (activeView === 'modite') {
+        const activeModite = rawModites.find((modite: Modite) => modite.id === id)
+        // TODO: fetch modite profile details if a record is found and the profile details are not
+        processTimestamps([activeModite as Modite], date)
         return {
-          ...state,
-          projectsFilter: action.filter,
-          projectsSource: state.projectsSource || state.projects,
+          ...obj,
+          activeModite,
+          mapRecords: activeModite,
+        }
+      } else if (activeView === 'project') {
+        const activeProject = rawProjects.find((project: Project) => project.id === id)
+        processTimestamps((activeProject as Project).users, date)
+        return {
+          ...obj,
+          activeProject,
+          mapRecords: (activeProject as Project).users,
         }
       } else {
-        // filter was cleared, let's get back to all modites
+        processed = processRecords(state.filter)
         return {
-          ...state,
-          projects: state.projectsSource || [],
-          projectsFilter: undefined,
-          projectsSource: undefined,
+          ...obj,
+          projects: processed.projects,
+          mapRecords: processed.modites,
         }
       }
     case 'on-load':
-      const modites = action.modites ? action.modites : []
-      const projects = action.projects ? action.projects : []
-      // if there was an activeModite, we need to find the new object
-      const activeModite = state.activeModite
-        ? modites.find((modite: Modite) => {
-            if (state.activeModite) {
-              return modite.id === state.activeModite.id
-            }
-
-            return false
-          })
-        : undefined
-      // if there was an activeProject, we need to find the new object
-      const activeProject = state.activeProject
-        ? projects.find((project: Project) => {
-            if (state.activeProject) {
-              return project.id === state.activeProject.id
-            }
-
-            return false
-          })
-        : undefined
-
-      return {
-        moditesSource: state.moditesFilter ? state.moditesSource : modites,
-        projectsSource: state.projectsFilter ? state.projectsSource : projects,
-        ...state,
-        activeModite,
-        activeProject,
-        modites,
-        projects,
-      }
-    case 'set-active-modite':
+      processed = processRecords('')
       return {
         ...state,
-        activeModite: action.modite,
-      }
-    case 'set-active-project':
-      return {
-        ...state,
-        activeProject: action.project,
+        modites: processed.modites,
+        projects: processed.projects,
       }
     default:
       throw new Error()
   }
 }
 
-const createFilterFn = ({ dispatch, modites, projects, type, workerState: { postMessage } }: FilterFnProps) => (
-  filter: string,
-) => {
-  const date = new Date()
-  const message: WorkerPostMessage = { date, filter, filterType: 'modites', locale, modites, projects }
-
-  dispatch({
-    type: `on-filter-${type}`,
-    filter,
-  })
-
-  if (postMessage && filter) {
-    // no need to filter as dispatch will return us
-    postMessage(message)
-  }
+const initialState = {
+  filter: '',
+  modites: [],
+  projects: [],
+  activeView: getActiveView(),
+  activeModite: undefined,
+  activeProject: undefined,
 }
 
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
-  const [state, dispatch] = React.useReducer(moditesReducer, initialState)
-  const workerState = React.useContext(WorkerContext)
-  const props: DataProps = {
-    filterModites: createFilterFn({
-      dispatch,
-      // we need to use all modites so if filtered, use the cached array
-      modites: state.moditesSource || state.modites,
-      projects: state.projectsSource || state.projects,
-      type: 'modites',
-      workerState: workerState,
-    }),
-    filterProjects: createFilterFn({
-      dispatch,
-      // we need to use all projects so if filtered, use the cached array
-      modites: state.moditesSource || state.modites,
-      projects: state.projectsSource || state.projects,
-      type: 'projects',
-      workerState: workerState,
-    }),
+  const [state, dispatch] = React.useReducer(reducer, initialState)
 
-    setActiveModite: (modite: Modite | null) => {
+  const getData = async () => {
+    // const headers = new Headers({
+    //   'CF-Access-Client-Id': `${process.env.CLOUDFLARE_ID}`,
+    //   'CF-Access-Client-Secret': `${process.env.CLOUDFLARE_SECRET}`,
+    // })
+    // const [modites, projects] = await Promise.all([
+    //   fetch('https://dir.modus.app/modites/all', { headers }).then(res => res.json()),
+    //   fetch('https://dir.modus.app/projects/all', { headers }).then(res => res.json()),
+    // ])
+
+    // fallback for connection issues to continue dev
+    rawModites = MockModites
+    sortRecords(rawModites)
+    rawProjects = MockProjects
+    sortRecords(rawProjects)
+    rawProjects.forEach((project: Project) => {
+      if (project.users) sortRecords(project.users)
+    })
+
+    dispatch({
+      type: 'on-load',
+    })
+  }
+
+  const props = {
+    setFilter: (filter: string) => {
       dispatch({
-        type: 'set-active-modite',
-        modite,
+        type: 'on-filter',
+        filter,
       })
     },
-    setActiveProject: (project: Project | null) => {
-      dispatch({
-        type: 'set-active-project',
-        project,
-      })
+    setActiveView: () => {
+      dispatch({ type: 'on-active-view' })
     },
   }
 
-  React.useEffect(() => {
-    const loadCallback = (event: WorkerEvent) => {
-      dispatch({
-        type: 'on-load',
-        ...event.data,
-      })
-    }
-
-    workerState.addCallback(loadCallback)
+  useEffect(() => {
+    getData()
 
     let minute: number
 
@@ -190,16 +240,13 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       const currentMinutes = date.getMinutes()
 
       if (minute && currentMinutes !== minute) {
-        getData(workerState.postMessage)
+        dispatch({ type: 'on-active-view' })
       }
 
       minute = currentMinutes
     }
 
     window.setInterval(tick, 1000)
-
-    // get data from the api
-    getData(workerState.postMessage)
   }, [])
 
   return <DataContext.Provider value={[state, props]}>{children}</DataContext.Provider>

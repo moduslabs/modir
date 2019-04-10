@@ -1,4 +1,7 @@
-const MockModites = [
+import Modite from '../models/Modite'
+import Project from '../models/Project'
+
+const MockModites: Modite[] = [
   {
     id: '12345',
     team_id: 'abcdefg',
@@ -48,12 +51,12 @@ const MockModites = [
       email: 'finn.human@example.com',
       first_name: 'Finn',
       last_name: 'Human',
-      image_24: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-      image_32: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-      image_48: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-      image_72: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-      image_192: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-      image_512: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
+      image_24: 'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+      image_32: 'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+      image_48: 'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+      image_72: 'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+      image_192: 'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+      image_512: 'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
       status_text_canonical: '',
     },
     is_admin: true,
@@ -141,7 +144,7 @@ const MockModites = [
   },
 ]
 
-const MockProjects = [
+const MockProjects: Project[] = [
   {
     id: 'project-123456',
     name: 'Project A',
@@ -187,14 +190,18 @@ const MockProjects = [
           email: 'finn.human@example.com',
           first_name: 'Finn',
           last_name: 'Human',
-          image_24: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-          image_32: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-          image_48: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
-          image_72: 'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
+          image_24:
+            'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+          image_32:
+            'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+          image_48:
+            'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
+          image_72:
+            'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
           image_192:
-            'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
+            'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
           image_512:
-            'http://www.hd-freeimages.com/download/adventure-time-finn-the-human-tv-show-hd-wallpaper-192x192/',
+            'http://image.downloadwap.co.uk/android-games/thumbs/ico/7/adventure-time-heroes-of-ooo-android.jpg',
           status_text_canonical: '',
         },
       },

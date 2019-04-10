@@ -1,12 +1,10 @@
 import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
-import React, { useEffect, useRef, useContext } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Modite from '../../models/Modite'
 import MapComponentProps from '../../types/components/MapComponent'
 import s from './styles.module.css'
-import DataContext from '../../service/Data'
-import { DataState } from '../../types/service/Data'
 
 let map: MapChart
 let imageSeries: any
@@ -23,10 +21,35 @@ const updateMap = (markerData: any) => {
   }
 }
 
-const MapComponent = ({ modites }: MapComponentProps) => {
+const MapComponent = ({ mapRecords }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
-  const [{ activeModite, activeProject }]: [DataState] = useContext(DataContext)
-  const data = activeProject ? activeProject.users : modites
+
+  const populateMap = (): void => {
+    if (map && mapRecords) {
+      const mapData: Modite[] = Array.isArray(mapRecords) ? mapRecords : [mapRecords]
+      const markerData: any = mapData
+        .map((modite: Modite) => {
+          if (!modite.profile || !modite.profile.fields) {
+            return
+          }
+
+          const { locationData = {}, Location: title } = modite.profile.fields
+          const { lat: latitude, lon: longitude } = locationData
+          return latitude && longitude && title ? { latitude, longitude, title } : null
+        })
+        .filter(Boolean)
+
+      if (map.isReady()) {
+        updateMap(markerData)
+      } else {
+        map.events.on('ready', () => {
+          requestAnimationFrame(() => {
+            updateMap(markerData)
+          })
+        })
+      }
+    }
+  }
 
   useEffect(() => {
     if (!map && mapRef.current) {
@@ -74,33 +97,12 @@ const MapComponent = ({ modites }: MapComponentProps) => {
       // Set property fields
       imageSeriesTemplate.propertyFields.latitude = 'latitude'
       imageSeriesTemplate.propertyFields.longitude = 'longitude'
+
+      populateMap()
     }
   }, [])
 
-  if (map && data) {
-    const mapData: Modite[] = activeModite ? [activeModite] : data
-    const markerData: any = mapData
-      .map((modite: Modite) => {
-        if (!modite.profile || !modite.profile.fields) {
-          return
-        }
-
-        const { locationData = {}, Location: title } = modite.profile.fields
-        const { lat: latitude, lon: longitude } = locationData
-        return latitude && longitude && title ? { latitude, longitude, title } : null
-      })
-      .filter(Boolean)
-
-    if (map.isReady()) {
-      updateMap(markerData)
-    } else {
-      map.events.on('ready', () => {
-        requestAnimationFrame(() => {
-          updateMap(markerData)
-        })
-      })
-    }
-  }
+  populateMap()
 
   return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 }

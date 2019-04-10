@@ -30,6 +30,8 @@ module.exports = {
     'no-case-declarations': 'off',
     'prettier/prettier': 'error',
     'react/prop-types': 'off',
+    '@typescript-eslint/camelcase': 'off',
+    'no-console': 'off',
   },
   settings: {
     react: {

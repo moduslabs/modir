@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 // @ts-ignore
 import { LastLocationProvider } from 'react-router-last-location'
 import { DataProvider } from '../../service/Data'
-import { WorkerProvider } from '../../service/Worker'
 import './styles.module.css'
 import './theme.css'
 
@@ -15,17 +14,15 @@ const Modites = lazy(() => import('../../pages/Modites' /* webpackChunkName: "pa
 const App = () => (
   <IonApp>
     <Suspense fallback={<IonContent>Loading...</IonContent>}>
-      <WorkerProvider>
-        <DataProvider>
-          <main role="main">
-            <Router>
-              <LastLocationProvider>
-                <Route path="*" component={Modites} />
-              </LastLocationProvider>
-            </Router>
-          </main>
-        </DataProvider>
-      </WorkerProvider>
+      <DataProvider>
+        <main role="main">
+          <Router>
+            <LastLocationProvider>
+              <Route path="*" component={Modites} />
+            </LastLocationProvider>
+          </Router>
+        </main>
+      </DataProvider>
     </Suspense>
   </IonApp>
 )

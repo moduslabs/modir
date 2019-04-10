@@ -53,7 +53,7 @@
   position: relative;
   top: 0;
   transform: translateY(calc(40vh / 2 - 21px));
-  transition: transform 600ms;
+  transition: transform 350ms;
   display: flex;
   flex-direction: row;
   z-index: 2;
@@ -84,7 +84,7 @@
 
 .mapWindow {
   height: 40vh;
-  transition: height 500ms;
+  transition: height 250ms;
 }
 .mapWindowCollapsed {
   height: 0;
@@ -105,7 +105,7 @@
     rgba(188, 219, 243, 0) 100%,
     rgba(112, 178, 229, 0) 100%
   );
-  transition: transform 600ms;
+  transition: transform 350ms;
 }
 .globalBarWrapHidden {
   transform: translateY(-150%);
@@ -116,7 +116,7 @@
 }
 .searchbarSpacer {
   width: 0;
-  transition: width 600ms;
+  transition: width 350ms;
 }
 .searchbarSpacerCollapsed {
   width: 40px;
@@ -140,7 +140,7 @@
   display: flex;
   flex-direction: row;
   height: 52px;
-  transition: height 500ms;
+  transition: height 250ms;
   background-color: rgba(248, 248, 248, 0.82);
   font-weight: bold;
   font-size: 12px;

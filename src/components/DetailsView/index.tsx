@@ -1,14 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, lazy } from 'react'
 import DataContext from '../../service/Data'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
-import VirtualizedList from '../VirtualizedList'
+// import VirtualizedList from '../VirtualizedList'
 import Project from '../../models/Project'
-import { DataState } from '../../types/service/Data'
 import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
 
+const VirtualizedList = lazy(() =>
+  import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
+)
+
 let lastScrollOffset = 0 // used by onScroll
+let cachedImgSrc: string
 
 // used to restore scroll position in the VirtualizedList
 const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
@@ -38,50 +42,50 @@ const GitHub = ({ className, name }: { className?: string; name?: string }) => {
 }
 
 const ModiteDetail = ({ className, modite }: { className?: string; modite?: Modite | null }) => {
-  if (!modite) {
-    return null
-  }
-
-  const { localDate, localTime, profile = {}, real_name: name, tod }: any = modite
-  const { fields = {}, image_192: image, title } = profile
+  const { localDate, localTime, profile = {}, real_name: name, tod }: any = modite || {}
+  const { fields = {}, image_192: image = cachedImgSrc, title } = profile
   const { Location, Title, 'GitHub User': gitHubUser } = fields
 
+  if (image) cachedImgSrc = image
+
   const cx = classNames.bind(s)
-  className = cx(s.moditeCt, className, s.isModite)
+  className = cx(s.moditeCt, s.isModite, {
+    [className as string]: name,
+  })
   const moditeDetailsWrapCLs = cx(s.moditeDetails, s.moditeDetailsShown)
 
   return (
     <div className={className}>
-      {image && <img src={image} />}
-      <div className={moditeDetailsWrapCLs}>
-        <div className={s.name}>{name}</div>
+      <img src={image} />
+      {modite && (
+        <div className={moditeDetailsWrapCLs}>
+          <div className={s.name}>{name}</div>
 
-        <div className={s.location}>{Location}</div>
-        <div className={s.todWrap}>
-          <span className={s.tod}>{tod}</span>
-          {localDate} {localDate && localTime && '-'} {localTime}
+          <div className={s.location}>{Location}</div>
+          <div className={s.todWrap}>
+            <span className={s.tod}>{tod}</span>
+            {localDate} {localDate && localTime && '-'} {localTime}
+          </div>
+
+          <div className={s.fieldTitle}>{Title}</div>
+          <GitHub className={s.gitUser} name={gitHubUser} />
+
+          <div className={s.title}>{title}</div>
         </div>
-
-        <div className={s.fieldTitle}>{Title}</div>
-        <GitHub className={s.gitUser} name={gitHubUser} />
-
-        <div className={s.title}>{title}</div>
-      </div>
+      )}
     </div>
   )
 }
 
 const ProjectDetail = ({ className, project }: { className?: string; project?: Project | null }) => {
-  if (!project) {
-    return null
-  }
-
-  const { name, users } = project
-  const userCount = users.length
+  const { name = '', users = [] } = project || {}
+  const userCount: number = users.length
 
   const cx = classNames.bind(s)
-  className = cx(s.moditeCt, className, s.isProject)
-  const projectDetailsWrapCLs = cx(s.projectDetails, s.projectDetailsShown)
+  className = cx(s.moditeCt, s.isProject, {
+    [className as string]: name,
+  })
+  const projectDetailsWrapCLs: string = cx(s.projectDetails, s.projectDetailsShown)
 
   return (
     <div className={className}>
@@ -90,19 +94,20 @@ const ProjectDetail = ({ className, project }: { className?: string; project?: P
 
         <div className={s.userCount}>{userCount}</div>
 
-        <VirtualizedList records={users} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
+        {userCount && <VirtualizedList records={users} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />}
       </div>
     </div>
   )
 }
 
 function DetailsView({ className }: { className?: string }) {
-  const [{ activeModite, activeProject }]: [DataState] = useContext(DataContext)
+  const [{ activeModite, activeProject }]: any = useContext(DataContext)
 
-  return activeProject ? (
-    <ProjectDetail className={className} project={activeProject} />
-  ) : (
-    <ModiteDetail className={className} modite={activeModite} />
+  return (
+    <>
+      <ProjectDetail className={className} project={activeProject} />
+      <ModiteDetail className={className} modite={activeModite} />
+    </>
   )
 }
 
