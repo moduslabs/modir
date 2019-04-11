@@ -1,5 +1,5 @@
-export default interface IFilterEvent {
+export default interface FilterEvent {
   detail: {
-    value: string | undefined;
-  };
+    value?: string
+  }
 }

@@ -1,6 +1,6 @@
-import Modite from './Modite';
+import Modite from './Modite'
 
-export default interface IModiteDetailsProps {
-  modite?: Modite;
-  slides?: React.MutableRefObject<any>;
+export default interface ModiteDetailsProps {
+  modite?: Modite
+  slides?: React.MutableRefObject<any>
 }

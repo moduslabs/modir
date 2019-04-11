@@ -2,26 +2,54 @@ import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
 import React, { useEffect, useRef } from 'react'
-import IModite from '../../models/Modite'
-import MapComponentProps from './MapComponentProps'
+import Modite from '../../models/Modite'
+import MapComponentProps from '../../types/components/MapComponent'
 import s from './styles.module.css'
-import IProject from '../../models/Project'
 
 let map: MapChart
 let imageSeries: any
 
 const updateMap = (markerData: any) => {
   imageSeries.data = markerData
+
   if (markerData.length === 1) {
     const { latitude, longitude } = markerData[0]
+
     map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
   } else {
     map.goHome(500)
   }
 }
 
-const MapComponent = ({ modites }: MapComponentProps) => {
+const MapComponent = ({ mapRecords }: MapComponentProps) => {
   const mapRef: React.MutableRefObject<null> = useRef(null)
+
+  const populateMap = (): void => {
+    if (map && mapRecords) {
+      const mapData: Modite[] = Array.isArray(mapRecords) ? mapRecords : [mapRecords]
+      const markerData: any = mapData
+        .map((modite: Modite) => {
+          if (!modite.profile || !modite.profile.fields) {
+            return
+          }
+
+          const { locationData = {}, Location: title } = modite.profile.fields
+          const { lat: latitude, lon: longitude } = locationData
+          return latitude && longitude && title ? { latitude, longitude, title } : null
+        })
+        .filter(Boolean)
+
+      if (map.isReady()) {
+        updateMap(markerData)
+      } else {
+        map.events.on('ready', () => {
+          requestAnimationFrame(() => {
+            updateMap(markerData)
+          })
+        })
+      }
+    }
+  }
 
   useEffect(() => {
     if (!map && mapRef.current) {
@@ -69,46 +97,12 @@ const MapComponent = ({ modites }: MapComponentProps) => {
       // Set property fields
       imageSeriesTemplate.propertyFields.latitude = 'latitude'
       imageSeriesTemplate.propertyFields.longitude = 'longitude'
+
+      populateMap()
     }
+  }, [])
 
-    if (map && modites) {
-      const isIndividual = !Array.isArray(modites)
-      const sampleRecord: any = isIndividual ? modites : (modites as (IProject | IModite)[])[0]
-      let mapData: IModite | IModite[] | IProject[]
-
-      // if the modites data passed in is a user or users then just use it directly
-      // else find the users list on the record passed in and use that for the map data
-      if (sampleRecord.recordType === 'user') {
-        mapData = modites
-      } else {
-        mapData = sampleRecord.users || []
-      }
-
-      ;(mapData as IModite[]) = isIndividual ? [mapData as IModite] : (mapData as IModite[])
-
-      let markerData: any = (mapData as IModite[]).map(modite => {
-        if (!modite.profile || !modite.profile.fields) {
-          return
-        }
-
-        const { locationData = {}, Location: title } = modite.profile.fields
-        const { lat: latitude, lon: longitude } = locationData
-        return latitude && longitude && title ? { latitude, longitude, title } : null
-      })
-
-      markerData = markerData.filter((item: any) => item)
-
-      if (map.isReady()) {
-        updateMap(markerData)
-      } else {
-        map.events.on('ready', () => {
-          requestAnimationFrame(() => {
-            updateMap(markerData)
-          })
-        })
-      }
-    }
-  })
+  populateMap()
 
   return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 }

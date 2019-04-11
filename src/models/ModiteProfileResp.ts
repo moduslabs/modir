@@ -1,6 +1,6 @@
-import { IModiteProfile } from './Modite';
+import { ModiteProfile } from './Modite'
 
-export default interface IModiteProfileResp {
-  ok: boolean;
-  profile: IModiteProfile;
+export default interface ModiteProfileResp {
+  ok: boolean
+  profile: ModiteProfile
 }

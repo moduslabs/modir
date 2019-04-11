@@ -1,5 +1,11 @@
 {
   "editor.formatOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
   },
@@ -11,22 +17,36 @@
   },
   "javascript.format.enable": false,
   "cSpell.words": [
+    "AMPM",
+    "CLOUDFLARE",
+    "Fairfax",
     "Modite",
     "Modites",
     "Prefetch",
     "Reston",
     "Searchbar",
     "amcharts",
+    "autoformat",
+    "boundingbox",
+    "browserslist",
+    "bundlesize",
+    "camelcase",
     "doublehit",
     "geocode",
     "geocoded",
     "geodata",
     "keyframes",
+    "modir",
+    "noopener",
+    "noreferrer",
     "overscan",
+    "precache",
     "resizable",
     "serverless",
+    "serviceworker",
     "slackbot",
     "unmount",
+    "unprefixed",
     "vimeo"
   ],
   "prettier.eslintIntegration": true,

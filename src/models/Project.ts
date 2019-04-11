@@ -1,9 +1,12 @@
-export default interface IProject {
+import { RecordTypes } from './Modite'
+
+export default interface Project {
   name: string
+  real_name?: string
   id: string
-  localTime: string
-  localDate: string
-  tod: string
-  recordType: 'user' | 'project'
+  localTime?: string
+  localDate?: string
+  tod?: string
+  recordType: RecordTypes
   users: any
 }

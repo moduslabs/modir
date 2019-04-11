@@ -9,7 +9,7 @@ import s from './styles.module.css'
 const VirtualizedList: FunctionComponent<any> = ({ records, lastScrollOffset, onScroll = () => {} }) => {
   const Row = ({ index, style }: ListChildComponentProps) => (
     <Link to={`/details/${records[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
-      <ModiteListItem modite={records[index]} key={records[index].id} />
+      <ModiteListItem item={records[index]} key={records[index].id} />
     </Link>
   )
 

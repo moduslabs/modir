@@ -1,20 +1,23 @@
 import cx from 'classnames'
 import React from 'react'
-import IModite from '../../models/Modite'
+import Modite from '../../models/Modite'
 import styles from './styles.module.css'
 import userIconPlaceholder from './user-icon-placeholder.png'
 
 interface Props {
-  modite: IModite
+  className?: string
+  modite: Modite
 }
 
-function ModiteImage({ modite, ...other }: Props) {
-  if (!modite) return null
+function ModiteImage({ className, modite, ...other }: Props) {
+  if (!modite) {
+    return null
+  }
 
   const { profile = {} }: any = modite
 
   return (
-    <div className={cx(styles.moditeImage, styles.loading)}>
+    <div aria-hidden="true" className={cx(className, styles.moditeImage, styles.loading)}>
       <picture {...other}>
         <source srcSet={`${profile.image_72}, ${profile.image_192} 2x`} />
         <img src={userIconPlaceholder} alt={modite.real_name} role="presentation" />

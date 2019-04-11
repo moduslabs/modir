@@ -1,8 +1,10 @@
-import IModite from './Modite'
+import Modite from './Modite'
+import Project from './Project'
 
-export default interface IModiteListProps {
-  onModiteItemClick?: (modite: IModite) => void
-  slides: React.MutableRefObject<any>
-  activeModite: IModite
-  view?: string
+export default interface ModiteListProps {
+  activeView: 'project' | 'projects' | 'modite' | 'modites'
+  filter: string
+  listRecords: (Modite | Project)[]
+  activeRecord: Modite | Project | null
+  setFilter: (val: string) => void
 }
