@@ -22,17 +22,15 @@ const Modites: FunctionComponent<RouteComponentProps> = () => {
   const [{ filter, modites, projects, rawModites, rawProjects }, { setFilter, processTimestamps }]: any = useContext(
     DataContext,
   )
-  let listRecords: (Modite | Project)[] = []
-  let activeRecord: Modite | Project | null = null
-  let mapRecords: Modite[] = []
 
   const { id } = getUrlInfo()
   const activeView: 'project' | 'projects' | 'modite' | 'modites' = getActiveView()
   const isProjects: boolean = activeView === VIEW_TYPES.projects
   const isModites: boolean = activeView === VIEW_TYPES.modites
 
-  listRecords = isProjects ? projects : modites
-  mapRecords = isProjects ? rawModites : modites
+  let listRecords: (Modite | Project)[] = isProjects ? projects : modites
+  let mapRecords: Modite[] = isProjects ? rawModites : modites
+  let activeRecord: Modite | Project | null = null
 
   if (!isProjects && !isModites) {
     const date = new Date()
