@@ -1,10 +1,11 @@
-interface ViewTypes {
+export type ViewTypes = 'project' | 'projects' | 'modite' | 'modites'
+interface ViewTypesInterface {
   project: 'project'
   projects: 'projects'
   modite: 'modite'
   modites: 'modites'
 }
-const VIEW_TYPES: ViewTypes = {
+const VIEW_TYPES: ViewTypesInterface = {
   project: 'project',
   projects: 'projects',
   modite: 'modite',

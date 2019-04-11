@@ -1,5 +1,10 @@
 import profilePlaceholder from '../assets/images/modus-neon.gif'
 
+export interface LocationData {
+  lat: number
+  lon: number
+}
+
 export interface ModiteProfile {
   title?: string
   last_name?: string
@@ -20,9 +25,12 @@ export interface ModiteProfile {
   image_32?: string
   image_48?: string
   image_72?: string
-  image_192: string
+  image_192?: string
   image_512?: string
-  fields?: { [key: string]: any }
+  fields?: {
+    Location?: string
+    locationData?: LocationData
+  }
 }
 
 export type RecordTypes = 'user' | 'project'

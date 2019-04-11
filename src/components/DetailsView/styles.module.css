@@ -6,7 +6,7 @@
   left: 12px;
   right: 12px;
   border-radius: 20px 20px 0 0;
-  transform: translateY(calc(100% + 52px));
+  transform: translateY(calc(100% + 90px));
   transition: transform 250ms;
   overflow: visible;
   text-align: center;

@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import Modite from '../../models/Modite'
 import styles from './styles.module.css'
 import userIconPlaceholder from './user-icon-placeholder.png'
@@ -9,12 +9,12 @@ interface Props {
   modite: Modite
 }
 
-function ModiteImage({ className, modite, ...other }: Props) {
+const ModiteImage: FunctionComponent<Props> = ({ className, modite, ...other }) => {
   if (!modite) {
     return null
   }
 
-  const { profile = {} }: any = modite
+  const { profile = {} }: Modite = modite
 
   return (
     <div aria-hidden="true" className={cx(className, styles.moditeImage, styles.loading)}>

@@ -1,19 +1,19 @@
-import React, { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, FunctionComponent } from 'react'
 // @ts-ignore
-import { useLastLocation } from 'react-router-last-location'
+import { useLastLocation, LastLocationType } from 'react-router-last-location'
 import { IonIcon } from '@ionic/react'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
 import { withRouter } from 'react-router'
+import { BackButtonProps } from '../../types/components/BackButton'
 
-// TODO: type correctly
-function BackButton({ history, className = '' }: any) {
+const BackButton: FunctionComponent<BackButtonProps> = ({ history, className = '' }) => {
   const cx = classNames.bind(s)
-  const lastLocation = useLastLocation()
+  const lastLocation: LastLocationType = useLastLocation()
 
   const onBackClick = (e: SyntheticEvent) => {
-    const target = e.target as HTMLElement
-    const btnEl = (target && target.tagName === 'BUTTON' ? target : target.parentNode) as HTMLElement
+    const target: HTMLElement = e.target as HTMLElement
+    const btnEl: HTMLElement = (target && target.tagName === 'BUTTON' ? target : target.parentNode) as HTMLElement
 
     if (btnEl) {
       btnEl.blur()

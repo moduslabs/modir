@@ -1,12 +1,13 @@
 import React, { Context, createContext, useEffect, Dispatch } from 'react'
-import Modite, { ListTypes } from '../models/Modite'
+import Modite, { ListTypes, ModiteProfile } from '../models/Modite'
 import Project from '../models/Project'
-import { VIEW_TYPES, RECORD_TYPES, NAME_PROPERTIES } from '../constants/constants'
-import { NameProperties } from '../types/service/Data'
+import { VIEW_TYPES, NAME_PROPERTIES } from '../constants/constants'
+import { NameProperties, DataState, DataAction, DataProps } from '../types/service/Data'
 import { envOrDefault } from '../utils/env'
 
 const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
+const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
 const CLOUDFLARE_ID = envOrDefault('REACT_APP_CLOUDFLARE_ID') as string
 const CLOUDFLARE_SECRET = envOrDefault('REACT_APP_CLOUDFLARE_SECRET') as string
 
@@ -18,11 +19,9 @@ let rawProjects: Project[] = []
 
 const sortRecords = (records: (Modite | Project)[]): void => {
   if (records.length) {
-    const isProject: boolean = records[0].recordType === RECORD_TYPES.project
-
-    records.sort((prev: any, next: any) => {
-      const prevName: string = isProject ? prev.name : prev.profile.last_name
-      const nextName: string = isProject ? next.name : next.profile.last_name
+    records.sort((prev: Modite | Project, next: Modite | Project) => {
+      const prevName: string | undefined = (prev.profile as ModiteProfile).last_name || ''
+      const nextName: string | undefined = (next.profile as ModiteProfile).last_name || ''
 
       if (prevName < nextName) return -1
       if (prevName > nextName) return 1
@@ -86,8 +85,6 @@ function formatAMPM(date: Date): string {
   return `${hours}:${minutes} ${ampm}`
 }
 
-// const foo: Date = new Date(new Date().getTime() + new Date().getTimezoneOffset())
-// const bar: Date = new Date(-400 + -foo * 60000)
 const processTimestamps = (records: Modite[] = [], date: Date) => {
   const nowUtc: Date = new Date(date.getTime() + date.getTimezoneOffset())
 
@@ -116,15 +113,18 @@ const processRecords = (
   return { modites, projects }
 }
 
-// TODO: type correctly including the return type
-const reducer = (state: any, action: any) => {
+const reducer = (state: DataState, action: DataAction): DataState => {
   let processed: { modites: Modite[]; projects: Project[] }
 
   switch (action.type) {
-    case 'on-filter':
-      processed = processRecords(action.filter)
+    case 'on-fetch-modite-profile':
       return {
-        filter: action.filter,
+        ...state,
+      }
+    case 'on-filter':
+      processed = processRecords(action.filter as string)
+      return {
+        filter: action.filter as string,
         modites: processed.modites,
         projects: processed.projects,
         rawModites,
@@ -144,8 +144,7 @@ const reducer = (state: any, action: any) => {
   }
 }
 
-// TODO: type this correctly
-const initialState = {
+const initialState: DataState = {
   filter: '',
   modites: [],
   projects: [],
@@ -153,42 +152,49 @@ const initialState = {
   rawProjects: [],
 }
 
+const headers: Headers = new Headers({
+  'CF-Access-Client-Id': CLOUDFLARE_ID,
+  'CF-Access-Client-Secret': CLOUDFLARE_SECRET,
+})
+
+// adds complete modite records to the rawProjects records' user property
+const augmentProjectUsers = (): void => {
+  rawProjects.forEach((project: Project) => {
+    project.profile = {
+      last_name: project.name,
+    }
+    project.users = project.users.map((modite: Modite) => moditeMap[modite.id as string])
+    project.users = project.users.filter(Boolean)
+  })
+}
+
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
-  // TODO: type the state correctly
-  const [state, dispatch]: [any, Dispatch<any>] = React.useReducer(reducer, initialState)
+  const [state, dispatch]: [DataState, Dispatch<DataAction>] = React.useReducer(reducer, initialState)
 
   const getData = async (): Promise<void> => {
-    const headers = new Headers({
-      'CF-Access-Client-Id': CLOUDFLARE_ID,
-      'CF-Access-Client-Secret': CLOUDFLARE_SECRET,
-    })
-    const [modites, projects] = await Promise.all([
+    const [modites, projects]: [Modite[], Project[]] = await Promise.all([
       fetch(MODITES_URL, { headers }).then(res => res.json()),
       fetch(PROJECTS_URL, { headers }).then(res => res.json()),
     ])
 
-    // fallback for connection issues to continue dev
     rawModites = modites
-    sortRecords(rawModites)
     rawProjects = projects
-    sortRecords(rawProjects)
     rawProjects.forEach((project: Project) => {
       if (project.users) sortRecords(project.users)
     })
 
     if (!Object.keys(moditeMap).length) {
       rawModites.forEach((modite: Modite) => (moditeMap[modite.id as string] = modite))
-      rawProjects.forEach((project: Project) => {
-        project.users = project.users.map((modite: Modite) => moditeMap[modite.id as string])
-        project.users = project.users.filter(Boolean)
-      })
+      augmentProjectUsers()
     }
+
+    sortRecords(rawModites)
+    sortRecords(rawProjects)
 
     dispatch({ type: 'on-load' })
   }
 
-  // TODO: type this correctly
-  const props = {
+  const props: DataProps = {
     setFilter: (filter: string) => {
       dispatch({
         type: 'on-filter',
@@ -196,6 +202,35 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       })
     },
     processTimestamps,
+    fetchModiteProfile: (id: string) => {
+      const suffix: string = MODITE_URL.includes('.json') ? '' : id
+      const url: string = `${MODITE_URL}${suffix}`
+
+      fetch(url, { headers })
+        .then(res => res.json())
+        .then(json => {
+          const { ok, profile }: { ok: boolean; profile: ModiteProfile } = json
+
+          if (ok && profile) {
+            const rawTarget: Modite = rawModites.find((modite: Modite) => modite.id === id) as Modite
+            if (rawTarget) {
+              rawTarget.profile = profile
+            }
+            const mappedTarget: Modite = moditeMap[id]
+            if (mappedTarget) {
+              mappedTarget.profile = profile
+              augmentProjectUsers()
+              dispatch({ type: 'on-fetch-modite-profile' })
+            }
+          }
+        })
+      // https://modus.app/modite/U0AUTJZUL
+      // fetch(MODITE_URL, { headers }).then(res => res.json())
+      // dispatch({
+      //   type: 'on-fetch-modite-profile',
+      //   id,
+      // })
+    },
   }
 
   useEffect((): void => {

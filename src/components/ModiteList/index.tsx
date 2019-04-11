@@ -2,13 +2,12 @@ import React, { useState, FunctionComponent, lazy } from 'react'
 import { Link } from 'react-router-dom'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
-import FilterEvent from '../../models/FilterEvent'
 import s from './styles.module.css'
-import ModiteListProps from '../../models/ModiteListProps'
 import SkeletonList from '../SkeletonList'
 import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import { VIEW_TYPES } from '../../constants/constants'
+import ModiteListProps, { FilterEvent } from '../../types/components/ModiteList'
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
@@ -53,20 +52,20 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     setFilter(query)
   }
 
-  const cx = classNames.bind(s)
-  const moditeListCtCls = cx('moditeListCt', { detailsView: isDetails })
-  const mapWindowCls = cx('mapWindow', { mapWindowCollapsed: collapsed && !isDetails })
-  const globalBarWrapCls = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
-  const searchbarWrapCls = cx('searchbarWrap', {
+  const cx: (...args: any) => string = classNames.bind(s)
+  const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
+  const mapWindowCls: string = cx('mapWindow', { mapWindowCollapsed: collapsed && !isDetails })
+  const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
+  const searchbarWrapCls: string = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filter.length,
     searchbarWrapHidden: !!isDetails,
   })
-  const searchbarSpacerCls = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed || filter.length })
-  const moditesTabCls = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.modites })
-  const projectsTabCls = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.projects })
-  const activeModiteCls = cx({ activeModiteShown: !!isDetails })
-  const tabCtCls = cx('tabCt', { tabCtHidden: !!isDetails })
-  const backButtonCls = cx('backButton')
+  const searchbarSpacerCls: string = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed || filter.length })
+  const moditesTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.modites })
+  const projectsTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.projects })
+  const activeModiteCls: string = cx({ activeModiteShown: !!isDetails })
+  const tabCtCls: string = cx('tabCt', { tabCtHidden: !!isDetails })
+  const backButtonCls: string = cx('backButton')
 
   return (
     <>
@@ -75,7 +74,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
         <div className={mapWindowCls} />
         <div className={s.moditeListWrap}>
           {listRecords.length ? (
-            <VirtualizedList records={listRecords} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />
+            <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />
           ) : (
             <SkeletonList />
           )}
