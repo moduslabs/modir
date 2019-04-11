@@ -4,10 +4,14 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import { Link } from 'react-router-dom'
 import ModiteListItem from '../ModiteListItem'
 import s from './styles.module.css'
+import VirtualizedListProps from '../../types/components/VirtualizedList'
 
-// TODO: type correctly
-const VirtualizedList: FunctionComponent<any> = ({ records, lastScrollOffset, onScroll = () => {} }) => {
-  const Row = ({ index, style }: ListChildComponentProps) => (
+const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
+  records,
+  lastScrollOffset,
+  onScroll = () => {},
+}) => {
+  const Row: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
     <Link to={`/details/${records[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
       <ModiteListItem item={records[index]} key={records[index].id} />
     </Link>

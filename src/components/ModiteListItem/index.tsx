@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
-import ListItemProps from '../../models/ListItemProps'
 import ModiteImage from '../ModiteImage'
 import s from './styles.module.css'
 import Project from '../../models/Project'
 import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
 import { RECORD_TYPES } from '../../constants/constants'
+import ListItemProps from '../../types/components/ModiteListItem'
 
 const ModiteItem = ({ modite }: { modite: Modite }) => (
   <div className={s.itemInnerCt}>
@@ -30,15 +30,9 @@ const ProjectItem = ({ project }: { project: Project }) => (
 )
 
 const ModiteListItem: FunctionComponent<ListItemProps & RouteComponentProps> = ({ item }) => {
-  const isProject = item.recordType === RECORD_TYPES.project
+  const isProject: boolean = item.recordType === RECORD_TYPES.project
 
-  if (isProject) {
-    const project = item as Project
-
-    return <ProjectItem project={project} />
-  } else {
-    return <ModiteItem modite={item} />
-  }
+  return isProject ? <ProjectItem project={item as Project} /> : <ModiteItem modite={item} />
 }
 
 export default withRouter(ModiteListItem)

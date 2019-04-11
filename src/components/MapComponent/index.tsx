@@ -1,19 +1,28 @@
 import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
-import { MapChart, MapImageSeries, MapPolygonSeries, projections } from '@amcharts/amcharts4/maps'
+import { MapChart, MapImageSeries, MapPolygonSeries, projections, MapPolygon, MapImage } from '@amcharts/amcharts4/maps'
 import React, { useEffect, useRef } from 'react'
-import Modite from '../../models/Modite'
+import Modite, { LocationData } from '../../models/Modite'
 import MapComponentProps from '../../types/components/MapComponent'
 import s from './styles.module.css'
 
+interface LatLon {
+  latitude: number
+  longitude: number
+}
+
+interface Marker extends LatLon {
+  title: string
+}
+
 let map: MapChart
-let imageSeries: any
+let imageSeries: MapImageSeries
 
 const updateMap = (markerData: any) => {
   imageSeries.data = markerData
 
   if (markerData.length === 1) {
-    const { latitude, longitude } = markerData[0]
+    const { latitude, longitude }: LatLon = markerData[0]
 
     map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
   } else {
@@ -22,19 +31,19 @@ const updateMap = (markerData: any) => {
 }
 
 const MapComponent = ({ mapRecords }: MapComponentProps) => {
-  const mapRef: React.MutableRefObject<null> = useRef(null)
+  const mapRef = useRef<HTMLDivElement>(null)
 
   const populateMap = (): void => {
     if (map && mapRecords) {
       const mapData: Modite[] = Array.isArray(mapRecords) ? mapRecords : [mapRecords]
-      const markerData: any = mapData
+      const markerData: (Marker | null)[] = mapData
         .map((modite: Modite) => {
           if (!modite.profile || !modite.profile.fields) {
-            return
+            return null
           }
 
           const { locationData = {}, Location: title } = modite.profile.fields
-          const { lat: latitude, lon: longitude } = locationData
+          const { lat: latitude, lon: longitude } = locationData as LocationData
           return latitude && longitude && title ? { latitude, longitude, title } : null
         })
         .filter(Boolean)
@@ -53,11 +62,11 @@ const MapComponent = ({ mapRecords }: MapComponentProps) => {
 
   useEffect(() => {
     if (!map && mapRef.current) {
-      const el: any = mapRef.current
+      const el: HTMLDivElement = mapRef.current
       map = create(el, MapChart)
       map.geodata = am4geodataWorldLow
       map.projection = new projections.Miller()
-      const polygonSeries = map.series.push(new MapPolygonSeries())
+      const polygonSeries: MapPolygonSeries = map.series.push(new MapPolygonSeries())
       polygonSeries.useGeodata = true
       polygonSeries.exclude = ['AQ']
 
@@ -68,7 +77,7 @@ const MapComponent = ({ mapRecords }: MapComponentProps) => {
       map.chartContainer.background.events.disableType('doublehit')
 
       // Configure series
-      const polygonTemplate = polygonSeries.mapPolygons.template
+      const polygonTemplate: MapPolygon = polygonSeries.mapPolygons.template
       polygonTemplate.tooltipText = '{name}'
       polygonTemplate.fill = color('#d6d6d6')
 
@@ -85,8 +94,8 @@ const MapComponent = ({ mapRecords }: MapComponentProps) => {
       imageSeries = map.series.push(new MapImageSeries())
 
       // Create a circle image in image series template so it gets replicated to all new images
-      const imageSeriesTemplate = imageSeries.mapImages.template
-      const circle = imageSeriesTemplate.createChild(Circle)
+      const imageSeriesTemplate: MapImage = imageSeries.mapImages.template
+      const circle: Circle = imageSeriesTemplate.createChild(Circle)
       circle.radius = 6
       circle.fill = color('#ff5c5d')
       circle.stroke = color('#FFFFFF')

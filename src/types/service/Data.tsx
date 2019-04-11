@@ -1,48 +1,24 @@
-// import Modite, { ListTypes } from '../../models/Modite'
-// import Project from '../../models/Project'
-// import { WorkerState } from '../../service/Worker'
-
-// type ModiteFilter = (filter: string) => void
-
-// export interface DataState {
-//   activeModite?: Modite | null
-//   activeProject?: Project | null
-//   modites: Modite[]
-//   moditesFilter?: string
-//   moditesSource?: Modite[]
-//   projects: Project[]
-//   projectsFilter?: string
-//   projectsSource?: Project[]
-// }
-
-// type DataActions = 'on-filter-modites' | 'on-filter-projects' | 'on-load' | 'set-active-modite' | 'set-active-project'
-
-// export interface DataAction {
-//   type: DataActions
-//   filter?: string
-//   modite?: Modite | null
-//   modites?: Modite[]
-//   project?: Project | null
-//   projects?: Project[]
-// }
-
-// export interface DataProps {
-//   filterModites: ModiteFilter
-//   filterProjects: ModiteFilter
-
-//   setActiveModite: (modite: Modite | null) => void
-//   setActiveProject: (project: Project | null) => void
-// }
-
-// export interface FilterFnProps {
-//   dispatch: any
-//   modites: Modite[]
-//   projects: Project[]
-//   type: ListTypes
-//   workerState: WorkerState
-// }
+import Modite from '../../models/Modite'
+import Project from '../../models/Project'
 
 export type NameProperties = 'real_name' | 'name'
-export interface Test {
-  foo: string
+
+export interface DataState {
+  filter: string
+  modites: Modite[]
+  projects: Project[]
+  rawModites: Modite[]
+  rawProjects: Project[]
+}
+
+export interface DataAction {
+  type: string
+  filter?: string
+  id?: string
+}
+
+export interface DataProps {
+  setFilter: (val: string) => void
+  processTimestamps: (records: Modite[], date: Date) => void
+  fetchModiteProfile: (id: string) => void
 }

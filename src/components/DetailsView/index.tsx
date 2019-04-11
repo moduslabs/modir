@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { lazy, FunctionComponent } from 'react'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
 // import VirtualizedList from '../VirtualizedList'
@@ -6,6 +6,12 @@ import Project from '../../models/Project'
 import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
 import { RECORD_TYPES } from '../../constants/constants'
+import {
+  ModiteDetailProps,
+  ProjectDetailProps,
+  DetailsViewProps,
+  GitHubProps,
+} from '../../types/components/DetailsView'
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
@@ -22,7 +28,7 @@ const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
 const NAME_CHECKER_RE = /[@/]/
 const NAME_REPLACER_RE = /([@/]?)(.+)$/
 
-const GitHub = ({ className, name }: { className?: string; name?: string }) => {
+const GitHub: FunctionComponent<GitHubProps> = ({ className, name }) => {
   if (!name) {
     return null
   }
@@ -41,7 +47,7 @@ const GitHub = ({ className, name }: { className?: string; name?: string }) => {
   )
 }
 
-const ModiteDetail = ({ className, modite }: { className?: string; modite?: Modite | null }) => {
+const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite }) => {
   const { localDate, localTime, profile = {}, real_name: name, tod }: any = modite || {}
   const { fields = {}, image_192: image = cachedImgSrc, title } = profile
   const { Location, Title, 'GitHub User': gitHubUser } = fields
@@ -52,7 +58,7 @@ const ModiteDetail = ({ className, modite }: { className?: string; modite?: Modi
   className = cx(s.moditeCt, s.isModite, {
     [className as string]: name,
   })
-  const moditeDetailsWrapCLs = cx(s.moditeDetails, s.moditeDetailsShown)
+  const moditeDetailsWrapCLs: string = cx(s.moditeDetails, s.moditeDetailsShown)
 
   return (
     <div className={className}>
@@ -77,8 +83,8 @@ const ModiteDetail = ({ className, modite }: { className?: string; modite?: Modi
   )
 }
 
-const ProjectDetail = ({ className, project }: { className?: string; project?: Project | null }) => {
-  const { name = '', users = [] } = project || {}
+const ProjectDetail: FunctionComponent<ProjectDetailProps> = ({ className, project = {} }) => {
+  const { name = '', users = [] }: { name: string; users: Modite[] } = project as Project
   const userCount: number = users.length
 
   const cx = classNames.bind(s)
@@ -94,19 +100,19 @@ const ProjectDetail = ({ className, project }: { className?: string; project?: P
 
         <div className={s.userCount}>{userCount}</div>
 
-        {userCount && <VirtualizedList records={users} onScroll={onScroll} initialScrollOffset={lastScrollOffset} />}
+        {userCount && <VirtualizedList records={users} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />}
       </div>
     </div>
   )
 }
 
-function DetailsView({ record, className }: { record: Modite | Project | null; className?: string }) {
+const DetailsView: FunctionComponent<DetailsViewProps> = ({ record, className }) => {
   const isProject: boolean = Boolean(record) && (record as Modite).recordType === RECORD_TYPES.project
 
   return (
     <>
-      <ProjectDetail className={className} project={record && isProject ? (record as Project) : null} />
-      <ModiteDetail className={className} modite={record && !isProject ? (record as Modite) : null} />
+      <ProjectDetail className={className} project={record && isProject ? (record as Project) : undefined} />
+      <ModiteDetail className={className} modite={record && !isProject ? (record as Modite) : undefined} />
     </>
   )
 }
