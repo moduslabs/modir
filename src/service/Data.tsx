@@ -7,8 +7,8 @@ import { envOrDefault } from '../utils/env'
 
 const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
-const CLOUDFLARE_ID = envOrDefault('CLOUDFLARE_ID') as string
-const CLOUDFLARE_SECRET = envOrDefault('CLOUDFLARE_SECRET') as string
+const CLOUDFLARE_ID = envOrDefault('REACT_APP_CLOUDFLARE_ID') as string
+const CLOUDFLARE_SECRET = envOrDefault('REACT_APP_CLOUDFLARE_SECRET') as string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
