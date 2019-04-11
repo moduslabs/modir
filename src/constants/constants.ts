@@ -20,4 +20,13 @@ const RECORD_TYPES: RecordTypes = {
   user: 'user',
 }
 
-export { VIEW_TYPES, RECORD_TYPES }
+interface NameProperties {
+  realName: 'real_name'
+  name: 'name'
+}
+const NAME_PROPERTIES: NameProperties = {
+  realName: 'real_name',
+  name: 'name',
+}
+
+export { VIEW_TYPES, RECORD_TYPES, NAME_PROPERTIES }

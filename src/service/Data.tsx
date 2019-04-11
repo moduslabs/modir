@@ -1,8 +1,9 @@
-import React, { Context, createContext, useEffect } from 'react'
+import React, { Context, createContext, useEffect, Dispatch } from 'react'
 import { MockModites, MockProjects } from './mockData'
 import Modite, { ListTypes } from '../models/Modite'
 import Project from '../models/Project'
-import { VIEW_TYPES, RECORD_TYPES } from '../constants/constants'
+import { VIEW_TYPES, RECORD_TYPES, NAME_PROPERTIES } from '../constants/constants'
+import { NameProperties } from '../types/service/Data'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -37,7 +38,7 @@ const filterRecords = ({
   filter?: string
 }): (Modite | Project)[] => {
   const filterLowered: string = filter.toLowerCase()
-  const name: 'real_name' | 'name' = type === VIEW_TYPES.modites ? 'real_name' : 'name'
+  const name: NameProperties = type === VIEW_TYPES.modites ? NAME_PROPERTIES.realName : NAME_PROPERTIES.name
 
   return filter.length
     ? (records as (Modite | Project)[]).filter(item => (item[name] as string).toLowerCase().indexOf(filterLowered) > -1)
@@ -80,13 +81,15 @@ function formatAMPM(date: Date): string {
   return `${hours}:${minutes} ${ampm}`
 }
 
+// const foo: Date = new Date(new Date().getTime() + new Date().getTimezoneOffset())
+// const bar: Date = new Date(-400 + -foo * 60000)
 const processTimestamps = (records: Modite[] = [], date: Date) => {
-  const nowUtc: any = new Date(date.getTime() + date.getTimezoneOffset())
+  const nowUtc: Date = new Date(date.getTime() + date.getTimezoneOffset())
 
   records.forEach((item: Modite) => {
-    const itemDate = new Date(nowUtc - (item.tz_offset as number) * 60000)
-    const localTime = formatAMPM(itemDate)
-    const tod = localTime.includes('pm') ? '🌙' : '☀️'
+    const itemDate: Date = new Date((nowUtc as any) - (item.tz_offset as number) * 60000)
+    const localTime: string = formatAMPM(itemDate)
+    const tod: string = localTime.includes('pm') ? '🌙' : '☀️'
 
     item.localDate = monthDayYear(itemDate)
     item.localTime = localTime
@@ -100,7 +103,7 @@ const processRecords = (
   modites: Modite[]
   projects: Project[]
 } => {
-  const date = new Date()
+  const date: Date = new Date()
   const modites: Modite[] = filterModites(filter)
   const projects: Project[] = filterProjects(filter)
   processTimestamps(modites, date)
@@ -108,6 +111,7 @@ const processRecords = (
   return { modites, projects }
 }
 
+// TODO: type correctly including the return type
 const reducer = (state: any, action: any) => {
   let processed: { modites: Modite[]; projects: Project[] }
 
@@ -135,6 +139,7 @@ const reducer = (state: any, action: any) => {
   }
 }
 
+// TODO: type this correctly
 const initialState = {
   filter: '',
   modites: [],
@@ -144,9 +149,10 @@ const initialState = {
 }
 
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
-  const [state, dispatch] = React.useReducer(reducer, initialState)
+  // TODO: type the state correctly
+  const [state, dispatch]: [any, Dispatch<any>] = React.useReducer(reducer, initialState)
 
-  const getData = async () => {
+  const getData = async (): Promise<void> => {
     // const headers = new Headers({
     //   'CF-Access-Client-Id': `${process.env.CLOUDFLARE_ID}`,
     //   'CF-Access-Client-Secret': `${process.env.CLOUDFLARE_SECRET}`,
@@ -173,11 +179,10 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       })
     }
 
-    dispatch({
-      type: 'on-load',
-    })
+    dispatch({ type: 'on-load' })
   }
 
+  // TODO: type this correctly
   const props = {
     setFilter: (filter: string) => {
       dispatch({
@@ -188,16 +193,16 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     processTimestamps,
   }
 
-  useEffect(() => {
+  useEffect((): void => {
     getData()
 
     let minute: number
 
     // this will run every second but only trigger
     // the getData function when the minute changes
-    const tick = () => {
-      const date = new Date()
-      const currentMinutes = date.getMinutes()
+    const tick = (): void => {
+      const date: Date = new Date()
+      const currentMinutes: number = date.getMinutes()
 
       if (minute && currentMinutes !== minute) {
         dispatch({ type: 'on-load' })
