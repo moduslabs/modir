@@ -1,9 +1,14 @@
 import React, { Context, createContext, useEffect, Dispatch } from 'react'
-import { MockModites, MockProjects } from './mockData'
 import Modite, { ListTypes } from '../models/Modite'
 import Project from '../models/Project'
 import { VIEW_TYPES, RECORD_TYPES, NAME_PROPERTIES } from '../constants/constants'
 import { NameProperties } from '../types/service/Data'
+import { envOrDefault } from '../utils/env'
+
+const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
+const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
+const CLOUDFLARE_ID = envOrDefault('CLOUDFLARE_ID') as string
+const CLOUDFLARE_SECRET = envOrDefault('CLOUDFLARE_SECRET') as string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -153,19 +158,19 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
   const [state, dispatch]: [any, Dispatch<any>] = React.useReducer(reducer, initialState)
 
   const getData = async (): Promise<void> => {
-    // const headers = new Headers({
-    //   'CF-Access-Client-Id': `${process.env.CLOUDFLARE_ID}`,
-    //   'CF-Access-Client-Secret': `${process.env.CLOUDFLARE_SECRET}`,
-    // })
-    // const [modites, projects] = await Promise.all([
-    //   fetch('https://dir.modus.app/modites/all', { headers }).then(res => res.json()),
-    //   fetch('https://dir.modus.app/projects/all', { headers }).then(res => res.json()),
-    // ])
+    const headers = new Headers({
+      'CF-Access-Client-Id': CLOUDFLARE_ID,
+      'CF-Access-Client-Secret': CLOUDFLARE_SECRET,
+    })
+    const [modites, projects] = await Promise.all([
+      fetch(MODITES_URL, { headers }).then(res => res.json()),
+      fetch(PROJECTS_URL, { headers }).then(res => res.json()),
+    ])
 
     // fallback for connection issues to continue dev
-    rawModites = MockModites
+    rawModites = modites
     sortRecords(rawModites)
-    rawProjects = MockProjects
+    rawProjects = projects
     sortRecords(rawProjects)
     rawProjects.forEach((project: Project) => {
       if (project.users) sortRecords(project.users)
