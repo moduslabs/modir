@@ -75,14 +75,15 @@ function monthDayYear(date: Date): string {
   return `${month} ${day}, ${year}`
 }
 
-function formatAMPM(date: Date): string {
+export function formatAMPM(date: Date): [string, boolean] {
   let hours: number = date.getHours()
   let minutes: number | string = date.getMinutes()
-  const ampm: string = hours >= 12 ? 'pm' : 'am'
+  const isAfterNoon = hours >= 12
+  const ampm: string = isAfterNoon ? 'pm' : 'am'
   hours = hours % 12
   hours = hours ? hours : 12 // the hour '0' should be '12'
   minutes = minutes < 10 ? '0' + minutes : minutes
-  return `${hours}:${minutes} ${ampm}`
+  return [`${hours}:${minutes} ${ampm}`, isAfterNoon]
 }
 
 const processTimestamps = (records: Modite[] = [], date: Date) => {
@@ -90,12 +91,8 @@ const processTimestamps = (records: Modite[] = [], date: Date) => {
 
   records.forEach((item: Modite) => {
     const itemDate: Date = new Date((nowUtc as any) - (item.tz_offset as number) * 60000)
-    const localTime: string = formatAMPM(itemDate)
-    const tod: string = localTime.includes('pm') ? '🌙' : '☀️'
 
     item.localDate = monthDayYear(itemDate)
-    item.localTime = localTime
-    item.tod = tod
   })
 }
 
@@ -235,23 +232,6 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
   useEffect((): void => {
     getData()
-
-    let minute: number
-
-    // this will run every second but only trigger
-    // the getData function when the minute changes
-    const tick = (): void => {
-      const date: Date = new Date()
-      const currentMinutes: number = date.getMinutes()
-
-      if (minute && currentMinutes !== minute) {
-        dispatch({ type: 'on-load' })
-      }
-
-      minute = currentMinutes
-    }
-
-    window.setInterval(tick, 1000)
   }, [])
 
   return <DataContext.Provider value={[state, props]}>{children}</DataContext.Provider>
