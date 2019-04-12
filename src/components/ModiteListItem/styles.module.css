@@ -4,15 +4,6 @@
   justify-content: center;
 }
 
-.time {
-  flex: 0 1 4.5rem;
-  opacity: 0.75;
-}
-
-.tod {
-  flex: 0 1 1.8rem;
-}
-
 .appear {
   animation-name: appear;
   animation-fill-mode: forwards;
@@ -53,13 +44,6 @@
   text-overflow: ellipsis;
   text-align: left;
   margin-left: 6px;
-}
-
-.localTime {
-  font-size: 15px;
-  opacity: 0.5;
-  width: 78px;
-  text-align: right;
 }
 
 .projectUserCount {

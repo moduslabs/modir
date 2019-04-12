@@ -19,6 +19,8 @@ let map: MapChart
 let imageSeries: MapImageSeries
 
 const updateMap = (markerData: any) => {
+  if (imageSeries.data === markerData) return
+
   imageSeries.data = markerData
 
   if (markerData.length === 1) {
@@ -30,7 +32,7 @@ const updateMap = (markerData: any) => {
   }
 }
 
-const MapComponent = ({ mapRecords }: MapComponentProps) => {
+const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
   const mapRef = useRef<HTMLDivElement>(null)
 
   const populateMap = (): void => {
@@ -49,7 +51,9 @@ const MapComponent = ({ mapRecords }: MapComponentProps) => {
         .filter(Boolean)
 
       if (map.isReady()) {
-        updateMap(markerData)
+        requestAnimationFrame(() => {
+          updateMap(markerData)
+        })
       } else {
         map.events.on('ready', () => {
           requestAnimationFrame(() => {
@@ -114,6 +118,6 @@ const MapComponent = ({ mapRecords }: MapComponentProps) => {
   populateMap()
 
   return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
-}
+})
 
 export default MapComponent

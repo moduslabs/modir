@@ -7,15 +7,13 @@ import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
 import { RECORD_TYPES } from '../../constants/constants'
 import ListItemProps from '../../types/components/ModiteListItem'
+import Time from '../Time'
 
 const ModiteItem = ({ modite }: { modite: Modite }) => (
   <div className={s.itemInnerCt}>
     <ModiteImage className={s.thumbContainer} modite={modite} />
     <div className={s.nameCt}>{modite.real_name}</div>
-    <div aria-hidden="true" className={s.todCt}>
-      {modite.tod}
-    </div>
-    <div className={s.localTime}>{modite.localTime}</div>
+    <Time modite={modite} />
     <IonIcon ios="ios-arrow-forward" md="ios-arrow-forward" />
   </div>
 )

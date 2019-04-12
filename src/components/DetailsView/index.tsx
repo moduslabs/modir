@@ -12,6 +12,7 @@ import {
   DetailsViewProps,
   GitHubProps,
 } from '../../types/components/DetailsView'
+import Time from '../Time'
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
@@ -69,8 +70,7 @@ const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite 
 
           <div className={s.location}>{Location}</div>
           <div className={s.todWrap}>
-            <span className={s.tod}>{tod}</span>
-            {localDate} {localDate && localTime && '-'} {localTime}
+            <Time modite={modite} date />
           </div>
 
           <div className={s.fieldTitle}>{Title}</div>
