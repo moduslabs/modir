@@ -17,26 +17,36 @@ interface Marker extends LatLon {
 
 let map: MapChart
 let imageSeries: MapImageSeries
+let cachedRecords: string
 
 const updateMap = (markerData: any) => {
   if (imageSeries.data === markerData) return
 
-  imageSeries.data = markerData
+  requestAnimationFrame(() => {
+    if (markerData.length === 1) {
+      const { latitude, longitude }: LatLon = markerData[0]
 
-  if (markerData.length === 1) {
-    const { latitude, longitude }: LatLon = markerData[0]
-
-    map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
-  } else {
-    map.goHome(500)
-  }
+      imageSeries.data = markerData
+      map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
+    } else {
+      map.goHome(500)
+      imageSeries.hide()
+      setTimeout(() => {
+        imageSeries.data = markerData
+        imageSeries.show(1500)
+      }, 500)
+    }
+  })
 }
 
 const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
   const mapRef = useRef<HTMLDivElement>(null)
 
   const populateMap = (): void => {
-    if (map && mapRecords) {
+    const cacheVal: string = mapRecords.map(item => item.id).join('')
+    const doUpdate = cachedRecords !== cacheVal
+
+    if (map && mapRecords && doUpdate) {
       const mapData: Modite[] = Array.isArray(mapRecords) ? mapRecords : [mapRecords]
       const markerData: (Marker | null)[] = mapData
         .map((modite: Modite) => {
@@ -51,16 +61,13 @@ const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
         .filter(Boolean)
 
       if (map.isReady()) {
-        requestAnimationFrame(() => {
-          updateMap(markerData)
-        })
+        updateMap(markerData)
       } else {
         map.events.on('ready', () => {
-          requestAnimationFrame(() => {
-            updateMap(markerData)
-          })
+          updateMap(markerData)
         })
       }
+      cachedRecords = cacheVal
     }
   }
 
@@ -111,11 +118,11 @@ const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
       imageSeriesTemplate.propertyFields.latitude = 'latitude'
       imageSeriesTemplate.propertyFields.longitude = 'longitude'
 
-      populateMap()
+      // populateMap()
     }
   }, [])
 
-  populateMap()
+  useEffect(populateMap, [mapRecords])
 
   return <div className={`MapEl ${s.mapCt}`} ref={mapRef} />
 })

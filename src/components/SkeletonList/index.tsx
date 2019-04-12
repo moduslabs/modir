@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import s from './styles.module.css'
 
 const SkeletonList: FunctionComponent<{}> = () => (
-  <div>
+  <div className={s.skeletonListWrap}>
     {Array.from(new Array(10)).map((_, index) => (
       <IonItem key={index}>
         <IonThumbnail slot="start" class={s.thumbnailContainer}>
