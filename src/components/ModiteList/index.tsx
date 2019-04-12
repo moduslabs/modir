@@ -54,7 +54,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
 
   const cx: (...args: any) => string = classNames.bind(s)
   const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
-  const mapWindowCls: string = cx('mapWindow', { mapWindowCollapsed: collapsed && !isDetails })
+  const moditeListWrapCls: string = cx('moditeListWrap', { moditeListWrapCollapsed: collapsed && !isDetails })
   const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
   const searchbarWrapCls: string = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filter.length,
@@ -65,14 +65,12 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   const projectsTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.projects })
   const activeModiteCls: string = cx({ activeModiteShown: !!isDetails })
   const tabCtCls: string = cx('tabCt', { tabCtHidden: !!isDetails })
-  const backButtonCls: string = cx('backButton')
 
   return (
     <>
       <IonPage className={moditeListCtCls}>
-        <BackButton className={backButtonCls} />
-        <div className={mapWindowCls} />
-        <div className={s.moditeListWrap}>
+        <BackButton className={s.backButton} />
+        <div className={moditeListWrapCls}>
           {listRecords.length ? (
             <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />
           ) : (
