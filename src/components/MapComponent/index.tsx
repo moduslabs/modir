@@ -44,7 +44,7 @@ const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
 
   const populateMap = (): void => {
     const cacheVal: string = mapRecords.map(item => item.id).join('')
-    const doUpdate: boolean = cachedRecords !== cacheVal
+    const doUpdate = cachedRecords !== cacheVal
 
     if (map && mapRecords && doUpdate) {
       const mapData: Modite[] = Array.isArray(mapRecords) ? mapRecords : [mapRecords]
