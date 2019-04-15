@@ -18,6 +18,7 @@ interface Marker extends LatLon {
 let map: MapChart
 let imageSeries: MapImageSeries
 let cachedRecords: string
+let circle: Circle
 
 const updateMap = (markerData: any) => {
   if (imageSeries.data === markerData) return
@@ -26,9 +27,17 @@ const updateMap = (markerData: any) => {
     if (markerData.length === 1) {
       const { latitude, longitude }: LatLon = markerData[0]
 
+      circle.radius = 12
+      circle.strokeWidth = 10
+      circle.stroke = color('#FF5C5D')
+      circle.strokeOpacity = 0.3
       imageSeries.data = markerData
       map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
     } else {
+      circle.radius = 6
+      circle.strokeWidth = 2
+      circle.stroke = color('#FFFFFF')
+      circle.strokeOpacity = 1
       map.goHome(500)
       imageSeries.hide()
       setTimeout(() => {
@@ -106,19 +115,14 @@ const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
 
       // Create a circle image in image series template so it gets replicated to all new images
       const imageSeriesTemplate: MapImage = imageSeries.mapImages.template
-      const circle: Circle = imageSeriesTemplate.createChild(Circle)
-      circle.radius = 6
+      circle = imageSeriesTemplate.createChild(Circle)
       circle.fill = color('#ff5c5d')
-      circle.stroke = color('#FFFFFF')
-      circle.strokeWidth = 2
       circle.nonScaling = true
       circle.tooltipText = '{title}'
 
       // Set property fields
       imageSeriesTemplate.propertyFields.latitude = 'latitude'
       imageSeriesTemplate.propertyFields.longitude = 'longitude'
-
-      // populateMap()
     }
   }, [])
 

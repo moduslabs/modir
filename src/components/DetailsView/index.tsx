@@ -49,7 +49,7 @@ const GitHub: FunctionComponent<GitHubProps> = ({ className, name }) => {
 }
 
 const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite }) => {
-  const { localDate, localTime, profile = {}, real_name: name, tod }: any = modite || {}
+  const { profile = {}, real_name: name, tacos }: any = modite || {}
   const { fields = {}, image_192: image = cachedImgSrc, title } = profile
   const { Location, Title, 'GitHub User': gitHubUser } = fields
 
@@ -77,6 +77,12 @@ const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite 
           <GitHub className={s.gitUser} name={gitHubUser} />
 
           <div className={s.title}>{title}</div>
+        </div>
+      )}
+      {modite && (
+        <div className={s.tacos}>
+          <span className={s.taco}>🌮</span>
+          {tacos}
         </div>
       )}
     </div>
