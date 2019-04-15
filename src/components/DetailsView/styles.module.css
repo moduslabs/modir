@@ -21,20 +21,22 @@
   left: 50%;
   transform: translate(-50%, -5%);
   opacity: 0;
-  transition: transform 250ms, opacity 400ms;
+  transition: transform 250ms, opacity 250ms;
   width: 192px;
   height: 192px;
+  max-width: 40vw;
+  max-height: 40vw;
 }
 
 .activeModiteShown {
-  /* transition-delay: 300ms; */
+  transition-delay: 250ms;
   transform: translateY(0px);
 }
 
 .activeModiteShown>img {
   opacity: 1;
   transform: translate(-50%, -50%);
-  transition-delay: 100ms;
+  transition-delay: 400ms;
 }
 
 .isModite {
@@ -109,4 +111,18 @@
   font-size: 15px;
   opacity: .5;
   margin: 18px 0;
+}
+
+.tacos {
+  padding: 4px 8px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 2px solid #DCAF39;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.taco {
+  margin-right: 8px;
 }
