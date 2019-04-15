@@ -63,7 +63,7 @@ const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite 
 
   return (
     <div className={className}>
-      <img src={image} />
+      <img src={image} alt={name} aria-hidden="true" />
       {modite && (
         <div className={moditeDetailsWrapCLs}>
           <div className={s.name}>{name}</div>
