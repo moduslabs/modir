@@ -4,3 +4,28 @@
   width: 78px;
   text-align: right;
 }
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.appear {
+  animation-name: fadeIn;
+  animation-duration: 400ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+@media (print), (prefers-reduced-motion) {
+  .animated {
+    animation: unset !important;
+    transition: none !important;
+  }
+}
