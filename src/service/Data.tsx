@@ -1,4 +1,5 @@
 import React, { Context, createContext, useEffect, Dispatch } from 'react'
+import get from 'lodash-es/get'
 import Modite, { ListTypes, ModiteProfile } from '../models/Modite'
 import Project from '../models/Project'
 import { VIEW_TYPES, NAME_PROPERTIES } from '../constants/constants'
@@ -42,10 +43,30 @@ const filterRecords = ({
   filter?: string
 }): (Modite | Project)[] => {
   const filterLowered: string = filter.toLowerCase()
-  const name: NameProperties = type === VIEW_TYPES.modites ? NAME_PROPERTIES.realName : NAME_PROPERTIES.name
+  const fieldGetter = (item: Modite | Project) => {
+    const isModite = type === VIEW_TYPES.modites
+
+    if (isModite) {
+      return String(item[NAME_PROPERTIES.realName]).concat(
+        get(item, 'profile.display_name', ''),
+        get(item, 'profile.fields.Title', ''),
+        get(item, 'profile.fields.Location', ''),
+        get(item, `profile.fields['Current Project']`, ''),
+        get(item, `profile.fields['Short Bio']`, ''),
+        get(item, 'profile.fields.locationData.display_name', ''),
+      )
+    }
+
+    return String(item[NAME_PROPERTIES.name])
+  }
 
   return filter.length
-    ? (records as (Modite | Project)[]).filter(item => (item[name] as string).toLowerCase().indexOf(filterLowered) > -1)
+    ? (records as (Modite | Project)[]).filter(
+        item =>
+          fieldGetter(item)
+            .toLowerCase()
+            .indexOf(filterLowered) > -1,
+      )
     : records
 }
 const filterModites = (filter: string): Modite[] => {
