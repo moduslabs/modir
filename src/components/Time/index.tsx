@@ -36,7 +36,7 @@ const RawTime = ({ modite, date }: { modite: Modite; date?: boolean }) => {
     })
 
     return () => cancelAnimationFrame(requestID)
-  })
+  }, [])
 
   return (
     <>
