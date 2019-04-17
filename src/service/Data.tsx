@@ -23,9 +23,9 @@ let rawProjects: Project[] = []
 const getLastName = (modite: Modite): string => {
   let lastName = get(modite, 'profile.last_name', false)
   if (!lastName) {
-    lastName = (get(modite, `real_name`, ' ~').split(' ') || ['~']).slice(-1)
+    lastName = get(modite, `real_name`, ' ~')
   }
-  return lastName
+  return (lastName.split(' ') || ['~']).slice(-1)
 }
 
 const sortRecords = (records: (Modite | Project)[]): void => {
