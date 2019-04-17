@@ -10,16 +10,25 @@ module.exports = function override(config, env) {
   }
 
   // custom service workers
-  config.plugins = config.plugins.map(plugin => {
-    if (plugin.constructor.name === 'GenerateSW') {
-      return new WorkboxWebpackPlugin.InjectManifest({
-        swDest: 'service-worker.js',
-        swSrc: './src/serviceWorkerCustom.js',
-      })
-    }
+  config.plugins = config.plugins
+    .map(plugin => {
+      if (plugin.constructor.name === 'GenerateSW') {
+        return new WorkboxWebpackPlugin.InjectManifest({
+          swDest: 'service-worker.js',
+          swSrc: './src/serviceWorkerCustom.js',
+          chunks: ['page-modites'],
+          exclude: [/\.(svg|png|map)$/, /^manifest.*\.js$/],
+        })
+      }
 
-    return plugin
-  })
+      // skip TS linting in webpack in favor of faster builds
+      if (plugin.constructor.name === 'ForkTsCheckerWebpackPlugin') {
+        return false
+      }
+
+      return plugin
+    })
+    .filter(Boolean)
 
   // custom alias for src/
   config.resolve.alias['@'] = path.resolve(__dirname, 'src')
