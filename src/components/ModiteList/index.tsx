@@ -16,6 +16,8 @@ const VirtualizedList = lazy(() =>
 let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
+const cx: (...args: any) => string = classNames.bind(s)
+
 const ModiteList: FunctionComponent<ModiteListProps> = ({
   activeView,
   filter,
@@ -53,9 +55,11 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     lastScrollOffset = 0
   }
 
-  const cx: (...args: any) => string = classNames.bind(s)
   const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
-  const moditeListWrapCls: string = cx('moditeListWrap', { moditeListWrapCollapsed: collapsed && !isDetails })
+  const moditeListWrapCls: string = cx('moditeListWrap')
+  const moditeListSpacerCls: string = cx('moditeListSpacer', {
+    moditeListSpacerExpanded: !collapsed || isDetails || !!filter,
+  })
   const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
   const searchbarWrapCls: string = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filter.length,
@@ -70,7 +74,8 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   return (
     <>
       <IonPage className={moditeListCtCls}>
-        <BackButton className={s.backButton} />
+        {isDetails ? <BackButton className={s.backButton} /> : null}
+        <div className={moditeListSpacerCls} />
         <div className={moditeListWrapCls}>
           {isDetails ? null : listRecords.length ? (
             <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />

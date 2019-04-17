@@ -79,13 +79,16 @@
 
 .moditeListWrap {
   flex: 1;
-  background: white;
-  transform: translateY(40vh);
-  transition: transform 400ms;
 }
-.moditeListWrapCollapsed {
-  transform: translateY(0px);
-  transition: transform 250ms;
+
+.moditeListSpacer {
+  height: 65px;
+  transition: height 200ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.moditeListSpacerExpanded {
+  height: 40vh;
 }
 
 .mapWindow {
