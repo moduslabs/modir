@@ -55,6 +55,11 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     lastScrollOffset = 0
   }
 
+  const resetScroll = () => {
+    setFilter('')
+    lastScrollOffset = 0
+  }
+
   const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
   const moditeListWrapCls: string = cx('moditeListWrap')
   const moditeListSpacerCls: string = cx('moditeListSpacer', {
@@ -85,11 +90,11 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
           {isDetails ? <DetailsView record={activeRecord} className={activeModiteCls} /> : null}
         </div>
         <div className={tabCtCls}>
-          <Link to="/" className={moditesTabCls} onClick={() => setFilter('')}>
+          <Link to="/" className={moditesTabCls} onClick={resetScroll}>
             <IonIcon ios="ios-people" md="ios-people" />
             Team
           </Link>
-          <Link to="/projects" className={projectsTabCls} onClick={() => setFilter('')}>
+          <Link to="/projects" className={projectsTabCls} onClick={resetScroll}>
             <IonIcon ios="md-clipboard" md="md-clipboard" />
             Projects
           </Link>
