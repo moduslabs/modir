@@ -79,11 +79,11 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
           <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
         <div className={tabCtCls}>
-          <Link to="/" className={moditesTabCls}>
+          <Link to="/" className={moditesTabCls} onClick={() => setFilter('')}>
             <IonIcon ios="ios-people" md="ios-people" />
             Team
           </Link>
-          <Link to="/projects" className={projectsTabCls}>
+          <Link to="/projects" className={projectsTabCls} onClick={() => setFilter('')}>
             <IonIcon ios="md-clipboard" md="md-clipboard" />
             Projects
           </Link>
