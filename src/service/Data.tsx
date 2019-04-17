@@ -18,11 +18,21 @@ const DataContext: Context<any> = createContext([{}, Function])
 let rawModites: Modite[] = []
 let rawProjects: Project[] = []
 
+// Find the last name either by the last name prop or splitting real_name
+// If nothing is found, push it to the bottom (~ comes after Z)
+const getLastName = (modite: Modite): string => {
+  let lastName = get(modite, 'profile.last_name', false)
+  if (!lastName) {
+    lastName = (get(modite, `real_name`, ' ~').split(' ') || ['~']).slice(-1)
+  }
+  return lastName
+}
+
 const sortRecords = (records: (Modite | Project)[]): void => {
   if (records.length) {
     records.sort((prev: Modite | Project, next: Modite | Project) => {
-      const prevName: string | undefined = (prev.profile as ModiteProfile).last_name || ''
-      const nextName: string | undefined = (next.profile as ModiteProfile).last_name || ''
+      const prevName = getLastName(prev)
+      const nextName = getLastName(next)
 
       if (prevName < nextName) return -1
       if (prevName > nextName) return 1
