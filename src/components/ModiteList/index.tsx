@@ -50,6 +50,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
 
     lastFilter = query
     setFilter(query.trim())
+    lastScrollOffset = 0
   }
 
   const cx: (...args: any) => string = classNames.bind(s)
@@ -71,12 +72,12 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
       <IonPage className={moditeListCtCls}>
         <BackButton className={s.backButton} />
         <div className={moditeListWrapCls}>
-          {listRecords.length ? (
+          {isDetails ? null : listRecords.length ? (
             <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />
           ) : (
             <SkeletonList />
           )}
-          <DetailsView record={activeRecord} className={activeModiteCls} />
+          {isDetails ? <DetailsView record={activeRecord} className={activeModiteCls} /> : null}
         </div>
         <div className={tabCtCls}>
           <Link to="/" className={moditesTabCls} onClick={() => setFilter('')}>
