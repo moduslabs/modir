@@ -60,7 +60,7 @@ const filterRecords = ({
     return String(item[NAME_PROPERTIES.name])
   }
 
-  return filter.length
+  return filter.trim().length
     ? (records as (Modite | Project)[]).filter(
         item =>
           fieldGetter(item)

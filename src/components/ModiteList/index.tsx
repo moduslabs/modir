@@ -49,7 +49,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     }
 
     lastFilter = query
-    setFilter(query)
+    setFilter(query.trim())
   }
 
   const cx: (...args: any) => string = classNames.bind(s)
