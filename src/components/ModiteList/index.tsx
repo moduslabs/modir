@@ -16,6 +16,8 @@ const VirtualizedList = lazy(() =>
 let lastFilter = '' // used by onFilter
 let lastScrollOffset = 0 // used by onScroll
 
+const cx: (...args: any) => string = classNames.bind(s)
+
 const ModiteList: FunctionComponent<ModiteListProps> = ({
   activeView,
   filter,
@@ -49,12 +51,20 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     }
 
     lastFilter = query
-    setFilter(query)
+    setFilter(query.trim())
+    lastScrollOffset = 0
   }
 
-  const cx: (...args: any) => string = classNames.bind(s)
+  const resetScroll = () => {
+    setFilter('')
+    lastScrollOffset = 0
+  }
+
   const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
-  const moditeListWrapCls: string = cx('moditeListWrap', { moditeListWrapCollapsed: collapsed && !isDetails })
+  const moditeListWrapCls: string = cx('moditeListWrap')
+  const moditeListSpacerCls: string = cx('moditeListSpacer', {
+    moditeListSpacerExpanded: !collapsed || isDetails || !!filter,
+  })
   const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
   const searchbarWrapCls: string = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filter.length,
@@ -69,21 +79,22 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   return (
     <>
       <IonPage className={moditeListCtCls}>
-        <BackButton className={s.backButton} />
+        {isDetails ? <BackButton className={s.backButton} /> : null}
+        <div className={moditeListSpacerCls} />
         <div className={moditeListWrapCls}>
-          {listRecords.length ? (
+          {isDetails ? null : listRecords.length ? (
             <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />
           ) : (
             <SkeletonList />
           )}
-          <DetailsView record={activeRecord} className={activeModiteCls} />
+          {isDetails ? <DetailsView record={activeRecord} className={activeModiteCls} /> : null}
         </div>
         <div className={tabCtCls}>
-          <Link to="/" className={moditesTabCls}>
+          <Link to="/" className={moditesTabCls} onClick={resetScroll}>
             <IonIcon ios="ios-people" md="ios-people" />
             Team
           </Link>
-          <Link to="/projects" className={projectsTabCls}>
+          <Link to="/projects" className={projectsTabCls} onClick={resetScroll}>
             <IonIcon ios="md-clipboard" md="md-clipboard" />
             Projects
           </Link>
