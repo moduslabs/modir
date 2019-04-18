@@ -3,7 +3,7 @@ import get from 'lodash-es/get'
 import Modite, { ListTypes, ModiteProfile } from '../models/Modite'
 import Project from '../models/Project'
 import { VIEW_TYPES, NAME_PROPERTIES } from '../constants/constants'
-import { NameProperties, DataState, DataAction, DataProps } from '../types/service/Data'
+import { DataState, DataAction, DataProps } from '../types/service/Data'
 import { envOrDefault } from '../utils/env'
 
 const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string

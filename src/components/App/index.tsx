@@ -1,6 +1,6 @@
 import '@ionic/core/css/core.css'
 import '@ionic/core/css/ionic.bundle.css'
-import { IonApp, IonContent } from '@ionic/react'
+import { IonApp } from '@ionic/react'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 // @ts-ignore
@@ -13,7 +13,7 @@ const Modites = lazy(() => import('../../pages/Modites' /* webpackChunkName: "pa
 
 const App = () => (
   <IonApp>
-    <Suspense fallback={<IonContent>Loading...</IonContent>}>
+    <Suspense fallback={<div className="loader" />}>
       <DataProvider>
         <main role="main">
           <Router>

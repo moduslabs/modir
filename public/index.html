@@ -66,13 +66,29 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Modite Directory</title>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        background: black;
+        transition: background 400ms;
+        transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1);
+      }
+      .loader {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        background-image: url('%PUBLIC_URL%/favicon256.png');
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <div style="position: fixed; top: 50%;left: 50%;transform: translate(-50%, -50%);">
-        Only authorized Modites can access this app.
-      </div>
+      <div class="loader"></div>
     </div>
     <!--
       This HTML file is a template.
