@@ -31,10 +31,11 @@ const getLastName = (modite: Modite): string => {
 const sortRecords = (records: (Modite | Project)[]): void => {
   if (records.length) {
     records.sort((prev: Modite | Project, next: Modite | Project) => {
-      const prevName = getLastName(prev).toLowerCase();
-      const nextName = getLastName(next).toLowerCase();
-
-      return prevName > nextName ? 1 : nextName > prevName ? -1 : 0;
+      const prevName = getLastName(prev).toLowerCase()
+      const nextName = getLastName(next).toLowerCase()
+      if (prevName < nextName) return -1
+      if (prevName > nextName) return 1
+      return 0
     })
   }
 }
