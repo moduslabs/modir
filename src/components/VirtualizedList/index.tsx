@@ -55,4 +55,4 @@ const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
   )
 }
 
-export default VirtualizedList
+export default React.memo(VirtualizedList)

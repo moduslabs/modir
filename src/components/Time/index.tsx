@@ -9,43 +9,33 @@ interface TimeData {
 }
 
 const RawTime = ({ modite, date }: { modite: Modite; date?: boolean }) => {
-  const [data, setData]: [TimeData, React.Dispatch<any>] = useState({})
+  const now = new Date()
+  const time = now.toLocaleString('en-US', {
+    timeZone: modite.tz,
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  })
 
-  useEffect(() => {
-    const requestID = requestAnimationFrame(() => {
-      const now = new Date()
-      const time = now.toLocaleString('en-US', {
-        timeZone: modite.tz,
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      })
+  const hour = Number(
+    now.toLocaleString('en-US', {
+      timeZone: modite.tz,
+      hour: 'numeric',
+      hour12: false,
+    }),
+  )
 
-      const hour = Number(
-        now.toLocaleString('en-US', {
-          timeZone: modite.tz,
-          hour: 'numeric',
-          hour12: false,
-        }),
-      )
-
-      const isNight = hour < 8 || hour > 22
-      const tod: string = isNight ? '🌙' : '☀️'
-
-      setData({ tod, time })
-    })
-
-    return () => cancelAnimationFrame(requestID)
-  }, [])
+  const isNight = hour < 8 || hour > 22
+  const tod: string = isNight ? '🌙' : '☀️'
 
   return (
     <>
-      <span aria-hidden="true" className={cx({ [s.appear]: !!data.tod })}>
-        {data.tod}
+      <span aria-hidden="true" className={cx({ [s.appear]: !!tod })}>
+        {tod}
       </span>
-      <time dateTime={data.time} className={cx(s.localTime, { [s.appear]: !!data.tod })}>
+      <time dateTime={time} className={cx(s.localTime, { [s.appear]: !!tod })}>
         {date ? `${modite.localDate} - ` : null}
-        {data.time}
+        {time}
       </time>
     </>
   )

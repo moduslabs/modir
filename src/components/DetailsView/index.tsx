@@ -56,7 +56,7 @@ const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite 
   if (image) cachedImgSrc = image
 
   const cx = classNames.bind(s)
-  className = cx(s.moditeCt, s.isModite, {
+  className = cx(s.moditeCt, {
     [className as string]: name,
   })
   const moditeDetailsWrapCLs: string = cx(s.moditeDetails, s.moditeDetailsShown)

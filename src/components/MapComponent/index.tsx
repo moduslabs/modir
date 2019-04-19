@@ -19,11 +19,15 @@ let map: MapChart
 let imageSeries: MapImageSeries
 let cachedRecords: string
 let circle: Circle
+let timeout: number
 
 const updateMap = (markerData: any) => {
   if (imageSeries.data === markerData) return
+  clearTimeout(timeout)
 
   requestAnimationFrame(() => {
+    imageSeries.deepInvalidate()
+
     if (markerData.length === 1) {
       const { latitude, longitude }: LatLon = markerData[0]
 
@@ -32,15 +36,16 @@ const updateMap = (markerData: any) => {
       circle.stroke = color('#FF5C5D')
       circle.strokeOpacity = 0.3
       imageSeries.data = markerData
+      imageSeries.show(0)
       map.zoomToGeoPoint({ latitude, longitude }, 5, true, 500)
     } else {
       circle.radius = 6
       circle.strokeWidth = 2
       circle.stroke = color('#FFFFFF')
       circle.strokeOpacity = 1
-      map.goHome(500)
+      map.goHome(0)
       imageSeries.hide()
-      setTimeout(() => {
+      timeout = window.setTimeout(() => {
         imageSeries.data = markerData
         imageSeries.show(1500)
       }, 500)

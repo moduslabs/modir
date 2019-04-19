@@ -1,4 +1,5 @@
 import React, { lazy, useContext, FunctionComponent, LazyExoticComponent } from 'react'
+import cx from 'classnames'
 import { IonPage } from '@ionic/react'
 import s from './styles.module.css'
 import DataContext from '../../service/Data'
@@ -34,6 +35,7 @@ const Modites: FunctionComponent<RouteComponentProps> = () => {
 
   if (!isProjects && !isModites) {
     const date: Date = new Date()
+
     if (activeView === VIEW_TYPES.project) {
       activeRecord = rawProjects.find((project: Project) => project.id === id)
       if (activeRecord) {
@@ -53,6 +55,10 @@ const Modites: FunctionComponent<RouteComponentProps> = () => {
     }
   }
 
+  const mapWrapCls = cx(s.mapWrap, {
+    [s.mapWrapWide]: mapRecords.length !== 1,
+  })
+
   return (
     <IonPage>
       <ModiteList
@@ -63,7 +69,7 @@ const Modites: FunctionComponent<RouteComponentProps> = () => {
         setFilter={setFilter}
       />
       <div className={`MapCt ${s.mapCt}`}>
-        <div className={s.mapWrap}>
+        <div className={mapWrapCls}>
           <MapComponent mapRecords={mapRecords} />
           <div className={s.mapOverlay} />
         </div>
