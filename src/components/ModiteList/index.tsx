@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent, lazy } from 'react'
+import React, { useState, FunctionComponent, lazy, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
@@ -27,16 +27,23 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
 }) => {
   const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
   const isDetails: boolean = activeView === VIEW_TYPES.project || activeView === VIEW_TYPES.modite
+  const searchBarRef = useRef<HTMLLabelElement>(null)
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
-    const threshold = 10 // scroll threshold to hit before acting on the layout
+    const threshold = 1 // scroll threshold to hit before acting on the layout
 
     if (
       (lastScrollOffset <= threshold && scrollOffset > threshold) ||
       (lastScrollOffset >= threshold && scrollOffset < threshold)
     ) {
       requestAnimationFrame(() => {
-        setCollapsed(scrollOffset > threshold)
+        const el: HTMLLabelElement = searchBarRef.current as HTMLLabelElement
+
+        if (scrollOffset > threshold) {
+          el.classList.add(s.searchbarWrapCollapsed)
+        } else {
+          el.classList.remove(s.searchbarWrapCollapsed)
+        }
       })
     }
 
@@ -62,9 +69,9 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
 
   const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
   const moditeListWrapCls: string = cx('moditeListWrap')
-  const moditeListSpacerCls: string = cx('moditeListSpacer', {
-    moditeListSpacerExpanded: !collapsed || isDetails || !!filter,
-  })
+  // const moditeListSpacerCls: string = cx('moditeListSpacer', {
+  //   moditeListSpacerExpanded: !collapsed || isDetails || !!filter,
+  // })
   const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
   const searchbarWrapCls: string = cx('searchbarWrap', {
     searchbarWrapCollapsed: collapsed || filter.length,
@@ -80,7 +87,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     <>
       <IonPage className={moditeListCtCls}>
         {isDetails ? <BackButton className={s.backButton} /> : null}
-        <div className={moditeListSpacerCls} />
+        {/* <div className={moditeListSpacerCls} /> */}
         <div className={moditeListWrapCls}>
           {isDetails ? null : listRecords.length ? (
             <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />
@@ -114,7 +121,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
             // onClick={() => console.log('clicked')}
           />
         </div>
-        <label className={searchbarWrapCls}>
+        <label ref={searchBarRef} className={searchbarWrapCls}>
           <IonSearchbar
             mode="md"
             debounce={200}
