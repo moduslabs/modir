@@ -26,3 +26,11 @@ yarn-error.log*
 /api/.serverless
 /api/dist
 /artifacts
+
+# webstorm
+.idea/
+.idea_modules/
+*.iml
+modules.xml
+.idea/misc.xml
+*.ipr
