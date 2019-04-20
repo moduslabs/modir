@@ -41,7 +41,8 @@
 }
 
 .isProject {
-  padding: 50px 0 0 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .moditeDetails {
@@ -56,17 +57,18 @@
 }
 
 .projectDetails {
-  opacity: 0;
   height: 100%;
-}
-
-.projectDetailsShown {
-  opacity: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .name {
   font-weight: bold;
   font-size: 22px;
+}
+.isProject .name {
+  padding-top: 50px;
 }
 
 .location {
@@ -125,4 +127,8 @@
 
 .taco {
   margin-right: 8px;
+}
+
+.moditeListWrap {
+  flex: 1;
 }

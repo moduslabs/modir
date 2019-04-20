@@ -185,7 +185,8 @@
   opacity: 0;
 }
 
-.detailsView ~ div[class*="MapCt"] div[class*="MapEl"] {
+.detailsView ~ div[class*="MapCt"] div[class*="MapEl"],
+.detailsView ~ div[class*="MapCt"] div[class*="MapEl"] + div {
   top: -9vh;
 }
 

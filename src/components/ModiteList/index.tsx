@@ -89,10 +89,20 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
         {isDetails ? <BackButton className={s.backButton} /> : null}
         <div className={moditeListWrapCls}>
           {isProjects && listRecords.length && (
-            <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffsetProjects} />
+            <VirtualizedList
+              addSpacerRow={true}
+              records={listRecords}
+              onScroll={onScroll}
+              lastScrollOffset={lastScrollOffsetProjects}
+            />
           )}
           {isModites && listRecords.length && (
-            <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffsetModites} />
+            <VirtualizedList
+              addSpacerRow={true}
+              records={listRecords}
+              onScroll={onScroll}
+              lastScrollOffset={lastScrollOffsetModites}
+            />
           )}
           {!isDetails && !listRecords.length && <SkeletonList />}
           <DetailsView record={activeRecord} className={activeModiteCls} />

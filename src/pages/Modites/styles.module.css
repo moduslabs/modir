@@ -10,6 +10,7 @@
 .mapWrap {
   height: 50vh;
   margin: 0 auto;
+  position: relative;
 }
 .mapWrapWide {
   height: 45vh;

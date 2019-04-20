@@ -7,24 +7,29 @@ import s from './styles.module.css'
 import VirtualizedListProps from '../../types/components/VirtualizedList'
 import Modite from '../../models/Modite'
 
-const getItemSize = (index: number) => {
-  return index === 0 ? document.body.clientHeight * 0.4 : 60
-}
-
 const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
   records,
   lastScrollOffset,
   onScroll = () => {},
+  addSpacerRow = false,
 }) => {
+  const getItemSize = (index: number) => {
+    if (!addSpacerRow) {
+      return 60
+    } else {
+      return index === 0 ? document.body.clientHeight * 0.4 : 60
+    }
+  }
+
   const pseudoRecord: Modite = {
     id: '30000000',
   }
-  const localRecords = [pseudoRecord, ...records]
+  const localRecords = addSpacerRow ? [pseudoRecord, ...records] : records
 
   const Row: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
     <>
-      {index === 0 && <div style={style} />}
-      {index !== 0 && (
+      {addSpacerRow && index === 0 && <div style={style} />}
+      {(!addSpacerRow || (addSpacerRow && index !== 0)) && (
         <Link to={`/details/${localRecords[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
           <ModiteListItem item={localRecords[index]} key={localRecords[index].id} />
         </Link>
