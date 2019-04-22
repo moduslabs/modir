@@ -177,7 +177,11 @@ jobs:
 
       - run:
           name: Fix NPM perm issues
-          command: npm set prefix=/home/circleci/npm && echo 'export PATH=$HOME/circleci/npm/bin:$PATH' >> /home/circleci/.bashrc
+          command: npm set prefix=/home/circleci/npm && echo 'export PATH=/home/circleci/npm/bin:$PATH' >> /home/circleci/.bashrc && source /home/circleci/.bashrc
+
+      - run:
+          name: Listing
+          command: ls /home/circleci/npm
 
       - run:
           name: Install Gimbal
