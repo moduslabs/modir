@@ -138,7 +138,7 @@ jobs:
 
   gimbal:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:latest-browsers
 
     working_directory: ~/repo
 
