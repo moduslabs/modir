@@ -180,12 +180,12 @@ jobs:
           command: npm set prefix=/home/circleci/npm && echo 'export PATH=/home/circleci/npm/bin:$PATH' >> /home/circleci/.bashrc && source /home/circleci/.bashrc
 
       - run:
-          name: Listing
-          command: ls /home/circleci/npm
-
-      - run:
           name: Install Gimbal
           command: npm install -g @modus/gimbal
+
+      - run:
+          name: Listing
+          command: ls /home/circleci/npm/bin
 
       - run:
           name: Run Gimbal
