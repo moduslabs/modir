@@ -13,12 +13,7 @@ aliases:
     keys:
       - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
       - v1-dist-master
-      - v1-dist-
-  - &restore-bundlesize
-    keys:
-      - v1-bundlesize-{{ .Environment.CIRCLE_SHA1 }}
-      - v1-bundlesize-master
-      - v1-bundlesize-
+      - v1-dist-\
   - &restore-lighthouse
     keys:
       - v1-lighthouse-{{ .Environment.CIRCLE_SHA1 }}
@@ -71,26 +66,6 @@ jobs:
           key: v1-webpackcache-{{ checksum "package.json" }}
           paths:
             - node_modules/.cache
-
-  check-sizes:
-    docker:
-      - image: circleci/node:10
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      - restore_cache: *restore-dist-cache
-      - restore_cache: *restore-bundlesize
-
-      - run:
-          name: Check Sizes
-          command: npm run bundlesize
-
-      - save_cache:
-          key: v1-bundlesize-master
-          paths:
-            - node_modules
 
   lighthouse:
     docker:
@@ -186,7 +161,6 @@ jobs:
       - run:
           name: Run Gimbal
           command: |
-            ls -ln
             source $BASH_ENV
             gimbal
 
@@ -208,10 +182,6 @@ workflows:
       - gimbal:
           requires:
             - build-pwa
-
-      # - check-sizes:
-      #     requires:
-      #       - build-pwa
 
       # - lighthouse:
       #     requires:
