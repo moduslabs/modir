@@ -188,8 +188,12 @@ jobs:
           command: ls /home/circleci/npm/bin
 
       - run:
+          name: echo $PATH
+          command: echo $PATH
+
+      - run:
           name: Run Gimbal
-          command: gimbal
+          command: source /home/circleci/.bashrc && gimbal
 
 
 workflows:
