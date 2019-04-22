@@ -169,7 +169,7 @@ jobs:
 
     steps:
       - checkout
-      - restore_cache: *restore-npm-cache
+      - restore_cache: *restore-dist-cache
 
       - run:
           name: Set ~/.npmrc
@@ -202,14 +202,14 @@ workflows:
           requires:
             - build-pwa
 
-      - check-sizes:
-          requires:
-            - build-pwa
+      # - check-sizes:
+      #     requires:
+      #       - build-pwa
 
-      - lighthouse:
-          requires:
-            - build-pwa
-          filters:
-            branches:
-              ignore:
-                - master
+      # - lighthouse:
+      #     requires:
+      #       - build-pwa
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
