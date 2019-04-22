@@ -186,9 +186,7 @@ jobs:
       - run:
           name: Run Gimbal
           command: |
-            echo $PATH
-            npm set prefix=/home/circleci/npm
-            echo 'export PATH=/home/circleci/npm/bin:$PATH' >> $BASH_ENV
+            ls -ln
             source $BASH_ENV
             gimbal
 
