@@ -172,16 +172,16 @@ jobs:
       - restore_cache: *restore-dist-cache
 
       - run:
-          name: Set ~/.npmrc
-          command: printf "@modus:registry=https://npm.modus.app\n//npm.modus.app/:_authToken=\"%s\"" "$MODUS_NPM_TOKEN" >> ~/.npmrc
+          name: Setup npm
+          command: |
+            printf "@modus:registry=https://npm.modus.app\n//npm.modus.app/:_authToken=\"%s\"" "$MODUS_NPM_TOKEN" >> ~/.npmrc
+            npm set prefix=/home/circleci/npm
+            echo 'export PATH=/home/circleci/npm/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
 
       - run:
           name: Install Gimbal
           command: npm install -g @modus/gimbal
-
-      - run:
-          name: Listing
-          command: ls /home/circleci/npm/bin
 
       - run:
           name: Run Gimbal
