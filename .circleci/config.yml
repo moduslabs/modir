@@ -173,7 +173,7 @@ jobs:
 
       - run:
           name: Set ~/.npmrc
-          command: echo "//npm.modus.app/:_authToken=\"$NPM_TOKEN\"" >> ~/.npmrc
+          command: printf "@modus:registry=https://npm.modus.app\n//npm.modus.app/:_authToken=\"%s\"" "$MODUS_NPM_TOKEN" >> ~/.npmrc
 
       - run:
           name: Install Gimbal
