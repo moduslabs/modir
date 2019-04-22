@@ -1,12 +1,4 @@
 configs:
-  lighthouse:
-    threshold:
-      accessibility: 90
-      best-practices: 90
-      performance: 60
-      pwa: 70
-      seo: 100
-
   size:
     -
       path: ./build/precache-*.js

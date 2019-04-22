@@ -160,10 +160,7 @@ jobs:
 
       - run:
           name: Run Gimbal
-          command: |
-            source $BASH_ENV
-            gimbal
-
+          command: source $BASH_ENV && gimbal
 
 workflows:
   version: 2
