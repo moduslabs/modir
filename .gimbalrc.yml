@@ -1,20 +1,28 @@
 configs:
+  lighthouse:
+    threshold:
+      accessibility: 90
+      best-practices: 90
+      performance: 60
+      pwa: 70
+      seo: 100
+
   size:
     -
       path: ./build/precache-*.js
-      maxSize: 50 KB
+      maxSize: 500 B
     -
       path: ./build/static/js/*.chunk.js
-      maxSize: 300 KB
+      maxSize: 1 MB
     -
       path: ./build/static/js/runtime*.js
-      maxSize: 30 KB
+      maxSize: 10 KB
     -
       path: ./build/
-      maxSize: 700 KB
+      maxSize: 18 MB
 
 outputs:
   json: artifacts/results.json
 
 jobs:
-  - cra
+  - cra --no-calculate-unused-source
