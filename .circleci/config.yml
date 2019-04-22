@@ -176,6 +176,10 @@ jobs:
           command: printf "@modus:registry=https://npm.modus.app\n//npm.modus.app/:_authToken=\"%s\"" "$MODUS_NPM_TOKEN" >> ~/.npmrc
 
       - run:
+          name: Fix NPM perm issues
+          command: npm set prefix=/home/circleci/npm && echo 'export PATH=$HOME/circleci/npm/bin:$PATH' >> /home/circleci/.bashrc
+
+      - run:
           name: Install Gimbal
           command: npm install -g @modus/gimbal
 
