@@ -161,6 +161,29 @@ jobs:
           name: Run Test Typescript Compile
           command: npm run check:compile
 
+  gimbal:
+    docker:
+      - image: circleci/node:10
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: *restore-npm-cache
+
+      - run:
+          name: Set ~/.npmrc
+          command: echo "//npm.modus.app/:_authToken=\"$NPM_TOKEN\"" >> ~/.npmrc
+
+      - run:
+          name: Install Gimbal
+          command: npm install -g @modus/gimbal
+
+      - run:
+          name: Run Gimbal
+          command: gimbal
+
+
 workflows:
   version: 2
   build-and-test:
@@ -174,6 +197,10 @@ workflows:
       - build-pwa:
           requires:
             - lint
+
+      - gimbal:
+          requires:
+            - build-pwa
 
       - check-sizes:
           requires:

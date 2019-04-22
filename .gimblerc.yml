@@ -1,0 +1,20 @@
+configs:
+  size:
+    -
+      path: ./build/precache-*.js
+      maxSize: 50 KB
+    -
+      path: ./build/static/js/*.chunk.js
+      maxSize: 300 KB
+    -
+      path: ./build/static/js/runtime*.js
+      maxSize: 30 KB
+    -
+      path: ./build/
+      maxSize: 700 KB
+
+outputs:
+  json: artifacts/results.json
+
+jobs:
+  - cra
