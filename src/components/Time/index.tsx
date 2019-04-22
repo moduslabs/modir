@@ -8,44 +8,59 @@ interface TimeData {
   tod?: string
 }
 
+var event = new Event('timestamp')
+
+let minute: number
+
+setInterval(() => {
+  const date: Date = new Date()
+  const currentMinutes: number = date.getMinutes()
+
+  if (minute && currentMinutes !== minute) {
+    window.dispatchEvent(event)
+  }
+
+  minute = currentMinutes
+}, 1000)
+
 const RawTime = ({ modite, date }: { modite: Modite; date?: boolean }) => {
-  const [data, setData]: [TimeData, React.Dispatch<any>] = useState({})
+  const [now, setNow]: [Date, React.Dispatch<Date>] = useState(new Date())
+
+  const time: string = now.toLocaleString('en-US', {
+    timeZone: modite.tz,
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  })
+
+  const hour: number = Number(
+    now.toLocaleString('en-US', {
+      timeZone: modite.tz,
+      hour: 'numeric',
+      hour12: false,
+    }),
+  )
+
+  const setTimestamp = () => {
+    setNow(new Date())
+  }
+
+  const isNight = hour < 8 || hour > 22
+  const tod: string = isNight ? '🌙' : '☀️'
 
   useEffect(() => {
-    const requestID = requestAnimationFrame(() => {
-      const now = new Date()
-      const time = now.toLocaleString('en-US', {
-        timeZone: modite.tz,
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      })
-
-      const hour = Number(
-        now.toLocaleString('en-US', {
-          timeZone: modite.tz,
-          hour: 'numeric',
-          hour12: false,
-        }),
-      )
-
-      const isNight = hour < 8 || hour > 22
-      const tod: string = isNight ? '🌙' : '☀️'
-
-      setData({ tod, time })
-    })
-
-    return () => cancelAnimationFrame(requestID)
+    window.addEventListener('timestamp', setTimestamp)
+    return () => window.removeEventListener('timestamp', setTimestamp)
   }, [])
 
   return (
     <>
-      <span aria-hidden="true" className={cx({ [s.appear]: !!data.tod })}>
-        {data.tod}
+      <span aria-hidden="true" className={cx({ [s.appear]: !!tod })}>
+        {tod}
       </span>
-      <time dateTime={data.time} className={cx(s.localTime, { [s.appear]: !!data.tod })}>
+      <time dateTime={time} className={cx(s.localTime, { [s.appear]: !!tod })}>
         {date ? `${modite.localDate} - ` : null}
-        {data.time}
+        {time}
       </time>
     </>
   )

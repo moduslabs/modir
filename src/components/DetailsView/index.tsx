@@ -1,7 +1,6 @@
 import React, { lazy, FunctionComponent } from 'react'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
-// import VirtualizedList from '../VirtualizedList'
 import Project from '../../models/Project'
 import { IonIcon } from '@ionic/react'
 import Modite from '../../models/Modite'
@@ -56,7 +55,7 @@ const ModiteDetail: FunctionComponent<ModiteDetailProps> = ({ className, modite 
   if (image) cachedImgSrc = image
 
   const cx = classNames.bind(s)
-  className = cx(s.moditeCt, s.isModite, {
+  className = cx(s.moditeCt, {
     [className as string]: name,
   })
   const moditeDetailsWrapCLs: string = cx(s.moditeDetails, s.moditeDetailsShown)
@@ -97,16 +96,17 @@ const ProjectDetail: FunctionComponent<ProjectDetailProps> = ({ className, proje
   className = cx(s.moditeCt, s.isProject, {
     [className as string]: name,
   })
-  const projectDetailsWrapCLs: string = cx(s.projectDetails, s.projectDetailsShown)
 
   return (
     <div className={className}>
-      <div className={projectDetailsWrapCLs}>
+      <div className={s.projectDetails}>
         <div className={s.name}>{name}</div>
 
         <div className={s.userCount}>{userCount}</div>
 
-        {userCount && <VirtualizedList records={users} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />}
+        <div className={s.moditeListWrap}>
+          {userCount && <VirtualizedList records={users} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />}
+        </div>
       </div>
     </div>
   )
