@@ -1,4 +1,17 @@
 configs:
+  heap-snapshot:
+    threshold:
+      Documents: 2
+      Frames: 1
+      Nodes: 750
+      RecalcStyleCount: 9
+  lighthouse:
+    threshold:
+      accessibility: 93
+      'best-practices': 100
+      performance: 70
+      pwa: 75
+      seo: 100
   size:
     -
       path: ./build/precache-*.js
