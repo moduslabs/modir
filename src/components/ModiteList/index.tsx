@@ -8,10 +8,18 @@ import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import { VIEW_TYPES } from '../../constants/constants'
 import ModiteListProps, { FilterEvent } from '../../types/components/ModiteList'
+import ModiteImage from "../ModiteImage";
+import Time from "../Time";
+import Modite from "../../models/Modite";
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
 )
+
+const moditeNotFound = {
+  real_name: 'No modite found',
+  tz: (Intl.DateTimeFormat().resolvedOptions().timeZone)
+}
 
 let lastFilter = '' // used by onFilter
 let lastScrollOffsetModites = 0 // used by onScroll
@@ -104,7 +112,14 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
               lastScrollOffset={lastScrollOffsetModites}
             />
           )}
-          {!isDetails && !listRecords.length && <SkeletonList />}
+          {!isDetails && !listRecords.length && (
+            <VirtualizedList
+              addSpacerRow={true}
+              records={[moditeNotFound]}
+              onScroll={0}
+              lastScrollOffset={0}
+            />
+            )}
           <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
         <div className={tabCtCls}>
