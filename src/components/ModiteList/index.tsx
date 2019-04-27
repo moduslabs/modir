@@ -8,9 +8,6 @@ import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import { VIEW_TYPES } from '../../constants/constants'
 import ModiteListProps, { FilterEvent } from '../../types/components/ModiteList'
-import ModiteImage from "../ModiteImage";
-import Time from "../Time";
-import Modite from "../../models/Modite";
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
