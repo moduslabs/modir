@@ -15,7 +15,7 @@ const VirtualizedList = lazy(() =>
 
 const moditeNotFound = {
   real_name: 'No modite found',
-  tz: (Intl.DateTimeFormat().resolvedOptions().timeZone)
+  tz: (Intl.DateTimeFormat().resolvedOptions().timeZone) // client timezone
 }
 
 let lastFilter = '' // used by onFilter
@@ -109,7 +109,8 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
               lastScrollOffset={lastScrollOffsetModites}
             />
           )}
-          {!isDetails && !listRecords.length && (
+          {!isDetails && !listRecords.length && !filter.length && <SkeletonList />}
+          {!isDetails && !listRecords.length && filter.length && (
             <VirtualizedList
               addSpacerRow={true}
               records={[moditeNotFound]}
