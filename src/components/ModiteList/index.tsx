@@ -109,7 +109,6 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
               lastScrollOffset={lastScrollOffsetModites}
             />
           )}
-          {!isDetails && !listRecords.length && !filter.length && <SkeletonList />}
           {!isDetails && !listRecords.length && filter.length && (
             <VirtualizedList
               addSpacerRow={true}
@@ -118,6 +117,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
               lastScrollOffset={0}
             />
             )}
+          {!isDetails && !listRecords.length && !filter.length && <SkeletonList />}
           <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
         <div className={tabCtCls}>
