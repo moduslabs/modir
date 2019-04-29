@@ -77,14 +77,15 @@ jobs:
       - restore_cache: *restore-dist-cache
       - run:
           name: Setup npm
+          # need to avoid using sudo here, circleci user does not
+          # have permission to write to default npm dir
           command: |
-            printf "@modus:registry=https://npm.modus.app\n//npm.modus.app/:_authToken=\"%s\"" "$MODUS_NPM_TOKEN" >> ~/.npmrc
             npm set prefix=/home/circleci/npm
             echo 'export PATH=/home/circleci/npm/bin:$PATH' >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Install Gimbal
-          command: npm install -g @modus/gimbal
+          command: npm install -g @modus/gimbal --registry https://npm.modus.app
       - run:
           name: Run Gimbal
           command: source $BASH_ENV && gimbal
