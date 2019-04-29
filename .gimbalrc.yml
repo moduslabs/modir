@@ -10,8 +10,8 @@ configs:
   lighthouse:
     threshold:
       accessibility: 93
-      'best-practices': 100
-      performance: 70
+      'best-practices': 90
+      performance: 60
       pwa: 75
       seo: 100
   size:
