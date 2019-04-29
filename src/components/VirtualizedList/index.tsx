@@ -1,20 +1,40 @@
 import React, { FunctionComponent } from 'react'
-import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
+import { VariableSizeList as List, ListChildComponentProps } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { Link } from 'react-router-dom'
 import ModiteListItem from '../ModiteListItem'
 import s from './styles.module.css'
 import VirtualizedListProps from '../../types/components/VirtualizedList'
+import Modite from '../../models/Modite'
 
 const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
   records,
   lastScrollOffset,
   onScroll = () => {},
+  addSpacerRow = false,
 }) => {
+  const getItemSize = (index: number) => {
+    if (!addSpacerRow) {
+      return 60
+    } else {
+      return index === 0 ? document.body.clientHeight * 0.4 : 60
+    }
+  }
+
+  const pseudoRecord: Modite = {
+    id: '30000000',
+  }
+  const localRecords = addSpacerRow ? [pseudoRecord, ...records] : records
+
   const Row: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <Link to={`/details/${records[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
-      <ModiteListItem item={records[index]} key={records[index].id} />
-    </Link>
+    <>
+      {addSpacerRow && index === 0 && <div style={style} />}
+      {(!addSpacerRow || (addSpacerRow && index !== 0)) && (
+        <Link to={`/details/${localRecords[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
+          <ModiteListItem item={localRecords[index]} key={localRecords[index].id} />
+        </Link>
+      )}
+    </>
   )
 
   return (
@@ -23,13 +43,13 @@ const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
         <>
           <List
             className="List"
-            itemSize={60}
-            itemCount={(records && records.length) || 10}
+            itemSize={getItemSize}
+            itemCount={localRecords.length}
             height={height}
             width={width}
             initialScrollOffset={lastScrollOffset}
             onScroll={onScroll}
-            itemKey={(index: number) => records[index].id || (index.toString() as string)}
+            itemKey={(index: number) => localRecords[index].id || (index.toString() as string)}
             overscanCount={30}
           >
             {Row}
@@ -40,4 +60,4 @@ const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
   )
 }
 
-export default VirtualizedList
+export default React.memo(VirtualizedList)

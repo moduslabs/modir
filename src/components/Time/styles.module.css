@@ -1,6 +1,6 @@
 .localTime {
   font-size: 15px;
-  opacity: 0.8;
+  color: #888888;
   width: 78px;
   text-align: right;
 }
@@ -17,6 +17,7 @@
 }
 
 .appear {
+  margin-left: 6px;
   animation-name: fadeIn;
   animation-duration: 400ms;
   animation-fill-mode: both;

@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent, lazy } from 'react'
+import React, { FunctionComponent, lazy, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
@@ -14,7 +14,8 @@ const VirtualizedList = lazy(() =>
 )
 
 let lastFilter = '' // used by onFilter
-let lastScrollOffset = 0 // used by onScroll
+let lastScrollOffsetModites = 0 // used by onScroll
+let lastScrollOffsetProjects = 0 // used by onScroll
 
 const cx: (...args: any) => string = classNames.bind(s)
 
@@ -25,22 +26,30 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   activeRecord,
   setFilter,
 }) => {
-  const [collapsed, setCollapsed]: [boolean, React.Dispatch<any>] = useState(false)
   const isDetails: boolean = activeView === VIEW_TYPES.project || activeView === VIEW_TYPES.modite
+  const isProjects = activeView === VIEW_TYPES.projects
+  const isModites = activeView === VIEW_TYPES.modites
+  const searchBarRef = useRef<HTMLLabelElement>(null)
+  const lastScrollOffset = isProjects ? lastScrollOffsetProjects : lastScrollOffsetModites
 
   const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
-    const threshold = 10 // scroll threshold to hit before acting on the layout
+    const doCollapse = scrollOffset > 0
 
-    if (
-      (lastScrollOffset <= threshold && scrollOffset > threshold) ||
-      (lastScrollOffset >= threshold && scrollOffset < threshold)
-    ) {
-      requestAnimationFrame(() => {
-        setCollapsed(scrollOffset > threshold)
-      })
+    requestAnimationFrame(() => {
+      const el: HTMLLabelElement = searchBarRef.current as HTMLLabelElement
+
+      if (doCollapse || filter) {
+        el.classList.add(s.searchbarWrapCollapsed)
+      } else {
+        el.classList.remove(s.searchbarWrapCollapsed)
+      }
+    })
+
+    if (isProjects) {
+      lastScrollOffsetProjects = scrollOffset
+    } else {
+      lastScrollOffsetModites = scrollOffset
     }
-
-    lastScrollOffset = scrollOffset
   }
 
   const onFilter = (event: FilterEvent): void => {
@@ -52,25 +61,23 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
 
     lastFilter = query
     setFilter(query.trim())
-    lastScrollOffset = 0
   }
 
   const resetScroll = () => {
     setFilter('')
-    lastScrollOffset = 0
   }
+
+  // adjusts the searchbar appropriately on route change
+  useEffect(() => {
+    onScroll({ scrollOffset: lastScrollOffset })
+  }, [activeView])
 
   const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
   const moditeListWrapCls: string = cx('moditeListWrap')
-  const moditeListSpacerCls: string = cx('moditeListSpacer', {
-    moditeListSpacerExpanded: !collapsed || isDetails || !!filter,
-  })
   const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
   const searchbarWrapCls: string = cx('searchbarWrap', {
-    searchbarWrapCollapsed: collapsed || filter.length,
     searchbarWrapHidden: !!isDetails,
   })
-  const searchbarSpacerCls: string = cx('searchbarSpacer', { searchbarSpacerCollapsed: collapsed || filter.length })
   const moditesTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.modites })
   const projectsTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.projects })
   const activeModiteCls: string = cx({ activeModiteShown: !!isDetails })
@@ -80,14 +87,25 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
     <>
       <IonPage className={moditeListCtCls}>
         {isDetails ? <BackButton className={s.backButton} /> : null}
-        <div className={moditeListSpacerCls} />
         <div className={moditeListWrapCls}>
-          {isDetails ? null : listRecords.length ? (
-            <VirtualizedList records={listRecords} onScroll={onScroll} lastScrollOffset={lastScrollOffset} />
-          ) : (
-            <SkeletonList />
+          {isProjects && listRecords.length && (
+            <VirtualizedList
+              addSpacerRow={true}
+              records={listRecords}
+              onScroll={onScroll}
+              lastScrollOffset={lastScrollOffsetProjects}
+            />
           )}
-          {isDetails ? <DetailsView record={activeRecord} className={activeModiteCls} /> : null}
+          {isModites && listRecords.length && (
+            <VirtualizedList
+              addSpacerRow={true}
+              records={listRecords}
+              onScroll={onScroll}
+              lastScrollOffset={lastScrollOffsetModites}
+            />
+          )}
+          {!isDetails && !listRecords.length && <SkeletonList />}
+          <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
         <div className={tabCtCls}>
           <Link to="/" className={moditesTabCls} onClick={resetScroll}>
@@ -114,7 +132,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
             // onClick={() => console.log('clicked')}
           />
         </div>
-        <label className={searchbarWrapCls}>
+        <label ref={searchBarRef} className={searchbarWrapCls}>
           <IonSearchbar
             mode="md"
             debounce={200}
@@ -123,7 +141,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
             onIonChange={onFilter}
             class={s.searchbar}
           />
-          <div className={searchbarSpacerCls} />
+          <div className={s.searchbarSpacer} />
         </label>
       </div>
     </>
