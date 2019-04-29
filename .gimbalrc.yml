@@ -5,13 +5,13 @@ configs:
       Frames: 1
       JSHeapTotalSize: 23356000
       JSHeapUsedSize: 15068000
-      Nodes: 750
+      Nodes: 800
       RecalcStyleCount: 9
   lighthouse:
     threshold:
       accessibility: 93
       'best-practices': 90
-      performance: 60
+      performance: 50
       pwa: 75
       seo: 100
   size:
