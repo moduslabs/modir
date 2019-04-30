@@ -9,8 +9,6 @@ import { envOrDefault } from '../utils/env'
 const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
 const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
-const CLOUDFLARE_ID = envOrDefault('REACT_APP_CLOUDFLARE_ID') as string
-const CLOUDFLARE_SECRET = envOrDefault('REACT_APP_CLOUDFLARE_SECRET') as string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -179,10 +177,10 @@ const initialState: DataState = {
   rawProjects: [],
 }
 
-const headers: Headers = new Headers({
-  'CF-Access-Client-Id': CLOUDFLARE_ID,
-  'CF-Access-Client-Secret': CLOUDFLARE_SECRET,
-})
+const getHeaders = () =>
+  new Headers({
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  })
 
 // adds complete modite records to the rawProjects records' user property
 const augmentProjectUsers = (): void => {
@@ -200,8 +198,8 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
   const getData = async (): Promise<void> => {
     const [modites, projects]: [Modite[], Project[]] = await Promise.all([
-      fetch(MODITES_URL, { headers }).then(res => res.json()),
-      fetch(PROJECTS_URL, { headers }).then(res => res.json()),
+      fetch(MODITES_URL, { headers: getHeaders() }).then(res => res.json()),
+      fetch(PROJECTS_URL, { headers: getHeaders() }).then(res => res.json()),
     ])
 
     rawModites = modites
@@ -233,7 +231,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
       const suffix: string = MODITE_URL.includes('.json') ? '' : id
       const url: string = `${MODITE_URL}${suffix}`
 
-      fetch(url, { headers })
+      fetch(url, { headers: getHeaders() })
         .then(res => res.json())
         .then(json => {
           const { ok, profile }: { ok: boolean; profile: ModiteProfile } = json
