@@ -14,175 +14,95 @@ aliases:
       - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
       - v1-dist-master
       - v1-dist-
-  - &restore-bundlesize
-    keys:
-      - v1-bundlesize-{{ .Environment.CIRCLE_SHA1 }}
-      - v1-bundlesize-master
-      - v1-bundlesize-
-  - &restore-lighthouse
-    keys:
-      - v1-lighthouse-{{ .Environment.CIRCLE_SHA1 }}
-      - v1-lighthouse-master
-      - v1-lighthouse-
 
-version: 2
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+
+version: 2.1
 jobs:
   install-dependencies:
-    docker:
-      - image: circleci/node:10
-
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
       - checkout
-
       - restore_cache: *restore-npm-cache
-
       - run:
           name: Install Node modules
           command: npm i -ci
-
       - save_cache:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
   build-pwa:
-    docker:
-      - image: circleci/node:10
-
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
       - checkout
       - restore_cache: *restore-npm-cache
       - restore_cache: *restore-webpack-cache
-
       - run:
           name: Build Project
           command: npm run build
-
       - save_cache:
           key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - build
-
       - save_cache:
           key: v1-webpackcache-{{ checksum "package.json" }}
           paths:
             - node_modules/.cache
 
-  check-sizes:
-    docker:
-      - image: circleci/node:10
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      - restore_cache: *restore-dist-cache
-      - restore_cache: *restore-bundlesize
-
-      - run:
-          name: Check Sizes
-          command: npm run bundlesize
-
-      - save_cache:
-          key: v1-bundlesize-master
-          paths:
-            - node_modules
-
-  lighthouse:
-    docker:
-      - image: circleci/node:10-browsers
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      - restore_cache: *restore-dist-cache
-      - restore_cache: *restore-lighthouse
-
-      - run:
-          name: Setup Artifacts
-          command: mkdir ./artifacts
-
-      - run:
-          name: Install Lighthouse
-          command: npm i lighthouse serve circle-github-bot
-
-      - run:
-          name: Serve the app
-          command: yarn serve -l 3000 -s build
-          background: true
-
-      # wait for the server to start responding.
-      - run:
-          shell: /bin/sh
-          command: |
-            wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 10 http://localhost:3000
-            :
-
-      - run:
-          name: Run Lighthouse
-          command: yarn lighthouse "http://localhost:3000/?moduslabsci"  --output json --output html --output-path=./artifacts/lighthouse.json --config-path=./lighthouse.config.js
-
-      - run:
-          name: Build Lighthouse Report
-          command: ./test/ci/lighthouse.js
-
-      - store_artifacts:
-          path: ./artifacts
-
-      - save_cache:
-          key: v1-lighthouse-master
-          paths:
-            - node_modules
-
   lint:
-    docker:
-      - image: circleci/node:10
-
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
       - checkout
       - restore_cache: *restore-npm-cache
-
       - run:
           name: Run Unprefixed Version Check
           command: npm run check:versions
-
       - run:
           name: Run TSLint
           command: npm run lint
-
       - run:
           name: Run Test Typescript Compile
           command: npm run check:compile
+
+  gimbal:
+    <<: *defaults
+    docker:
+      - image: circleci/node:latest-browsers
+    steps:
+      - checkout
+      - restore_cache: *restore-dist-cache
+      - run:
+          name: Setup npm
+          # need to avoid using sudo here, circleci user does not
+          # have permission to write to default npm dir
+          command: |
+            npm set prefix=/home/circleci/npm
+            echo 'export PATH=/home/circleci/npm/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Install Gimbal
+          command: npm install -g @modus/gimbal --registry https://npm.modus.app
+      - run:
+          name: Run Gimbal
+          command: source $BASH_ENV && gimbal
+      - store_artifacts:
+          path: ./artifacts
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - install-dependencies
-
       - lint:
           requires:
             - install-dependencies
-
       - build-pwa:
           requires:
             - lint
-
-      - check-sizes:
+      - gimbal:
           requires:
             - build-pwa
-
-      - lighthouse:
-          requires:
-            - build-pwa
-          filters:
-            branches:
-              ignore:
-                - master
