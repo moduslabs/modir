@@ -193,6 +193,9 @@ const augmentProjectUsers = (): void => {
   })
 }
 
+// @ts-ignore
+const signOut = () => gapi.auth2.getAuthInstance().signOut()
+
 const DataProvider = ({ children }: { children?: React.ReactNode }) => {
   const [state, dispatch]: [DataState, Dispatch<DataAction>] = React.useReducer(reducer, initialState)
 
@@ -200,7 +203,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     const [modites, projects]: [Modite[], Project[]] = await Promise.all([
       fetch(MODITES_URL, { headers: getHeaders() }).then(res => res.json()),
       fetch(PROJECTS_URL, { headers: getHeaders() }).then(res => res.json()),
-    ])
+    ]).catch(signOut)
 
     rawModites = modites
     rawProjects = projects
@@ -249,6 +252,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
             }
           }
         })
+        .catch(signOut)
       // https://modus.app/modite/U0AUTJZUL
       // fetch(MODITE_URL, { headers }).then(res => res.json())
       // dispatch({
