@@ -1,0 +1,12 @@
+html, body {
+  width: 480px;
+  height: 960px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+iframe {
+  border: 0;
+}
