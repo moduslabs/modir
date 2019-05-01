@@ -22,6 +22,8 @@
     <link rel="preconnect" href="https://dir.modus.app" />
     <meta name="apple-mobile-web-app-title" content="Modites">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="google-signin-client_id" content="398317159902-tq6ld761e6f8tut1m46l09nbrdld74q1.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <link
       rel="apple-touch-icon"
       href="https://res.cloudinary.com/modus-labs/image/upload/b_rgb:000000,c_pad,h_150,w_150/v1533109874/modus/logo-vertical-white.png"
@@ -82,23 +84,28 @@
         background-image: url('%PUBLIC_URL%/favicon256.png');
         background-position: center center;
         background-repeat: no-repeat;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
       }
     </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <div class="loader"></div>
+      <div class="loader">
+        <div class="g-signin2" data-onsuccess="initApp"></div>
+      </div>
     </div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-27963224-6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+      gtag('config', 'UA-27963224-6');
+    </script>
   </body>
 </html>

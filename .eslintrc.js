@@ -31,11 +31,13 @@ module.exports = {
     'prettier/prettier': 'error',
     'react/prop-types': 'off',
     '@typescript-eslint/camelcase': 'off',
-    'no-console': 'off',
   },
   settings: {
     react: {
       version: '16.8.6',
     },
+  },
+  globals: {
+    gapi: true,
   },
 }

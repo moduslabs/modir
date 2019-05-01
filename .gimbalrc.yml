@@ -1,0 +1,35 @@
+configs:
+  heap-snapshot:
+    threshold:
+      Documents: 5
+      Frames: 2
+      JSHeapTotalSize: 23356000
+      JSHeapUsedSize: 15068000
+      Nodes: 800
+      RecalcStyleCount: 9
+  lighthouse:
+    threshold:
+      accessibility: 93
+      'best-practices': 90
+      performance: 50
+      pwa: 75
+      seo: 100
+  size:
+    -
+      path: ./build/precache-*.js
+      maxSize: 500 B
+    -
+      path: ./build/static/js/*.chunk.js
+      maxSize: 1 MB
+    -
+      path: ./build/static/js/runtime*.js
+      maxSize: 10 KB
+    -
+      path: ./build/
+      maxSize: 18 MB
+
+outputs:
+  json: artifacts/results.json
+
+jobs:
+  - cra --no-calculate-unused-source
