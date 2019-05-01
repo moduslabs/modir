@@ -1,7 +1,7 @@
 configs:
   heap-snapshot:
     threshold:
-      Documents: 3
+      Documents: 5
       Frames: 2
       JSHeapTotalSize: 23356000
       JSHeapUsedSize: 15068000
