@@ -60,7 +60,7 @@ async function initMap(mapRef: RefObject<HTMLDivElement>) {
 
   // Lazy-load the World in low res
   // This is a big chunk which is why we need to consider lazy-loading
-  const am4geodataWorldLow = await import('@amcharts/amcharts4-geodata/worldLow' /* webpackChunkName: world-detail */)
+  const am4geodataWorldLow = await import('@amcharts/amcharts4-geodata/worldLow' /* webpackChunkName: "world-detail" */)
 
   const el: HTMLDivElement = mapRef.current
   map = create(el, MapChart)
