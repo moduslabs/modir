@@ -1,7 +1,6 @@
-import am4geodataWorldLow from '@amcharts/amcharts4-geodata/worldLow'
 import { Circle, color, create } from '@amcharts/amcharts4/core'
 import { MapChart, MapImageSeries, MapPolygonSeries, projections, MapPolygon, MapImage } from '@amcharts/amcharts4/maps'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, RefObject } from 'react'
 import Modite, { LocationData } from '../../models/Modite'
 import MapComponentProps from '../../types/components/MapComponent'
 import s from './styles.module.css'
@@ -53,6 +52,59 @@ const updateMap = (markerData: any) => {
   })
 }
 
+/**
+ * Initialize the map asynchronously
+ */
+async function initMap(mapRef: RefObject<HTMLDivElement>) {
+  if (!mapRef.current) return
+
+  // Lazy-load the World in low res
+  // This is a big chunk which is why we need to consider lazy-loading
+  const am4geodataWorldLow = await import('@amcharts/amcharts4-geodata/worldLow' /* webpackChunkName: world-detail */)
+
+  const el: HTMLDivElement = mapRef.current
+  map = create(el, MapChart)
+  map.geodata = am4geodataWorldLow.default
+  map.projection = new projections.Miller()
+  const polygonSeries: MapPolygonSeries = map.series.push(new MapPolygonSeries())
+  polygonSeries.useGeodata = true
+  polygonSeries.exclude = ['AQ']
+
+  map.seriesContainer.draggable = false
+  map.seriesContainer.resizable = false
+  // map.maxZoomLevel = 1;
+  map.seriesContainer.events.disableType('doublehit')
+  map.chartContainer.background.events.disableType('doublehit')
+
+  // Configure series
+  const polygonTemplate: MapPolygon = polygonSeries.mapPolygons.template
+  polygonTemplate.tooltipText = '{name}'
+  polygonTemplate.fill = color('#d6d6d6')
+
+  // Create hover state and set alternative fill color
+  const hs = polygonTemplate.states.create('hover')
+  hs.properties.fill = color('#d6d6d6')
+
+  polygonTemplate.events.on('hit', (event: any) => {
+    map.maxZoomLevel = 1
+    event.target.isActive = false
+  })
+
+  // Create image series
+  imageSeries = map.series.push(new MapImageSeries())
+
+  // Create a circle image in image series template so it gets replicated to all new images
+  const imageSeriesTemplate: MapImage = imageSeries.mapImages.template
+  circle = imageSeriesTemplate.createChild(Circle)
+  circle.fill = color('#ff5c5d')
+  circle.nonScaling = true
+  circle.tooltipText = '{title}'
+
+  // Set property fields
+  imageSeriesTemplate.propertyFields.latitude = 'latitude'
+  imageSeriesTemplate.propertyFields.longitude = 'longitude'
+}
+
 const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
   const mapRef = useRef<HTMLDivElement>(null)
 
@@ -87,47 +139,7 @@ const MapComponent = React.memo(({ mapRecords }: MapComponentProps) => {
 
   useEffect(() => {
     if (!map && mapRef.current) {
-      const el: HTMLDivElement = mapRef.current
-      map = create(el, MapChart)
-      map.geodata = am4geodataWorldLow
-      map.projection = new projections.Miller()
-      const polygonSeries: MapPolygonSeries = map.series.push(new MapPolygonSeries())
-      polygonSeries.useGeodata = true
-      polygonSeries.exclude = ['AQ']
-
-      map.seriesContainer.draggable = false
-      map.seriesContainer.resizable = false
-      // map.maxZoomLevel = 1;
-      map.seriesContainer.events.disableType('doublehit')
-      map.chartContainer.background.events.disableType('doublehit')
-
-      // Configure series
-      const polygonTemplate: MapPolygon = polygonSeries.mapPolygons.template
-      polygonTemplate.tooltipText = '{name}'
-      polygonTemplate.fill = color('#d6d6d6')
-
-      // Create hover state and set alternative fill color
-      const hs = polygonTemplate.states.create('hover')
-      hs.properties.fill = color('#d6d6d6')
-
-      polygonTemplate.events.on('hit', (event: any) => {
-        map.maxZoomLevel = 1
-        event.target.isActive = false
-      })
-
-      // Create image series
-      imageSeries = map.series.push(new MapImageSeries())
-
-      // Create a circle image in image series template so it gets replicated to all new images
-      const imageSeriesTemplate: MapImage = imageSeries.mapImages.template
-      circle = imageSeriesTemplate.createChild(Circle)
-      circle.fill = color('#ff5c5d')
-      circle.nonScaling = true
-      circle.tooltipText = '{title}'
-
-      // Set property fields
-      imageSeriesTemplate.propertyFields.latitude = 'latitude'
-      imageSeriesTemplate.propertyFields.longitude = 'longitude'
+      initMap(mapRef)
     }
   }, [])
 

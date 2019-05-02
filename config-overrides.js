@@ -38,9 +38,8 @@ module.exports = function override(config, env) {
 
   // remove pdfmake from amcharts
   config.externals = [
-    /(xlsx|canvg)/,
     function(context, request, callback) {
-      if (/(pdfmake)/.test(request)) {
+      if (/(pdfmake|xlsx|canvg)/.test(request)) {
         return callback(null, 'commonjs ' + request)
       }
 
