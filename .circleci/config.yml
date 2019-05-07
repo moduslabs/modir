@@ -71,11 +71,10 @@ jobs:
   gimbal:
     <<: *defaults
     docker:
-      - image: moduscreate/gimbal:1.0.0
+      - image: moduscreate/gimbal:1.0.1
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
-      - run: printenv
       - run:
           name: Run Gimbal
           command: gimbal
