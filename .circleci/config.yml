@@ -62,33 +62,22 @@ jobs:
           name: Run Unprefixed Version Check
           command: npm run check:versions
       - run:
-          name: Run TSLint
+          name: Run ESLint
           command: npm run lint
       - run:
-          name: Run Test Typescript Compile
+          name: Run Test TypeScript Compile
           command: npm run check:compile
 
   gimbal:
     <<: *defaults
     docker:
-      - image: circleci/node:latest-browsers
+      - image: moduscreate/gimbal:1.0.0
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
       - run:
-          name: Setup npm
-          # need to avoid using sudo here, circleci user does not
-          # have permission to write to default npm dir
-          command: |
-            npm set prefix=/home/circleci/npm
-            echo 'export PATH=/home/circleci/npm/bin:$PATH' >> $BASH_ENV
-            source $BASH_ENV
-      - run:
-          name: Install Gimbal
-          command: npm install -g @modus/gimbal --registry https://npm.modus.app
-      - run:
           name: Run Gimbal
-          command: source $BASH_ENV && gimbal
+          command: gimbal
       - store_artifacts:
           path: ./artifacts
 

@@ -29,7 +29,9 @@ configs:
       maxSize: 18 MB
 
 outputs:
+  html: artifacts/results.html
   json: artifacts/results.json
+  markdown: artifacts/results.md
 
 jobs:
-  - cra --no-calculate-unused-source
+  - audit --no-calculate-unused-source
