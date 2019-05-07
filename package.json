@@ -63,7 +63,8 @@
     "react-app-rewired": "2.1.1",
     "typescript": "3.4.3",
     "utility-types": "3.5.0",
-    "webdriverio": "^5.8.1",
+    "wdio-mocha-framework": "^0.6.4",
+    "webdriverio": "4.9.11",
     "worker-loader": "2.0.0"
   },
   "husky": {
