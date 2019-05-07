@@ -75,6 +75,7 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
+      - run: printenv
       - run:
           name: Run Gimbal
           command: gimbal
