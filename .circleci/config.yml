@@ -16,7 +16,7 @@ aliases:
       - v1-dist-
 
 defaults: &defaults
-  working_directory: ~/repo
+  working_directory: /home/circleci/repo
   docker:
     - image: circleci/node:10
 
