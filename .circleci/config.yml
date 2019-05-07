@@ -78,8 +78,6 @@ jobs:
       - run:
           name: Run Gimbal
           command: gimbal
-          environment:
-            GITHUB_AUTH_TOKEN: $GH_AUTH_TOKEN
       - store_artifacts:
           path: ./artifacts
 
