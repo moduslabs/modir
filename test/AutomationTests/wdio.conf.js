@@ -11,6 +11,7 @@ exports.config = {
   //specs: ['./test/AutomationTests/specs/**/*.js'],
   suites: {
     login: ['./specs/Login/*.js'],
+    dashboard: ['./specs/UI/*.js'],
   },
   // Patterns to exclude.
   exclude: [

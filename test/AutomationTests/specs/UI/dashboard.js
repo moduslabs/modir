@@ -4,8 +4,8 @@ const loginPage = new LoginPage();
 
 describe('Dashboard', () => {
   it('should have the right title', () => {
-    browser.url('/');
-    const title = browser.getTitle();
-    assert.equal(title, 'Modite Directory')
+    loginPage.open();
+    const title = loginPage.getTitle();
+      assert.equal(title, 'Modite Directory')
   })
 });

@@ -5,7 +5,7 @@ class Page {
     browser.url(`/${path}`)
   }
 
-  get title() {
+  getTitle() {
     return browser.getTitle();
   }
 

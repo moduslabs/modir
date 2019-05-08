@@ -17,7 +17,8 @@
     "webdriverio": "4.9.11"
   },
   "scripts": {
-    "test-all": "./node_modules/.bin/wdio wdio.conf.js --suite login"
+    "test-login": "./node_modules/.bin/wdio wdio.conf.js --suite login",
+    "test-dashboard": "./node_modules/.bin/wdio wdio.conf.js --suite dashboard"
   },
   "author": "",
   "license": "ISC",
