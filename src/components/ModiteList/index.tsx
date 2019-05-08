@@ -14,11 +14,6 @@ const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
 )
 
-const moditeNotFound = {
-  real_name: 'No modite found',
-  tz: (Intl.DateTimeFormat().resolvedOptions().timeZone) // client timezone
-}
-
 let lastFilter = '' // used by onFilter
 let lastScrollOffsetModites = 0 // used by onScroll
 let lastScrollOffsetProjects = 0 // used by onScroll

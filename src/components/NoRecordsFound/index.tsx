@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from 'react'
 import VirtualizedList from "../VirtualizedList";
 
 const NoRecordsFound = () => {
@@ -7,14 +7,10 @@ const NoRecordsFound = () => {
     tz: (Intl.DateTimeFormat().resolvedOptions().timeZone) // client timezone
   }
 
-  const onScroll = (): void => {
-
-  }
-
   return <VirtualizedList
     addSpacerRow={true}
     records={[moditeNotFound]}
-    onScroll={onScroll}
+    onScroll={(() => {})}
     lastScrollOffset={0}
     />
 }

@@ -29,10 +29,15 @@ const VirtualizedList: FunctionComponent<VirtualizedListProps> = ({
   const Row: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
     <>
       {addSpacerRow && index === 0 && <div style={style} />}
-      {(!addSpacerRow || (addSpacerRow && index !== 0)) && (
+      {(!addSpacerRow || (addSpacerRow && index !== 0)) && localRecords[index].id && (
         <Link to={`/details/${localRecords[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
           <ModiteListItem item={localRecords[index]} key={localRecords[index].id} />
         </Link>
+      )}
+      {(!addSpacerRow || (addSpacerRow && index !== 0)) && !localRecords[index].id && (
+        <span className={`ListRow ${s.moditeRow}`} style={style}>
+          <ModiteListItem item={localRecords[index]} />
+        </span>
       )}
     </>
   )
