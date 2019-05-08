@@ -5,31 +5,31 @@ class Page {
     browser.url(`/${path}`)
   }
 
-  getTitle() {
+  static getTitle() {
     return browser.getTitle();
   }
 
-  hitEnter() {
+  static hitEnter() {
     return browser.keys('\uE007');
   }
 
-  expectH3(header) {
+  static expectH3(header) {
     $(`h3*=${header}`).waitForVisible();
   }
 
-  elementByDataTestId(testId) {
+  static elementByDataTestId(testId) {
     return $(`[data-test-id="${testId}"]`);
   }
 
-  elementByInputType(inputType) {
+  static elementByInputType(inputType) {
     return $(`input[type="${inputType}"]`);
   }
 
-  elementByLinkText(linkText) {
+  static elementByLinkText(linkText) {
     return $(`a=${linkText}`);
   }
 
-  elementByButtonText(buttonText) {
+  static elementByButtonText(buttonText) {
     return $(`button=${buttonText}`);
   }
 }

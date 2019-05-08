@@ -1,6 +1,7 @@
 const Page = require('./page');
 
 class LoginPage extends Page {
+
   constructor() {
     super()
   }
@@ -9,17 +10,11 @@ class LoginPage extends Page {
     super.open('')
   }
 
-  get signInButton() {
-    return $('.abcRioButton');
-  }
-  get emailInput() {
-    return $('#identifierId');
-  }
-  get nextButton() {
-    return $('#identifierNext');
-  }
-  get PasswordField() {
-    return $('//*[@name="password"]');
+  /**############ Define Elements ###############*/
+  static signInButton() {return $('.abcRioButton');}
+  static emailInput() {return $('#identifierId');}
+  static nextButton() {return $('#identifierNext');}
+  static PasswordField() {return $('//*[@name="password"]');
   }
 
   /**
