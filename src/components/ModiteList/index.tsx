@@ -8,6 +8,7 @@ import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import { VIEW_TYPES } from '../../constants/constants'
 import ModiteListProps, { FilterEvent } from '../../types/components/ModiteList'
+import NoRecordsFound from "../NoRecordsFound";
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
@@ -109,14 +110,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
               lastScrollOffset={lastScrollOffsetModites}
             />
           )}
-          {!isDetails && !listRecords.length && filter.length && (
-            <VirtualizedList
-              addSpacerRow={true}
-              records={[moditeNotFound]}
-              onScroll={0}
-              lastScrollOffset={0}
-            />
-            )}
+          {!isDetails && !listRecords.length && filter.length && <NoRecordsFound />}
           {!isDetails && !listRecords.length && !filter.length && <SkeletonList />}
           <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
