@@ -6,31 +6,31 @@ class Page {
   }
 
   get title() {
-    return browser.getTitle()
+    return browser.getTitle();
   }
 
   hitEnter() {
-    return browser.keys('\uE007')
+    return browser.keys('\uE007');
   }
 
   expectH3(header) {
-    $(`h3*=${header}`).waitForVisible()
+    $(`h3*=${header}`).waitForVisible();
   }
 
   elementByDataTestId(testId) {
-    return $(`[data-test-id="${testId}"]`)
+    return $(`[data-test-id="${testId}"]`);
   }
 
   elementByInputType(inputType) {
-    return $(`input[type="${inputType}"]`)
+    return $(`input[type="${inputType}"]`);
   }
 
   elementByLinkText(linkText) {
-    return $(`a=${linkText}`)
+    return $(`a=${linkText}`);
   }
 
   elementByButtonText(buttonText) {
-    return $(`button=${buttonText}`)
+    return $(`button=${buttonText}`);
   }
 }
-module.exports = Page
+module.exports = Page;

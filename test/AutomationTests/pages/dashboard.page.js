@@ -1,4 +1,4 @@
-const Page = require('./page')
+const Page = require('./page');
 
 class DashPage extends Page {
   constructor() {
@@ -10,16 +10,15 @@ class DashPage extends Page {
   }
 
   //############ Locators ###############
-  get header() {
-    return $('#header_container')
+  get headerContainer() {
+    return $('#header_container');
   }
 
   /**
    * documentation
    */
   isHeaderPresent() {
-    console.log('12')
-    this.header.click()
+    this.headerContainer;
   }
 }
-module.exports = DashPage
+module.exports = DashPage;

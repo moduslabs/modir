@@ -1,4 +1,4 @@
-const Page = require('./page')
+const Page = require('./page');
 
 class LoginPage extends Page {
   constructor() {
@@ -10,23 +10,23 @@ class LoginPage extends Page {
   }
 
   get signInButton() {
-    return $('.abcRioButton')
+    return $('.abcRioButton');
   }
   get emailInput() {
-    return $('#identifierId')
+    return $('#identifierId');
   }
   get nextButton() {
-    return $('#identifierNext')
+    return $('#identifierNext');
   }
   get PasswordField() {
-    return $('//*[@name="password"]')
+    return $('//*[@name="password"]');
   }
 
   /**
    * Click first sign in button in Modir App
    */
   clickSignInButton() {
-    this.signInButton.click()
+    this.signInButton.click();
   }
 
   /**
@@ -34,8 +34,8 @@ class LoginPage extends Page {
    * Param: Email
    */
   fillEmailField(email) {
-    const openTabs = browser.getTabIds()
-    browser.switchTab(openTabs[1]).pause('3000')
+    const openTabs = browser.getTabIds();
+    browser.switchTab(openTabs[1]).pause('3000');
 
     this.emailInput.setValue(email)
   }
@@ -44,7 +44,7 @@ class LoginPage extends Page {
    * Click Next button in email page
    */
   clickNextButton() {
-    this.nextButton.click().pause('6000')
+    this.nextButton.click().pause('6000');
   }
 
   /**
@@ -52,7 +52,7 @@ class LoginPage extends Page {
    * Param: Password
    */
   fillPasswordField(password) {
-    this.PasswordField.setValue(password)
+    this.PasswordField.setValue(password);
     super.hitEnter()
   }
 
@@ -61,11 +61,11 @@ class LoginPage extends Page {
    * Perform complete login using login page methods
    */
   doCompleteLogin(email, password) {
-    this.clickSignInButton()
-    this.fillEmailField(email)
-    this.clickNextButton()
-    this.fillPasswordField(password)
+    this.clickSignInButton();
+    this.fillEmailField(email);
+    this.clickNextButton();
+    this.fillPasswordField(password);
   }
 }
 
-module.exports = LoginPage
+module.exports = LoginPage;
