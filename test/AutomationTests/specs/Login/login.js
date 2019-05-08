@@ -8,8 +8,8 @@ const dashPage = new DashPage();
 describe('Normal Login', () => {
   it('Should be able to login a normal user', () => {
     loginPage.open();
-    loginPage.doCompleteLogin('abraham.arias@moduscreate.com', 'bronce.modus.1');
+    loginPage.doCompleteLogin('abraham.arias@moduscreate.com', 'Bronce.modus.1');
 
-    expect(dashPage.isHeaderPresent())
+    expect(dashPage.isModusLandHeaderPresent())
   })
 });
