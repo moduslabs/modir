@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "4.4"
+      }
+    }],
+    "stage-0"
+  ],
+  "plugins": ["add-module-exports"]
+}

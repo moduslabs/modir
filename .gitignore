@@ -5,8 +5,8 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
+# testing /coverage
+/test/AutomationTests/node_modules
 
 # production
 /build
