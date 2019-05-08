@@ -10,15 +10,15 @@ class DashPage extends Page {
   }
 
   //############ Locators ###############
-  get headerContainer() {
-    return $('#header_container');
+  get modusLandHeader() {
+    return $(".//*[@class='styles_globeTitle__19Kwx']");
   }
 
   /**
    * documentation
    */
-  isHeaderPresent() {
-    this.headerContainer;
+  isModusLandHeaderPresent() {
+    this.modusLandHeader.isExisting();
   }
 }
 module.exports = DashPage;

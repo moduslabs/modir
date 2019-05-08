@@ -44,7 +44,7 @@ class LoginPage extends Page {
    * Click Next button in email page
    */
   clickNextButton() {
-    this.nextButton.click().pause('6000');
+    this.nextButton.click().pause('3000');
   }
 
   /**
@@ -53,7 +53,8 @@ class LoginPage extends Page {
    */
   fillPasswordField(password) {
     this.PasswordField.setValue(password);
-    super.hitEnter()
+      super.hitEnter();
+      browser.pause('3000');
   }
 
   //################## Complex methods   ############
