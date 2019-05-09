@@ -19,6 +19,9 @@ class DashPage extends Page {
 
   static projectsButton() {return $("//*[@class='styles_tabCt__1Cr-H']//a[2]");}
 
+  static emptyResultList() {return $("//*[@class='item ion-focusable hydrated item-label']");}
+
+  static firstModiteFromResultList(){return $("//*[@class='styles_nameCt__1O5NB'][1]")}
 
 
     //#############  Verification actions ####################
@@ -50,6 +53,14 @@ class DashPage extends Page {
         this.projectsButton.isExisting();
     }
 
+    /**
+     * Checks if the result list is returning NO results
+     */
+    resultListIsEmpty(){
+        this.emptyResultList.waitForExist();
+    }
+
+
     //#############  Clicking Actions ####################
     /**
      * Clicks little team button in dashboard at the bottom of the page
@@ -63,6 +74,13 @@ class DashPage extends Page {
      */
     clickProjectsButton(){
         this.projectsButton.click();
+    }
+
+    /**
+     * Clicks first modite on the list of results
+     */
+    clickFirstModiteFromList(){
+        this.firstModiteFromResultList.click();
     }
 
     //#############  Filling Actions ####################
