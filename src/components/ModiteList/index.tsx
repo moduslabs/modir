@@ -8,7 +8,7 @@ import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import { VIEW_TYPES } from '../../constants/constants'
 import ModiteListProps, { FilterEvent } from '../../types/components/ModiteList'
-import NoRecordsFound from "../NoRecordsFound";
+import NoRecordsFound from '../NoRecordsFound'
 
 const VirtualizedList = lazy(() =>
   import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
