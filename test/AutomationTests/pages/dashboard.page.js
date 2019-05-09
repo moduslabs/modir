@@ -37,10 +37,17 @@ class DashPage extends Page {
     }
 
     /**
-     * Checks if the team button at the bottom of the page is present
+     * Checks if the little team button is present at the bottom of the page
      */
-    isModusLandHeaderPresent() {
+    isTeamButtonPresent() {
         this.teamButton.isExisting();
+    }
+
+    /**
+     * Checks if the little projects button is present at the bottom of the page
+     */
+    isProjectsButtonPresent() {
+        this.projectsButton.isExisting();
     }
 
     //#############  Clicking Actions ####################
