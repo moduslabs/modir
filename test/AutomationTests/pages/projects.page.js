@@ -11,15 +11,22 @@ class projectsPage extends Page {
     }
 
     /**############ Define Elements ###############*/
-    static ProjectList() {return $("#todo");}
-
+    static projectList() {return $("//div[@class='styles_nameCt__1O5NB']");}
+    static projectModal() {return $("//div[@class='styles_moditeCt__Tp4wX']");}
 
     //#############  Verification actions ####################
     /**
      * Checks if the project list is present on the page
      */
     isProjectListPresent() {
-        this.ProjectList.isExisting();
+        this.projectList.isExisting();
+    }
+
+    /**
+     * Checks if the project Modal with project information is being displayed
+     */
+    isProjectModalDisplayed() {
+        this.projectModal.isExisting();
     }
 
 }
