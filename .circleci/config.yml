@@ -1,19 +1,10 @@
 aliases:
   - &restore-npm-cache
-    keys:
-      - v1-dependencies-{{ checksum "package-lock.json" }}
-      - v1-dependencies-master
-      - v1-dependencies-
+    key: v1-dependencies-{{ checksum "yarn.lock" }}
   - &restore-webpack-cache
-    keys:
-      - v1-webpackcache-{{ checksum "package.json" }}
-      - v1-webpackcache-master
-      - v1-webpackcache-
+    key: v1-webpackcache-{{ checksum "yarn.lock" }}
   - &restore-dist-cache
-    keys:
-      - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
-      - v1-dist-master
-      - v1-dist-
+    key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
 
 defaults: &defaults
   working_directory: /home/circleci/repo
