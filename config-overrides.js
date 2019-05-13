@@ -31,7 +31,9 @@ module.exports = function override(config, env) {
     })
     .filter(Boolean)
 
-  config.plugins.push(new GimbalPlugin())
+  if (env === 'production') {
+    config.plugins.push(new GimbalPlugin())
+  }
 
   // custom alias for src/
   config.resolve.alias['@'] = path.resolve(__dirname, 'src')
