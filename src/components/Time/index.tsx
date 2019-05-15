@@ -33,7 +33,7 @@ const RawTime = ({ modite, date }: { modite: Modite; date?: boolean }) => {
     hour12: true,
   })
 
-  const hour: number = Number(
+  const hour = Number(
     now.toLocaleString('en-US', {
       timeZone: modite.tz,
       hour: 'numeric',
