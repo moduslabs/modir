@@ -62,7 +62,7 @@ jobs:
   gimbal:
     <<: *defaults
     docker:
-      - image: moduscreate/gimbal:1.0.2
+      - image: moduscreate/gimbal:1.0.10
     steps:
       - checkout
       - restore_cache: *restore-dist-cache

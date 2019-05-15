@@ -24,7 +24,7 @@ configs:
     - path: ./build/
       maxSize: 18 MB
   unused-source:
-    threshold: 0%
+    threshold: 100%
 
 outputs:
   html: artifacts/results.html
