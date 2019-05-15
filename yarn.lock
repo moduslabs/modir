@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@amcharts/amcharts4-geodata/-/amcharts4-geodata-4.1.5.tgz#d124b3296d01df1aee367061428ef658d82bfc4b"
   integrity sha512-RGM8j2ZNCmqG7Ifsutz46Ra+8zCfDgxDKNa567JWDPF9nKLSKw1HoEoKiBO4SvrQwpxGl1ZlPYZsNkhqyjoAeA==
 
-"@amcharts/amcharts4@4.4.6":
-  version "4.4.6"
-  resolved "https://registry.yarnpkg.com/@amcharts/amcharts4/-/amcharts4-4.4.6.tgz#f29b8679b20892650e2cffdb351b4b851bfe9936"
-  integrity sha512-K0C5FLsgZxGrTMtVuVzNcmnydDEiaYoXYsQxmm6f9/rZEisr1EWsUYLAL65bgcwabRz/1PuK6KOPSgFtxyfAig==
+"@amcharts/amcharts4@4.4.4":
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/@amcharts/amcharts4/-/amcharts4-4.4.4.tgz#14fba3fa1b049014fb72cbd045d12c9227ae17dd"
+  integrity sha512-OlJqgsnOHtHGysSLAg+dFGSaEGChduQaFm1cbAbkaV7vRkjyGqmze5p4Are6pa11N89rDaTb9jzAiUM5Y7/FsA==
   dependencies:
     "@types/regression" "^2.0.0"
     canvg "^1.5.3"
@@ -10519,10 +10519,10 @@ react-router-dom@5.0.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-router-last-location@2.0.0-beta.2:
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/react-router-last-location/-/react-router-last-location-2.0.0-beta.2.tgz#1861c3783aea49d2e969636d96f7bf7a0a19aebf"
-  integrity sha512-QBWZNsbc01ZK2WHcjHAnKwILnckwQzINsNUe4Hj432lLRTRiEvcU/um1Xb37xD79LIRWN5N9kf+9huZFTresDg==
+react-router-last-location@2.0.0-beta.1:
+  version "2.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-router-last-location/-/react-router-last-location-2.0.0-beta.1.tgz#0cc93ba456a1f5c259b6b0766d7abb64e73778a0"
+  integrity sha512-DSN4ta5vntC2g+J5YiwQKmhlLIzs2Icq3iVRIjGMcjSeKNOIasM10C1abiURzhkyr2mqmE8cLD9K7eQV9xZjEw==
 
 react-router@5.0.0:
   version "5.0.0"

@@ -14,7 +14,7 @@
     "test": "react-app-rewired test"
   },
   "dependencies": {
-    "@amcharts/amcharts4": "4.4.6",
+    "@amcharts/amcharts4": "4.4.4",
     "@amcharts/amcharts4-geodata": "4.1.5",
     "@ionic/react": "0.0.5",
     "classnames": "2.2.6",
@@ -23,7 +23,7 @@
     "react-dom": "16.8.6",
     "react-router": "5.0.0",
     "react-router-dom": "5.0.0",
-    "react-router-last-location": "2.0.0-beta.2",
+    "react-router-last-location": "2.0.0-beta.1",
     "react-scripts": "3.0.1",
     "react-virtualized-auto-sizer": "1.0.2",
     "react-window": "1.8.1"
