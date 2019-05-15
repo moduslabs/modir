@@ -2,7 +2,10 @@ aliases:
   - &restore-npm-cache
     key: v1-dependencies-{{ checksum "yarn.lock" }}
   - &restore-webpack-cache
-    key: v1-webpackcache-{{ checksum "yarn.lock" }}
+    keys:
+      - v1-webpackcache-{{ checksum "package.json" }}
+      - v1-webpackcache-master
+      - v1-webpackcache-
   - &restore-dist-cache
     key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
 
