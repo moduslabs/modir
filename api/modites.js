@@ -30,7 +30,7 @@ const addTacosToUsers = async users => {
 }
 
 const appendModiteProfiles = async modites => {
-  const list = await MODITES.get('activeModitesList', 'json')
+  const list = await modites.get('activeModitesList', 'json')
 
   // for (const modite of modites) {
   //   const profileObj = await MODITES.get(modite.id, 'json');
@@ -41,7 +41,7 @@ const appendModiteProfiles = async modites => {
 
   const profileFetches = modites.map(modite => {
     return new Promise(async resolve => {
-      const profileObj = await MODITES.get(modite.id, 'json')
+      const profileObj = await modites.get(modite.id, 'json')
       if (profileObj) {
         modite.profile = profileObj.profile
       }

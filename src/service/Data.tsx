@@ -115,10 +115,10 @@ export function formatAMPM(date: Date): [string, boolean] {
 }
 
 const processTimestamps = (records: Modite[] = [], date: Date) => {
-  const nowUtc: Date = new Date(date.getTime() + date.getTimezoneOffset())
+  const nowUtc: Date = new Date()
 
   records.forEach((item: Modite) => {
-    const itemDate: Date = new Date((nowUtc as any) - (item.tz_offset as number) * 60000)
+    const itemDate: Date = new Date(nowUtc as any)
 
     item.localDate = monthDayYear(itemDate)
   })
@@ -232,7 +232,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     processTimestamps,
     fetchModiteProfile: (id: string) => {
       const suffix: string = MODITE_URL.includes('.json') ? '' : id
-      const url: string = `${MODITE_URL}${suffix}`
+      const url = `${MODITE_URL}${suffix}`
 
       fetch(url, { headers: getHeaders() })
         .then(res => res.json())

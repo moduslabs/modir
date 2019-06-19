@@ -13,8 +13,8 @@ var event = new Event('timestamp')
 let minute: number
 
 setInterval(() => {
-  const date: Date = new Date()
-  const currentMinutes: number = date.getMinutes()
+  var date: Date = new Date()
+  var currentMinutes: number = date.getMinutes()
 
   if (minute && currentMinutes !== minute) {
     window.dispatchEvent(event)
@@ -33,7 +33,7 @@ const RawTime = ({ modite, date }: { modite: Modite; date?: boolean }) => {
     hour12: true,
   })
 
-  const hour: number = Number(
+  const hour = Number(
     now.toLocaleString('en-US', {
       timeZone: modite.tz,
       hour: 'numeric',
