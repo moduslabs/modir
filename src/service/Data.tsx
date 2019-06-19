@@ -115,11 +115,11 @@ export function formatAMPM(date: Date): [string, boolean] {
 }
 
 const processTimestamps = (records: Modite[] = [], date: Date) => {
-  const nowUtc: Date = new Date()
+  const nowUtc: Date = new Date(date.getTime() + date.getTimezoneOffset())
 
   records.forEach((item: Modite) => {
+    var CAoffset = -3
     const itemDate: Date = new Date(nowUtc as any)
-
     item.localDate = monthDayYear(itemDate)
   })
 }
