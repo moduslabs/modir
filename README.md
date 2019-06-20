@@ -11,7 +11,7 @@
 </div>
 
 
-[Modite Directory](https://dir.modus.app/?utm_source=labs&utm_medium=github&utm_campaign=modir) Bringing distributed teams at Modus closer together with clever data patterns. Uses 3rd party API services from Slack, Harvest, Google Suite, GitHub, HeyTaco, etc.
+[Modite Directory](https://dir.modus.app/?utm_source=labs&utm_medium=github&utm_campaign=modir) brings distributed teams at Modus closer together with clever data patterns. Uses 3rd party API services from Slack, Harvest, Google Suite, GitHub, HeyTaco, etc.
 
 
 ##### Modite Directory uses:
