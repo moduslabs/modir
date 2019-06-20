@@ -1,7 +1,3 @@
-<p align="center">
-<img src="https://res.cloudinary.com/modus-labs/image/upload/w_220,f_auto/v1561025523/labs/modir.png" alt="Modite Directory" width="20" />
-</p>
-
 # Modite Directory
 
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ModusCreateOrg/beep/blob/master/LICENSE)
@@ -9,7 +5,12 @@
 
 [Modite Directory](https://dir.modus.app/?utm_source=labs&utm_medium=github&utm_campaign=modir) Bringing distributed teams at Modus closer together with clever data patterns. Uses 3rd party API services from Slack, Harvest, Google Suite, GitHub, HeyTaco, etc.
 
-Modite Directory uses:
+
+<p align="center">
+<img src="https://res.cloudinary.com/modus-labs/image/upload/w_120,f_auto/v1561025523/labs/modir.png" alt="Modite Directory" width="120" />
+</p>
+
+##### Modite Directory uses:
 * Ionic 4
 * React
 * Cloudflare Workers
