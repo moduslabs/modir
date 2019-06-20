@@ -1,5 +1,5 @@
 <div align="center">
-  <img  src="https://res.cloudinary.com/modus-labs/image/upload/w_80,f_auto/v1561025523/labs/modir.png" alt="Modite Directory" width="80" />
+  <img  src="https://res.cloudinary.com/modus-labs/image/upload/w_240,f_auto/v1561025523/labs/modir.png" alt="Modite Directory" width="120" />
 
   <h1>Modite Directory</h1>
  
