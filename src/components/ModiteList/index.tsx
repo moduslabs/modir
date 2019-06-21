@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
 import classNames from 'classnames/bind'
 import s from './styles.module.css'
-import SkeletonList from '../SkeletonList'
+import Loader from '../Loader'
 import DetailsView from '../../components/DetailsView'
 import BackButton from '../BackButton'
 import { VIEW_TYPES } from '../../constants/constants'
@@ -106,7 +106,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
             />
           )}
           {!isDetails && !listRecords.length && filter.length && <NoRecordsFound />}
-          {!isDetails && !listRecords.length && !filter.length && <SkeletonList />}
+          {!isDetails && !listRecords.length && !filter.length && <Loader />}
           <DetailsView record={activeRecord} className={activeModiteCls} />
         </div>
         <div className={tabCtCls}>
