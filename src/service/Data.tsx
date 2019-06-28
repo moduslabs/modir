@@ -10,6 +10,8 @@ const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
 const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
 
+const MY_OFFSET = new Date().getTimezoneOffset() * 60000
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
 
@@ -114,11 +116,11 @@ export function formatAMPM(date: Date): [string, boolean] {
   return [`${hours}:${minutes} ${ampm}`, isAfterNoon]
 }
 
-const processTimestamps = (records: Modite[] = [], date: Date) => {
-  const nowUtc: Date = new Date(date.getTime() + date.getTimezoneOffset())
+const processTimestamps = (records: Modite[] = []) => {
+  const utc = new Date().getTime() + MY_OFFSET
 
   records.forEach((item: Modite) => {
-    const itemDate: Date = new Date((nowUtc as any) - (item.tz_offset as number) * 60000)
+    const itemDate = new Date(utc + (item.tz_offset as number))
 
     item.localDate = monthDayYear(itemDate)
   })
@@ -130,10 +132,9 @@ const processRecords = (
   modites: Modite[]
   projects: Project[]
 } => {
-  const date: Date = new Date()
   const modites: Modite[] = filterModites(filter)
   const projects: Project[] = filterProjects(filter)
-  processTimestamps(modites, date)
+  processTimestamps(modites)
 
   return { modites, projects }
 }

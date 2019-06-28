@@ -19,6 +19,6 @@ export interface DataAction {
 
 export interface DataProps {
   setFilter: (val: string) => void
-  processTimestamps: (records: Modite[], date: Date) => void
+  processTimestamps: (records: Modite[]) => void
   fetchModiteProfile: (id: string) => void
 }

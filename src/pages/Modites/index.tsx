@@ -34,12 +34,10 @@ const Modites: FunctionComponent<RouteComponentProps> = () => {
   let activeRecord: Modite | Project | undefined = undefined
 
   if (!isProjects && !isModites) {
-    const date: Date = new Date()
-
     if (activeView === VIEW_TYPES.project) {
       activeRecord = rawProjects.find((project: Project) => project.id === id)
       if (activeRecord) {
-        processTimestamps((activeRecord as Project).users, date)
+        processTimestamps((activeRecord as Project).users)
         mapRecords = (activeRecord as Project).users
       }
     } else {
@@ -49,7 +47,7 @@ const Modites: FunctionComponent<RouteComponentProps> = () => {
         if (!(activeRecord.profile as ModiteProfile).fields) {
           fetchModiteProfile(id as string)
         }
-        processTimestamps([activeRecord as Modite], date)
+        processTimestamps([activeRecord as Modite])
         mapRecords = [activeRecord as Modite]
       }
     }
