@@ -50,9 +50,6 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run:
-          name: Run Unprefixed Version Check
-          command: npm run check:versions
-      - run:
           name: Run ESLint
           command: npm run lint
       - run:

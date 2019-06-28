@@ -1,0 +1,23 @@
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
+.rotate {
+  animation: spin 4s linear infinite;
+  transform-origin: 165px 150px;
+}
+
+.logo {
+  composes: rotate;
+  width: 20rem;
+  height: 20rem;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 320px;
+}
