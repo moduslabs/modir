@@ -10,8 +10,6 @@ const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
 const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
 
-const MY_OFFSET = new Date().getTimezoneOffset() * 60000
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
 
@@ -117,7 +115,15 @@ export function formatAMPM(date: Date): [string, boolean] {
 }
 
 const processTimestamps = (records: Modite[] = []) => {
-  const utc = new Date().getTime() + MY_OFFSET
+  const now = new Date()
+  const utc = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    now.getUTCHours(),
+    now.getUTCMinutes(),
+    now.getUTCSeconds(),
+  )
 
   records.forEach((item: Modite) => {
     const itemDate = new Date(utc + (item.tz_offset as number))
