@@ -1,10 +1,28 @@
 aliases:
   - &restore-npm-cache
     key: v1-dependencies-{{ checksum "yarn.lock" }}
+    name: Saving node_modules cache
   - &restore-webpack-cache
     key: v1-webpackcache-{{ checksum "yarn.lock" }}
+    name: Saving webpack cache
   - &restore-dist-cache
     key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+    name: Saving build
+  - &save-npm-cache
+    key: v1-dependencies-{{ checksum "yarn.lock" }}
+    name: Saving node_modules cache
+    paths:
+      - node_modules
+  - &save-webpack-cache
+    key: v1-webpackcache-{{ checksum "yarn.lock" }}
+    name: Saving webpack cache
+    paths:
+      - node_modules/.cache
+  - &save-dist-cache
+    key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+    name: Saving build
+    paths:
+      - build
 
 defaults: &defaults
   working_directory: /home/circleci/repo
@@ -21,10 +39,7 @@ jobs:
       - run:
           name: Install Node modules
           command: yarn
-      - save_cache:
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
+      - save_cache: *save-npm-cache
 
   build-pwa:
     <<: *defaults
@@ -35,14 +50,8 @@ jobs:
       - run:
           name: Build Project
           command: yarn build
-      - save_cache:
-          key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - build
-      - save_cache:
-          key: v1-webpackcache-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/.cache
+      - save_cache: *save-dist-cache
+      - save_cache: *save-webpack-cache
 
   lint:
     <<: *defaults
@@ -67,6 +76,7 @@ jobs:
       - checkout
       - restore_cache: *restore-dist-cache
       - restore_cache: *restore-npm-cache
+      - run: ls -ln /home/circleci/repo/node_modules/@modus
       - run:
           name: Run Gimbal
           command: gimbal
