@@ -50,6 +50,9 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run:
+          name: Check Version Prefixes
+          command: yarn check:versions
+      - run:
           name: Run ESLint
           command: yarn lint
       - run:
@@ -59,7 +62,7 @@ jobs:
   gimbal:
     <<: *defaults
     docker:
-      - image: moduscreate/gimbal:1.1.0
+      - image: moduscreate/gimbal:1.1.1
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
