@@ -66,6 +66,7 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
+      - restore_cache: *restore-npm-cache
       - run:
           name: Run Gimbal
           command: gimbal
