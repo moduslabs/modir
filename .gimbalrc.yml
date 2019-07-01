@@ -34,7 +34,7 @@ configs:
     - path: ./build/index.html
       maxSize: 4.5 KB
     - path: ./build/
-      maxSize: 10 MB
+      maxSize: 15 MB
 
 plugins:
   - plugin: '@modus/gimbal-plugin-axe'
