@@ -29,9 +29,9 @@
     "react-window": "1.8.4"
   },
   "devDependencies": {
-    "@modus/gimbal": "1.1.1",
-    "@modus/gimbal-plugin-axe": "1.1.1",
-    "@modus/gimbal-plugin-source-map-explorer": "1.1.1",
+    "@modus/gimbal": "1.1.2",
+    "@modus/gimbal-plugin-axe": "1.1.2",
+    "@modus/gimbal-plugin-source-map-explorer": "1.1.2",
     "@types/classnames": "2.2.8",
     "@types/d3-geo": "1.11.1",
     "@types/gapi.auth2": "0.0.50",

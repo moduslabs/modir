@@ -1,13 +1,13 @@
 aliases:
   - &restore-npm-cache
     key: v1-dependencies-{{ checksum "yarn.lock" }}
-    name: Saving node_modules cache
+    name: Restoring node_modules cache
   - &restore-webpack-cache
     key: v1-webpackcache-{{ checksum "yarn.lock" }}
-    name: Saving webpack cache
+    name: Restoring webpack cache
   - &restore-dist-cache
     key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
-    name: Saving build
+    name: Restoring build
   - &save-npm-cache
     key: v1-dependencies-{{ checksum "yarn.lock" }}
     name: Saving node_modules cache
@@ -71,12 +71,11 @@ jobs:
   gimbal:
     <<: *defaults
     docker:
-      - image: moduscreate/gimbal:1.1.1
+      - image: moduscreate/gimbal:1.1.2
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
       - restore_cache: *restore-npm-cache
-      - run: ls -ln /home/circleci/repo/node_modules/@modus
       - run:
           name: Run Gimbal
           command: gimbal

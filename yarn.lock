@@ -1411,10 +1411,10 @@
     pidusage "2.0.17"
     strip-ansi "5.2.0"
 
-"@modus/gimbal-core@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal-core/-/gimbal-core-1.1.1.tgz#6b18d64e1da85f8d97ad6475649cc1e9ff517107"
-  integrity sha512-9GKcQayPkt0NqlgG5KEcUFfMEeoxDsiN5f+xy1HHlRI7cYpojGRYN/Dlu27oqm4NSWCwYRlpc60D6qrdLrOALw==
+"@modus/gimbal-core@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal-core/-/gimbal-core-1.1.2.tgz#2c15047e7194914b87b2edf2cc84f4eb4e34c754"
+  integrity sha512-pBV5qBDoaHzrOpwuXiKsRBCC2FugHmSsci9sh2izt1bvSJTb1ye8qXOcAJHzevZUdAivbIMo6Wq9KiUUvAecaw==
   dependencies:
     cli-table3 "0.5.1"
     colors "1.3.3"
@@ -1431,33 +1431,33 @@
     spinnies "0.4.2"
     strip-ansi "5.2.0"
 
-"@modus/gimbal-plugin-axe@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-axe/-/gimbal-plugin-axe-1.1.1.tgz#5dd2d5d8dccd03ab93855e1e26959da638e94e82"
-  integrity sha512-3OQ2lk87dJNyQ6wKsgwPF3PZWcshzM8PJ4mdcIi9NjbfKKgt2xjFVqUS88B+mgvQ/+mKhFathKg8n0BE76jYGw==
+"@modus/gimbal-plugin-axe@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-axe/-/gimbal-plugin-axe-1.1.2.tgz#2551234f3a2f26d5874b7ea05659a539aa5a01b3"
+  integrity sha512-pQL+WHXWTh7YmO7vfo2CjIJu2fpZ1SiIGX8AarIb9dkECUlID/oy6oUzc68jRqkOOhVeyPzf1MmSCX4r2mh0/Q==
   dependencies:
-    "@modus/gimbal-core" "1.1.1"
+    "@modus/gimbal-core" "1.1.2"
     axe-puppeteer "1.0.0"
     deepmerge "3.3.0"
 
-"@modus/gimbal-plugin-source-map-explorer@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-source-map-explorer/-/gimbal-plugin-source-map-explorer-1.1.1.tgz#bed75816b79fd7c8f355e7810d444ef7c448da6f"
-  integrity sha512-GXGmCO+nyBxhx17UL6UitreFkL4DeRazJuJKdYy1k/wPypUpLnoNFrzyxoNvi6njQwUZ89tQF7mRY/2waYlLUQ==
+"@modus/gimbal-plugin-source-map-explorer@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-source-map-explorer/-/gimbal-plugin-source-map-explorer-1.1.2.tgz#d9394ac6eee77f52fa0666476fa17beb52685943"
+  integrity sha512-pZ/2fP3u0mGCARVhRIxlz+cj7Sz7gJj52f8Tf9iqko3xuWWseDOw3qXAFyiyzrSOrHPp6gmb3Xw9eefx9RZMRA==
   dependencies:
-    "@modus/gimbal-core" "1.1.1"
+    "@modus/gimbal-core" "1.1.2"
     bytes "3.1.0"
     deepmerge "3.3.0"
     globby "10.0.0"
     minimatch "3.0.4"
     source-map-explorer "2.0.1"
 
-"@modus/gimbal@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal/-/gimbal-1.1.1.tgz#7b5bb4af78245ae79ebac64c70005f882f47ee4b"
-  integrity sha512-3tnRi09ePSUZ21uPEe1bDPFWsI727WkeO396IvBhpWHTtXZPEcodEKDKC3/5comtpJASkr6GWo+oOf5upo4Vzw==
+"@modus/gimbal@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal/-/gimbal-1.1.2.tgz#d9e6c3a42da1d903fb3192e10c86f630f10b3ff8"
+  integrity sha512-ZYZJ48ZpWxeZW783PKQ8enHd1nIswKrFfdcqBXUOlvhQOL7qsW+Gsd7Dp3pH3OYeiJiLEpGWsNqwYma6JqxVSg==
   dependencies:
-    "@modus/gimbal-core" "1.1.1"
+    "@modus/gimbal-core" "1.1.2"
     "@octokit/rest" "16.28.2"
     brotli-size "0.1.0"
     bytes "3.1.0"
