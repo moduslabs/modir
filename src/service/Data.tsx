@@ -232,7 +232,7 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     processTimestamps,
     fetchModiteProfile: (id: string) => {
       const suffix: string = MODITE_URL.includes('.json') ? '' : id
-      const url: string = `${MODITE_URL}${suffix}`
+      const url = `${MODITE_URL}${suffix}`
 
       fetch(url, { headers: getHeaders() })
         .then(res => res.json())
