@@ -35,3 +35,4 @@ yarn-error.log*
 modules.xml
 .idea/misc.xml
 *.ipr
+/package-lock.json

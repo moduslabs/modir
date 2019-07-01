@@ -1,24 +1,15 @@
 aliases:
   - &restore-npm-cache
-    keys:
-      - v1-dependencies-{{ checksum "package-lock.json" }}
-      - v1-dependencies-master
-      - v1-dependencies-
+    key: v1-dependencies-{{ checksum "yarn.lock" }}
   - &restore-webpack-cache
-    keys:
-      - v1-webpackcache-{{ checksum "package.json" }}
-      - v1-webpackcache-master
-      - v1-webpackcache-
+    key: v1-webpackcache-{{ checksum "yarn.lock" }}
   - &restore-dist-cache
-    keys:
-      - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
-      - v1-dist-master
-      - v1-dist-
+    key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
 
 defaults: &defaults
   working_directory: /home/circleci/repo
   docker:
-    - image: circleci/node:10
+    - image: circleci/node:10-browsers
 
 version: 2.1
 jobs:
@@ -31,7 +22,7 @@ jobs:
           name: Install Node modules
           command: npm i -ci
       - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
 
@@ -49,7 +40,7 @@ jobs:
           paths:
             - build
       - save_cache:
-          key: v1-webpackcache-{{ checksum "package.json" }}
+          key: v1-webpackcache-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/.cache
 
@@ -58,9 +49,6 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-npm-cache
-      - run:
-          name: Run Unprefixed Version Check
-          command: npm run check:versions
       - run:
           name: Run ESLint
           command: npm run lint

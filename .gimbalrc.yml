@@ -1,15 +1,15 @@
 configs:
   heap-snapshot:
     threshold:
-      Documents: 6
-      Frames: 2
+      Documents: 11
+      Frames: 5
       JSHeapTotalSize: 23356000
       JSHeapUsedSize: 15068000
       Nodes: 800
       RecalcStyleCount: 9
   lighthouse:
     threshold:
-      accessibility: 93
+      accessibility: 90
       'best-practices': 90
       performance: 50
       pwa: 75
