@@ -1,9 +1,9 @@
 audits:
-  - axe
+  # - axe
   - heap-snapshot
   - lighthouse
   - size
-  - source-map-explorer
+  # - source-map-explorer
   # - unused-source
 
 configs:
