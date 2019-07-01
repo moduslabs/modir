@@ -19,8 +19,8 @@ configs:
     threshold:
       accessibility: 90
       'best-practices': 90
-      performance: 50
-      pwa: 75
+      performance: 0
+      pwa: 0
       seo: 100
   size:
     - path: ./build/precache-*.js
@@ -34,7 +34,7 @@ configs:
     - path: ./build/index.html
       maxSize: 4.5 KB
     - path: ./build/
-      maxSize: 18 MB
+      maxSize: 10 MB
 
 plugins:
   - plugin: '@modus/gimbal-plugin-axe'
