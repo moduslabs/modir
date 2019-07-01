@@ -9,7 +9,7 @@ aliases:
 defaults: &defaults
   working_directory: /home/circleci/repo
   docker:
-    - image: circleci/node:10-browsers
+    - image: circleci/node:12
 
 version: 2.1
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - restore_cache: *restore-npm-cache
       - run:
           name: Install Node modules
-          command: npm i -ci
+          command: yarn
       - save_cache:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
@@ -34,7 +34,7 @@ jobs:
       - restore_cache: *restore-webpack-cache
       - run:
           name: Build Project
-          command: npm run build
+          command: yarn build
       - save_cache:
           key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -51,15 +51,15 @@ jobs:
       - restore_cache: *restore-npm-cache
       - run:
           name: Run ESLint
-          command: npm run lint
+          command: yarn lint
       - run:
           name: Run Test TypeScript Compile
-          command: npm run check:compile
+          command: yarn check:compile
 
   gimbal:
     <<: *defaults
     docker:
-      - image: moduscreate/gimbal:1.0.2
+      - image: moduscreate/gimbal:1.1.0
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
