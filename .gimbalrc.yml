@@ -11,16 +11,14 @@ configs:
     threshold:
       Documents: 11
       Frames: 5
-      JSHeapTotalSize: 23356000
-      JSHeapUsedSize: 15068000
       Nodes: 800
-      RecalcStyleCount: 9
+      RecalcStyleCount: 10
   lighthouse:
     threshold:
-      accessibility: 90
-      'best-practices': 90
-      performance: 0
-      pwa: 0
+      accessibility: 100
+      'best-practices': 100
+      performance: 90
+      pwa: 75
       seo: 100
   size:
     - path: ./build/precache-*.js
