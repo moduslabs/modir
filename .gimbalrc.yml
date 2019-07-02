@@ -51,7 +51,7 @@ plugins:
           components/App/index.tsx: 500 B
           serviceWorker.js: 1.5 KB
           index.tsx: 300 B
-          <unmapped>: 150 B
+          <unmapped>: 250 B
       - path: '**/maps.*.js'
         thresholds:
           styles.module.css: 100 B
