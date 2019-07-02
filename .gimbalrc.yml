@@ -1,3 +1,11 @@
+audits:
+  - axe
+  - heap-snapshot
+  - lighthouse
+  - size
+  - source-map-explorer
+  # - unused-source
+
 configs:
   heap-snapshot:
     threshold:
@@ -11,8 +19,8 @@ configs:
     threshold:
       accessibility: 90
       'best-practices': 90
-      performance: 50
-      pwa: 75
+      performance: 0
+      pwa: 0
       seo: 100
   size:
     - path: ./build/precache-*.js
@@ -21,15 +29,68 @@ configs:
       maxSize: 1 MB
     - path: ./build/static/js/runtime*.js
       maxSize: 10 KB
+    - path: ./build/favicon.ico
+      maxSize: 11 KB
+    - path: ./build/index.html
+      maxSize: 4.5 KB
     - path: ./build/
-      maxSize: 18 MB
-  unused-source:
-    threshold: 0%
+      maxSize: 15 MB
+
+plugins:
+  - plugin: '@modus/gimbal-plugin-axe'
+    thresholds:
+      landmark-one-main: moderate
+      page-has-heading-one: moderate
+  - plugin: '@modus/gimbal-plugin-source-map-explorer'
+    bundles:
+      - path: '**/main.*.js'
+        thresholds:
+          constants/constants.ts: 400 B
+          utils/env.ts: 400 B
+          service/Data.tsx: 4 KB
+          components/App/index.tsx: 500 B
+          serviceWorker.js: 1.5 KB
+          index.tsx: 300 B
+          <unmapped>: 250 B
+      - path: '**/maps.*.js'
+        thresholds:
+          styles.module.css: 100 B
+          index.tsx: 2.5 KB
+          <unmapped>: 150 B
+      - path: '**/modite-list.*.js'
+        thresholds:
+          Time/index.tsx: 1 KB
+          ModiteList/styles.module.css: 1.5 KB
+          Loader/styles.module.css: 200 B
+          DetailsView/styles.module.css: 700 B
+          Time/styles.module.css: 200 B
+          BackButton/styles.module.css: 100 B
+          ModiteImage/styles.module.css: 300 B
+          ModiteImage/user-icon-placeholder.png: 100 B
+          ModiteListItem/styles.module.css: 300 B
+          VirtualizedList/styles.module.css: 250 B
+          ModiteImage/index.tsx: 500 B
+          ModiteListItem/index.tsx: 900 B
+          VirtualizedList/index.tsx: 1.25 KB
+          DetailsView/index.tsx: 2.5 KB
+          Loader/index.tsx: 400 B
+          BackButton/index.ts: 400 B
+          NoRecordsFound/index.tsx: 250 B
+          ModiteList/index.tsx: 2.5 KB
+          <unmapped>: 150 B
+      - path: '**/page-modites.*.js'
+        thresholds:
+          pages/Modites/styles.module.css: 350 B
+          utils/util.ts: 350 B
+          pages/Modites/index.tsx: 1.5 KB
+          <unmapped>: 150 B
+      - path: '**/*.js'
+        disable: true
+      - '!precache-manifest*'
+      - '!service-worker.js'
+      - '!**/runtime*.js'
 
 outputs:
   html: artifacts/results.html
   json: artifacts/results.json
   markdown: artifacts/results.md
-
-jobs:
-  - audit
