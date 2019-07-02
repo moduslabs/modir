@@ -72,8 +72,6 @@ jobs:
     <<: *defaults
     docker:
       - image: moduscreate/gimbal:1.1.4
-    environment:
-      CI: 'true'
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
