@@ -9685,10 +9685,10 @@ react-router-dom@5.0.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-router-last-location@2.0.0-beta.1:
-  version "2.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-router-last-location/-/react-router-last-location-2.0.0-beta.1.tgz#0cc93ba456a1f5c259b6b0766d7abb64e73778a0"
-  integrity sha512-DSN4ta5vntC2g+J5YiwQKmhlLIzs2Icq3iVRIjGMcjSeKNOIasM10C1abiURzhkyr2mqmE8cLD9K7eQV9xZjEw==
+react-router-last-location@2.0.0-beta.4:
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/react-router-last-location/-/react-router-last-location-2.0.0-beta.4.tgz#1e95e20075708fc0648d4074096c81978d685bf9"
+  integrity sha512-PmF/3iBjYF/IKo74KHZXTR8IJ27exifaD7ffsdl7QpWdZAeZO0AyjxnQza2up8p4mwF+By8KybT+VV3VDZf9tA==
 
 react-router@5.0.1:
   version "5.0.1"
