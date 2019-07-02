@@ -32,15 +32,16 @@ configs:
     - path: ./build/favicon.ico
       maxSize: 11 KB
     - path: ./build/index.html
-      maxSize: 4.5 KB
+      maxSize: 5 KB
     - path: ./build/
-      maxSize: 15 MB
+      maxSize: 20 MB
 
 plugins:
   - plugin: '@modus/gimbal-plugin-axe'
     thresholds:
       landmark-one-main: moderate
       page-has-heading-one: moderate
+      region: moderate
   - plugin: '@modus/gimbal-plugin-source-map-explorer'
     bundles:
       - path: '**/main.*.js'
