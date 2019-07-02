@@ -1,33 +1,15 @@
 aliases:
   - &restore-npm-cache
     key: v1-dependencies-{{ checksum "yarn.lock" }}
-    name: Restoring node_modules cache
   - &restore-webpack-cache
     key: v1-webpackcache-{{ checksum "yarn.lock" }}
-    name: Restoring webpack cache
   - &restore-dist-cache
     key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
-    name: Restoring build
-  - &save-npm-cache
-    key: v1-dependencies-{{ checksum "yarn.lock" }}
-    name: Saving node_modules cache
-    paths:
-      - node_modules
-  - &save-webpack-cache
-    key: v1-webpackcache-{{ checksum "yarn.lock" }}
-    name: Saving webpack cache
-    paths:
-      - node_modules/.cache
-  - &save-dist-cache
-    key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
-    name: Saving build
-    paths:
-      - build
 
 defaults: &defaults
   working_directory: /home/circleci/repo
   docker:
-    - image: circleci/node:12
+    - image: circleci/node:10-browsers
 
 version: 2.1
 jobs:
@@ -38,8 +20,11 @@ jobs:
       - restore_cache: *restore-npm-cache
       - run:
           name: Install Node modules
-          command: yarn
-      - save_cache: *save-npm-cache
+          command: npm i -ci
+      - save_cache:
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
 
   build-pwa:
     <<: *defaults
@@ -49,9 +34,15 @@ jobs:
       - restore_cache: *restore-webpack-cache
       - run:
           name: Build Project
-          command: yarn build
-      - save_cache: *save-dist-cache
-      - save_cache: *save-webpack-cache
+          command: npm run build
+      - save_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - build
+      - save_cache:
+          key: v1-webpackcache-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/.cache
 
   lint:
     <<: *defaults
@@ -59,23 +50,19 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run:
-          name: Check Version Prefixes
-          command: yarn check:versions
-      - run:
           name: Run ESLint
-          command: yarn lint
+          command: npm run lint
       - run:
           name: Run Test TypeScript Compile
-          command: yarn check:compile
+          command: npm run check:compile
 
   gimbal:
     <<: *defaults
     docker:
-      - image: moduscreate/gimbal:1.1.4
+      - image: moduscreate/gimbal:1.0.2
     steps:
       - checkout
       - restore_cache: *restore-dist-cache
-      - restore_cache: *restore-npm-cache
       - run:
           name: Run Gimbal
           command: gimbal

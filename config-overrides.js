@@ -2,7 +2,7 @@
 const path = require('path')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-// const GimbalPlugin = require('webpack-gimbal-plugin')
+const GimbalPlugin = require('webpack-gimbal-plugin')
 
 module.exports = function override(config, env) {
   if (env === 'development') {
@@ -32,7 +32,7 @@ module.exports = function override(config, env) {
     .filter(Boolean)
 
   if (env === 'production') {
-    // config.plugins.push(new GimbalPlugin())
+    config.plugins.push(new GimbalPlugin())
   }
 
   // custom alias for src/
