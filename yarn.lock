@@ -1396,10 +1396,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
-"@modus/gimbal-core@1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal-core/-/gimbal-core-1.1.3.tgz#0daf227c090c5b99fb63e9e647615f8a82faeff5"
-  integrity sha512-MbCMXoFmupCCgJdgpEdxNXlabM2F8nEKdh9EMhiB3K5JbNrlrBkoAp19XOFwCsQ50XxJtKXFx183kITzqYeSxg==
+"@modus/gimbal-core@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal-core/-/gimbal-core-1.1.4.tgz#0e51da9f80bf2d121a3d2fa05367030952a63583"
+  integrity sha512-eLjimvx3V3BLub2irqpIIXgDXCCB2VvehNoJKrSPLe1x9sBe4lW4zpLB2Q0vJHPUfVNiFzFF40mlvsLmm6H+tQ==
   dependencies:
     cli-table3 "0.5.1"
     colors "1.3.3"
@@ -1415,20 +1415,20 @@
     spinnies "0.4.2"
     strip-ansi "5.2.0"
 
-"@modus/gimbal-plugin-axe@1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-axe/-/gimbal-plugin-axe-1.1.3.tgz#7bb22e02ec58dd45c4f53e197b3cd06caa2a8a78"
-  integrity sha512-j25R6BoyxrJdpCGOres4lqg/we+6Nv0JMYE2SMH1lrh3njbiQG9NXUqMbsSrY8VZJxAG5RLcc+qEGwdA1R2v6Q==
+"@modus/gimbal-plugin-axe@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-axe/-/gimbal-plugin-axe-1.1.4.tgz#bc3674c35a59f32d81e4d002f45b4d46fc892309"
+  integrity sha512-GhhCWixqhi0bFIHYrzG0eXKSgdqm+dxNQOoKrvilg6Q8iEBly3hFAmTp2p6ENPU9bQ8b9IbzuMuJsJAKRGBY5Q==
   dependencies:
     axe-puppeteer "1.0.0"
     deepmerge "3.3.0"
 
-"@modus/gimbal-plugin-source-map-explorer@1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-source-map-explorer/-/gimbal-plugin-source-map-explorer-1.1.3.tgz#3e987ca383d8fbfe8cf9f1a2688a9a3c6a58a428"
-  integrity sha512-d8tsKj28fJgW3IJiHsKPr29NfrsjvxEqQEjQtmfu1501PLRDPVXrqJh79FuV9XVu1WQgOs7BkZxBwDGEDPkoYg==
+"@modus/gimbal-plugin-source-map-explorer@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@modus/gimbal-plugin-source-map-explorer/-/gimbal-plugin-source-map-explorer-1.1.4.tgz#3f26a220ab82d7edeaa51659b9f4eef0ddbf3cde"
+  integrity sha512-0rFJQRsmS0P/8I37G+Onyp7BE5rtS6HWOofhAW2TYmmHwf9FW+xMRD7jVSaEfgY0lhH+5iTKvvqwA6P0NvfpOw==
   dependencies:
-    "@modus/gimbal-core" "1.1.3"
+    "@modus/gimbal-core" "1.1.4"
     bytes "3.1.0"
     deepmerge "3.3.0"
     globby "10.0.0"
@@ -1614,10 +1614,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/classnames@2.2.8":
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.8.tgz#17139e1e1104203572caa4368f6796f6225b70b4"
-  integrity sha512-3UrLzPnz8u+MMXuJTF++389IfLSQUbl5F3ry9WCxva0BKG5H/oo5NuPRXk+HrpPU1+5pVHSWhnVWRzIaFQ7QuQ==
+"@types/classnames@2.2.9":
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.9.tgz#d868b6febb02666330410fe7f58f3c4b8258be7b"
+  integrity sha512-MNl+rT5UmZeilaPxAVs6YaPC2m6aA8rofviZbhbxpPpl61uKodfdQVsBtgJGTqGizEf02oW3tsVe7FYB8kK14A==
 
 "@types/d3-geo@1.11.1":
   version "1.11.1"
@@ -1743,10 +1743,10 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-router@5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.0.2.tgz#619850cf28245d97bfa205f1fa7136451ba384bc"
-  integrity sha512-sdMN284GEOcqDEMS/hE/XD06Abw2fws30+xkZf3C9cSRcWopiv/HDTmunYI7DKLYKVRaWFkq1lkuJ6qeYu0E7A==
+"@types/react-router@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.0.3.tgz#855a1606e62de3f4d69ea34fb3c0e50e98e964d5"
+  integrity sha512-j2Gge5cvxca+5lK9wxovmGPgpVJMwjyu5lTA/Cd6fLGoPq7FXcUE1jFkEdxeyqGGz8VfHYSHCn5Lcn24BzaNKA==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"

@@ -84,6 +84,8 @@ plugins:
           utils/util.ts: 350 B
           pages/Modites/index.tsx: 1.5 KB
           <unmapped>: 150 B
+      - path: '**/*.js'
+        disable: true
       - '!precache-manifest*'
       - '!service-worker.js'
       - '!**/runtime*.js'
