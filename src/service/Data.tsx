@@ -114,11 +114,19 @@ export function formatAMPM(date: Date): [string, boolean] {
   return [`${hours}:${minutes} ${ampm}`, isAfterNoon]
 }
 
-const processTimestamps = (records: Modite[] = [], date: Date) => {
-  const nowUtc: Date = new Date(date.getTime() + date.getTimezoneOffset())
+const processTimestamps = (records: Modite[] = []) => {
+  const now = new Date()
+  const utc = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    now.getUTCHours(),
+    now.getUTCMinutes(),
+    now.getUTCSeconds(),
+  )
 
   records.forEach((item: Modite) => {
-    const itemDate: Date = new Date((nowUtc as any) - (item.tz_offset as number) * 60000)
+    const itemDate = new Date(utc + (item.tz_offset as number))
 
     item.localDate = monthDayYear(itemDate)
   })
@@ -130,10 +138,9 @@ const processRecords = (
   modites: Modite[]
   projects: Project[]
 } => {
-  const date: Date = new Date()
   const modites: Modite[] = filterModites(filter)
   const projects: Project[] = filterProjects(filter)
-  processTimestamps(modites, date)
+  processTimestamps(modites)
 
   return { modites, projects }
 }
