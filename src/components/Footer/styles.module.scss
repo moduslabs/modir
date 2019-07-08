@@ -1,0 +1,20 @@
+@import '../../theme/variables.scss';
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+.footerTitle {
+  padding-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.footerSubline {
+  color: $mediumGray;
+  font-size: 60%;
+  padding: 0 3rem 1rem;
+}

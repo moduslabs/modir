@@ -1,0 +1,62 @@
+@import './variables.scss';
+
+html,
+body {
+  font-family: $fontRegular;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.016em;
+  line-height: 20px;
+  text-rendering: optimizeLegibility;
+  color: $black;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  font-family: $fontAlt;
+  font-size: 4.25rem;
+  font-weight: 800;
+
+  @media only screen and (max-width: $desktop) {
+    font-size: 3.25rem;
+  }
+
+  @media only screen and (max-width: $tablet) {
+    font-size: 3rem;
+  }
+}
+
+h2 {
+  font-family: $fontAlt;
+  font-size: 2.75rem;
+  font-weight: 800;
+}
+
+h3 {
+  font-family: $fontAlt;
+  font-size: 2.275rem;
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-height: 1.25em;
+}
+
+p {
+  line-height: 1.25em;
+}
+
+a {
+  text-decoration: none;
+  color: $black;
+}

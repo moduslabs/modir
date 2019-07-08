@@ -1,4 +1,4 @@
-import React, { Context, createContext, useEffect, Dispatch } from 'react'
+import React, { Context, createContext, useContext, useEffect, Dispatch } from 'react'
 import get from 'lodash-es/get'
 import Modite, { ListTypes, ModiteProfile } from '../models/Modite'
 import Project from '../models/Project'
@@ -278,3 +278,5 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
 export { DataProvider }
 export default DataContext
+
+export const useData = () => useContext(DataContext)

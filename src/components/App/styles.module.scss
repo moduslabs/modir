@@ -1,0 +1,147 @@
+@import '../../theme/variables.scss';
+
+$backgroundColor: #f4f4f2;
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px !important;
+  }
+}
+
+.main {
+  background: $backgroundColor;
+  height: 100%;
+
+  > *:first-child {
+    transition: height $animDuration;
+    will-change: height;
+  }
+}
+
+.bottomFader,
+.topFader {
+  background: #FFFFFF;
+  box-shadow: 0 0 3em 3em rgba(255, 255, 255, 1);
+  height: 10%;
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+
+.bottomFader {
+  bottom: 0;
+}
+
+.topFader {
+  top: 0;
+  transition: height $animDuration;
+  will-change: height;
+
+  &.loaded {
+    height: 0;
+  }
+}
+
+.headerCt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.header {
+  transform: translateY(calc(100vh / 2 - 21px));
+  transition: transform $animDuration;
+  will-change: transform;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.loaded {
+    transform: translateY(25px);
+  }
+}
+
+.title {
+  font-weight: bold;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+}
+
+.globeButton {
+  position: absolute;
+  right: 15px;
+  color: var(--ion-color-modus-salmon);
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.tabBar {
+  background: $backgroundColor;
+  border-top: 1px solid #dcdcdc;
+  display: flex;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  > * {
+    cursor: pointer;
+    flex: 1;
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 70%;
+  }
+
+  ion-icon {
+    display: block;
+    font-size: 190%;
+  }
+
+  .activeTab {
+    color: $red;
+  }
+}
+
+.bodyWrapper {
+  padding: 0 0 46px;
+
+  > * {
+    flex: 1;
+    position: relative;
+  }
+
+  &.isFullscreen {
+    padding-bottom: 0;
+  }
+}
+
+.searchbar {
+  background: transparent;
+  padding: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  transform: translateY(calc(25vh - 21px));
+  transition: transform $animDuration, right $animDuration;
+  will-change: transform;
+  width: unset;
+
+  &.searchbarCollapsed {
+    transform: translateY(0);
+
+    &.searchbarSpaced {
+      right: 45px;
+    }
+  }
+
+  input {
+    border-radius: 10px !important;
+    box-shadow: 0px 24px 48px 0px rgba(0, 0, 0, 0.5) !important;
+  }
+}

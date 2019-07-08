@@ -1,16 +1,16 @@
 import React, { FunctionComponent } from 'react'
 import { VariableSizeList as List, ListChildComponentProps } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import Modite from '../../models/Modite'
+import Project from '../../models/Project'
 import ModiteListProps from '../../types/components/ModiteList'
 import Row from './Row'
 
 // used for spacer row
-const pseudoRecord: Modite = {
+const pseudoRecord: Project = {
   id: '-1',
 }
 
-const ModiteList: FunctionComponent<ModiteListProps> = ({
+const ProjectList: FunctionComponent<ModiteListProps> = ({
   records,
   lastScrollOffset,
   onScroll = () => {},
@@ -24,7 +24,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   )
 
   return (
-    <AutoSizer aria-label="The list of Modites">
+    <AutoSizer aria-label="The list of projects">
       {({ height, width }: { height: number; width: number }) => (
         <>
           <List
@@ -45,4 +45,4 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   )
 }
 
-export default React.memo(ModiteList)
+export default React.memo(ProjectList)

@@ -165,3 +165,24 @@ a {
   text-decoration: none;
   color: var(--ion-color-modus-charcoal);
 }
+
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit.fade-exit-active {
+  opacity: 0;
+  transition: opacity 250ms ease-in;
+}
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+
+a.mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-attrib.mapboxgl-compact {
+  display: none !important;
+}
