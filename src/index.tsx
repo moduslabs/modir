@@ -7,6 +7,7 @@ function initApp(googleUser: { getAuthResponse: Function } | void) {
   if (googleUser) {
     localStorage.setItem('token', googleUser.getAuthResponse().id_token)
   }
+
   ReactDOM.render(<App />, document.getElementById('root'))
 }
 

@@ -34,13 +34,21 @@ export const NAME_PROPERTIES: NameProperties = {
   name: 'name',
 }
 
-const pathRe = /^\/(.*)\/?/
+type LocationViewTypeMap = {
+  [key in string]: ViewTypes
+}
+
+const LOCATION_VIEW_TYPE_MAP: LocationViewTypeMap = {
+  details: 'modite',
+  modites: 'modites',
+  projects: 'projects',
+}
 
 export const locationToViewType = (pathname: string): ViewTypes => {
-  const matches = pathname.match(pathRe)
+  const [, match] = pathname.split('/')
 
-  if (matches && matches[1]) {
-    return matches[1] as ViewTypes
+  if (match) {
+    return LOCATION_VIEW_TYPE_MAP[match as ViewTypes] || 'modites'
   }
 
   return 'modites'

@@ -1,0 +1,75 @@
+@import '../../theme/variables.scss';
+
+$thumbSize: 150px;
+
+.detailContainer {
+  height: 75vh;
+  margin-top: 25vh;
+  position: relative;
+}
+
+.detailInnerContainer {
+  background: #FFFFFF;
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  bottom: 0;
+  box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+  height: calc(75vh - #{$thumbSize / 2});
+  left: 10px;
+  overflow-y: scroll;
+  padding: 90px 10px 10px;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+}
+
+.thumbContainer {
+  border-radius: 12px;
+  box-shadow: 0px 0px 37px 4px rgba(0,0,0,0.75);
+  height: $thumbSize;
+  left: calc(50% - #{$thumbSize / 2});
+  position: absolute;
+  top: 0;
+  width: $thumbSize;
+}
+
+.tacos {
+  padding: 4px 8px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 2px solid #DCAF39;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.taco {
+  margin-right: 8px;
+}
+
+.gitUser {
+  font-size: 150%;
+  left: 10px;
+  position: absolute;
+  top: 10px;
+}
+
+.location {
+  color: $grey-shadow;
+  margin: 10px 0;
+}
+
+.name {
+  margin: 0;
+}
+
+.slackName,
+.todWrap {
+  margin-bottom: 20px;
+}
+
+.projectHeader {
+  font-size: 90%;
+  margin-bottom: 0;
+}

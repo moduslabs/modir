@@ -1,5 +1,5 @@
 import { addIcons } from 'ionicons'
-import { clipboard, globe, list, people } from 'ionicons/icons'
+import { clipboard, globe, list, logoGithub, logoSkype, people } from 'ionicons/icons'
 
 addIcons({
   'ios-clipboard': clipboard.ios,
@@ -10,4 +10,7 @@ addIcons({
   'md-list': list.md,
   'ios-people': people.ios,
   'md-people': people.md,
+
+  'logo-github': logoGithub,
+  'logo-skype': logoSkype,
 })

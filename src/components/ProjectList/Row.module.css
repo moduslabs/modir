@@ -3,7 +3,3 @@
   flex-direction: column-reverse;
   padding: 3px 0;
 }
-
-div[class="List"] {
-  transition: opacity 250ms;
-}

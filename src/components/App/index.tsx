@@ -3,7 +3,7 @@ import '@ionic/core/css/ionic.bundle.css'
 import { IonApp, IonIcon, IonPage, IonSearchbar } from '@ionic/react'
 import classnames from 'classnames'
 import React, { Suspense, useState } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { LastLocationProvider } from 'react-router-last-location'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import Footer from '../Footer'
@@ -11,12 +11,17 @@ import Map from '../Map'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
 import { useNavigate, useLocation } from '../../hook/useRouter'
 import { useData } from '../../service/Data'
+import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 import Providers from '../../service/Providers'
+import history from '../../utils/history'
 import s from './styles.module.scss'
 import './icons'
 import './theme.css'
 
+const ModiteDetailPage = React.lazy(() =>
+  import('../../pages/ModiteDetail' /* webpackChunkName: "page-modite-detail", webpackPrefetch: true  */),
+)
 const ModitesPage = React.lazy(() =>
   import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
 )
@@ -28,13 +33,14 @@ type ModiteListTypes = 'globe' | 'list'
 
 const Inner = () => {
   const [state] = useData()
+  const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const location = useLocation()
   const [, setViewport]: MapContextArray = useMap()
   const go = useNavigate('/{tab}')
   const [isLoaded, setIsLoaded] = useState(false)
   const [moditeListType, setModiteListType] = useState<ModiteListTypes>('list')
-  const [searchBarCollapsed, setSearchBarCollapsed] = useState(false)
   const activePage = locationToViewType(location.pathname)
+  const isModite = activePage === VIEW_TYPES.modite
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
   const isGlobe = moditeListType === 'globe'
@@ -44,9 +50,6 @@ const Inner = () => {
     setTimeout(() => setIsLoaded(true), 1500)
   }
 
-  const onListScroll = (scrollOffset: number): void =>
-    setSearchBarCollapsed(isGlobe || scrollOffset >= document.body.clientHeight / 5)
-
   const onTabClick = (newTab: ViewTypes) =>
     go({
       tab: newTab === 'modites' ? '' : newTab,
@@ -54,7 +57,10 @@ const Inner = () => {
 
   const toggleListType = () => {
     setModiteListType(isGlobe ? 'list' : 'globe')
-    setSearchBarCollapsed(!isGlobe)
+    setGlobalState({
+      ...globalState,
+      searchBarCollapsed: !isGlobe,
+    })
 
     if (isGlobe) {
       setViewport({
@@ -73,15 +79,13 @@ const Inner = () => {
       <IonPage className={classnames(s.bodyWrapper, showTabBar ? null : s.isFullscreen)}>
         {isLoaded ? (
           <TransitionGroup>
-            <CSSTransition key={location.key} classNames="fade" timeout={300}>
+            <CSSTransition key={location.key} classNames="slide-down" timeout={300}>
               <Suspense fallback={<div className="loader" />}>
                 <Switch location={location}>
-                  <Route
-                    exact
-                    path="/"
-                    render={() => <ModitesPage listType={moditeListType} onScroll={onListScroll} />}
-                  />
-                  <Route exact path="/projects" render={() => <ProjectsPage onScroll={onListScroll} />} />
+                  <Route exact path="/details/:id" component={ModiteDetailPage} />
+                  <Route exact path="/" render={() => <ModitesPage listType={moditeListType} />} />
+                  <Route exact path="/projects" render={() => <ProjectsPage />} />
+                  <Route path="*" render={() => <Redirect to="/" />} />
                 </Switch>
               </Suspense>
             </CSSTransition>
@@ -89,33 +93,38 @@ const Inner = () => {
         ) : null}
       </IonPage>
 
-      <div className={s.headerCt}>
-        <div className={classnames(s.header, isLoaded ? s.loaded : null)}>
-          <div className={s.title}>Modus Land</div>
-          {isLoaded && isTeam ? (
-            /* eslint-disable-next-line no-console */
-            <IonIcon
-              className={s.globeButton}
-              mode="ios"
-              name={moditeListType === 'globe' ? 'list' : 'globe'}
-              onClick={toggleListType}
-            />
-          ) : null}
+      {globalState.headerHidden ? null : (
+        <div className={s.headerCt}>
+          <div className={classnames(s.header, isLoaded ? s.loaded : null)}>
+            <div className={s.title}>Modus Land</div>
+            {isLoaded && isTeam ? (
+              /* eslint-disable-next-line no-console */
+              <IonIcon
+                className={s.globeButton}
+                mode="ios"
+                name={moditeListType === 'globe' ? 'list' : 'globe'}
+                onClick={toggleListType}
+              />
+            ) : null}
+          </div>
         </div>
-      </div>
+      )}
 
-      <IonSearchbar
-        mode="md"
-        debounce={200}
-        // value={filter}
-        placeholder={isTeam ? 'Search Modites' : 'Search Projects'}
-        // onIonChange={onFilter}
-        className={classnames(
-          s.searchbar,
-          searchBarCollapsed ? s.searchbarCollapsed : null,
-          isTeam ? s.searchbarSpaced : null,
-        )}
-      />
+      {globalState.searchBarHidden ? null : (
+        <IonSearchbar
+          mode="md"
+          debounce={200}
+          placeholder={isTeam || isModite ? 'Search Modites' : 'Search Projects'}
+          // TODO need to handle filtering
+          // value={filter}
+          // onIonChange={onFilter}
+          className={classnames(
+            s.searchbar,
+            globalState.searchBarCollapsed ? s.searchbarCollapsed : null,
+            isTeam ? s.searchbarSpaced : null,
+          )}
+        />
+      )}
 
       {isLoaded ? null : <Footer />}
 
@@ -139,7 +148,7 @@ const App = () => (
   <IonApp>
     <Providers>
       <main className={s.main} role="main">
-        <Router>
+        <Router history={history}>
           <LastLocationProvider>
             <Inner />
           </LastLocationProvider>

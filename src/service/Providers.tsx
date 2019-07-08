@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { DataProvider } from './Data'
+import GlobalProvider from './Global'
 import MapProvider from './Map'
 
 interface Props {
@@ -8,7 +9,9 @@ interface Props {
 
 const Providers = ({ children }: Props) => (
   <DataProvider>
-    <MapProvider>{children}</MapProvider>
+    <GlobalProvider>
+      <MapProvider>{children}</MapProvider>
+    </GlobalProvider>
   </DataProvider>
 )
 

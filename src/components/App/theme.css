@@ -73,13 +73,13 @@
   --ion-color-light-tint: #f5f6f9;
 }
 
-/* Additional Ionic Colors
-// --------------------------------------------------
-// In order to add colors to be used with Ionic components,
-// the color should be added as a class with the convention `.ion-color-{COLOR}`
-// where `{COLOR}` is the color to be used on the Ionic component
-// and each variant is defined for the color. For more information, please see
-// https://beta.ionicframework.com/docs/theming/advanced
+/** Additional Ionic Colors
+/* --------------------------------------------------
+/* In order to add colors to be used with Ionic components,
+/* the color should be added as a class with the convention `.ion-color-{COLOR}`
+/* where `{COLOR}` is the color to be used on the Ionic component
+/* and each variant is defined for the color. For more information, please see
+/* https://beta.ionicframework.com/docs/theming/advanced
 */
 
 .ion-color-favorite {
@@ -127,12 +127,12 @@
   --ion-color-tint: #4f6aa2;
 }
 
-/* Shared Variables
-// --------------------------------------------------
-// To customize the look and feel of this app, you can override
-// the CSS variables found in Ionic's source files.
-// To view all the possible Ionic variables, see:
-// https://beta.ionicframework.com/docs/theming/css-variables#ionic-variables
+/** Shared Variables
+/* --------------------------------------------------
+/* To customize the look and feel of this app, you can override
+/* the CSS variables found in Ionic's source files.
+/* To view all the possible Ionic variables, see:
+/* https://beta.ionicframework.com/docs/theming/css-variables#ionic-variables
 */
 
 :root {
@@ -166,23 +166,41 @@ a {
   color: var(--ion-color-modus-charcoal);
 }
 
-.fade-exit {
+a.mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-attrib.mapboxgl-compact {
+  display: none !important;
+}
+
+/** Fade page transitions
+*/
+.fade-exit,
+.fade-enter.fade-enter-active {
   opacity: 1;
 }
-.fade-exit.fade-exit-active {
-  opacity: 0;
-  transition: opacity 250ms ease-in;
-}
+
+.fade-exit.fade-exit-active,
 .fade-enter {
   opacity: 0;
   z-index: 1;
 }
+.fade-exit.fade-exit-active,
 .fade-enter.fade-enter-active {
-  opacity: 1;
   transition: opacity 250ms ease-in;
 }
 
-a.mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-attrib.mapboxgl-compact {
-  display: none !important;
+/** Slide down page transitions
+*/
+.slide-down-exit,
+.slide-down-enter.slide-down-enter-active {
+  transform: translateY(0);
+}
+.slide-down-exit.slide-down-exit-active,
+.slide-down-enter {
+  transform: translateY(100vh);
+  z-index: 1;
+}
+
+.slide-down-exit.slide-down-exit-active,
+.slide-down-enter.slide-down-enter-active {
+  transition: transform 250ms ease-in;
 }

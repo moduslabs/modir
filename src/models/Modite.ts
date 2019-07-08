@@ -28,8 +28,11 @@ export interface ModiteProfile {
   image_192?: string
   image_512?: string
   fields?: {
+    'GitHub User'?: string
     Location?: string
     locationData?: LocationData
+    'Skype User'?: string
+    Title?: string
   }
 }
 
