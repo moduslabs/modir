@@ -10,10 +10,15 @@
   right: 0;
   text-align: center;
   top: 0;
+}
 
-  h2 {
-    margin: 0;
-  }
+.firstHeader,
+.secondHeader {
+  margin: 0;
+}
+
+.firstHeader {
+  margin-top: 1em;
 }
 
 .text {
