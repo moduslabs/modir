@@ -1,28 +1,23 @@
-import React, { FunctionComponent } from 'react'
+import React, { CSSProperties, FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { ListChildComponentProps } from 'react-window'
+import Modite from '../../models/Modite'
 import ModiteItem from './Item'
 import s from './Row.module.css'
 
-interface RowProps extends ListChildComponentProps {
+interface RowProps {
   addSpacerRow: boolean
+  plain: boolean
+  modite: Modite
+  style: CSSProperties
 }
 
-const Row: FunctionComponent<RowProps> = ({ addSpacerRow, data, index, style }) => (
-  <>
-    {addSpacerRow && index === 0 && <div style={style} />}
-    {(!addSpacerRow || (addSpacerRow && index !== 0)) && data[index].id && (
-      <Link to={`/details/${data[index].id}`} className={`ListRow ${s.moditeRow}`} style={style}>
-        <ModiteItem key={data[index].id} item={data[index]} />
-      </Link>
-    )}
-    {/* When does not have an id (e.g. no modite found) there is no detail link.*/}
-    {(!addSpacerRow || (addSpacerRow && index !== 0)) && !data[index].id && (
-      <span className={`ListRow ${s.moditeRow}`} style={style}>
-        <ModiteItem key={data[index].id} item={data[index]} />
-      </span>
-    )}
-  </>
-)
+const Row: FunctionComponent<RowProps> = ({ addSpacerRow, plain, modite, style }) =>
+  addSpacerRow && modite.id === '-1' ? (
+    <div style={style} />
+  ) : (
+    <Link to={`/details/${modite.id}`} className={s.moditeRow} style={style}>
+      <ModiteItem plain={plain} key={modite.id} item={modite} />
+    </Link>
+  )
 
 export default Row

@@ -21,7 +21,7 @@ const ProjectList: FunctionComponent<ProjectListProps> = ({
   const localRecords = addSpacerRow ? [{ ...pseudoRecord }, ...records] : records
 
   const Renderer: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <Row plain={plain} addSpacerRow={addSpacerRow} index={index} data={localRecords} style={style} />
+    <Row plain={plain} addSpacerRow={addSpacerRow} project={localRecords[index]} style={style} />
   )
 
   return (

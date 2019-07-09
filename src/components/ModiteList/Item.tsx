@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 import ModiteImage from '../ModiteImage'
 import Time from '../Time'
-import ListItemProps from '../../types/components/ModiteListItem'
+import { ListItemProps } from '../../types/components/ModiteList'
 import s from './Item.module.scss'
 
 const ModiteItem: FunctionComponent<ListItemProps & RouteComponentProps> = ({ item }) => (

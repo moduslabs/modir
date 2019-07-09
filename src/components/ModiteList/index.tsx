@@ -15,12 +15,13 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   lastScrollOffset,
   onScroll = () => {},
   addSpacerRow = false,
+  plain = false,
 }) => {
   const getItemSize = (index: number) => (addSpacerRow && index === 0 ? document.body.clientHeight / 2 : 60)
   const localRecords = addSpacerRow ? [{ ...pseudoRecord }, ...records] : records
 
   const Renderer: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
-    <Row addSpacerRow={addSpacerRow} index={index} data={localRecords} style={style} />
+    <Row plain={plain} addSpacerRow={addSpacerRow} modite={localRecords[index]} style={style} />
   )
 
   return (
