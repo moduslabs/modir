@@ -2,12 +2,9 @@
 const path = require('path')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-const rewireSvgReactLoader = require('./rewired-config/svg')
 // const GimbalPlugin = require('webpack-gimbal-plugin')
 
 module.exports = function override(config, env) {
-  config = rewireSvgReactLoader(config, env)
-
   if (env === 'development') {
     // required for web workers to work with HMR
     config.output.globalObject = 'this'

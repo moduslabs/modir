@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from './Rocket-Empty-State-Illustration.local.svg'
+import Image from '-!react-svg-loader!./Rocket-Empty-State-Illustration.svg'
 import s from './styles.module.scss'
 
 const NoResults = () => (
