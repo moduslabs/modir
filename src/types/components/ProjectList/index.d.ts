@@ -7,6 +7,7 @@ export interface ListItemProps {
 
 export default interface ProjectListProps {
   addSpacerRow?: boolean
+  className?: string
   lastScrollOffset?: number
   onScroll?: (...args: any) => void
   plain?: boolean

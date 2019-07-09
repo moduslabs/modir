@@ -39,8 +39,9 @@ type LocationViewTypeMap = {
 }
 
 const LOCATION_VIEW_TYPE_MAP: LocationViewTypeMap = {
-  details: 'modite',
+  modite: 'modite',
   modites: 'modites',
+  project: 'project',
   projects: 'projects',
 }
 

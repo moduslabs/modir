@@ -10,9 +10,9 @@ import { useParams } from '../../hook/useRouter'
 import Modite from '../../models/Modite'
 import Project from '../../models/Project'
 import { useData } from '../../service/Data'
-import { DataState } from '../../types/service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, useMap } from '../../service/Map'
+import { DataState } from '../../types/service/Data'
 import s from './styles.module.scss'
 
 const latitudeDiff = -5.5

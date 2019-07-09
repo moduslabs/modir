@@ -25,8 +25,11 @@ const ModiteDetailPage = React.lazy(() =>
 const ModitesPage = React.lazy(() =>
   import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
 )
+const ProjectDetailPage = React.lazy(() =>
+  import('../../pages/ProjectDetail' /* webpackChunkName: "page-project-detail", webpackPrefetch: true  */),
+)
 const ProjectsPage = React.lazy(() =>
-  import('../../pages/Projects' /* webpackChunkName: "page-pages", webpackPrefetch: true  */),
+  import('../../pages/Projects' /* webpackChunkName: "page-projects", webpackPrefetch: true  */),
 )
 
 type ModiteListTypes = 'globe' | 'list'
@@ -41,10 +44,11 @@ const Inner = () => {
   const [moditeListType, setModiteListType] = useState<ModiteListTypes>('list')
   const activePage = locationToViewType(location.pathname)
   const isModite = activePage === VIEW_TYPES.modite
+  const isProject = activePage === VIEW_TYPES.project
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
   const isGlobe = moditeListType === 'globe'
-  const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe))
+  const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
   if (!isLoaded && state.modites.length === 0 && !state.filter) {
     setTimeout(() => setIsLoaded(true), 1500)
@@ -82,9 +86,10 @@ const Inner = () => {
             <CSSTransition key={location.key} classNames="slide-down" timeout={300}>
               <Suspense fallback={<div className="loader" />}>
                 <Switch location={location}>
-                  <Route exact path="/details/:id" component={ModiteDetailPage} />
+                  <Route exact path="/modite/:id" component={ModiteDetailPage} />
                   <Route exact path="/" render={() => <ModitesPage listType={moditeListType} />} />
-                  <Route exact path="/projects" render={() => <ProjectsPage />} />
+                  <Route exact path="/project/:id" component={ProjectDetailPage} />
+                  <Route exact path="/projects" component={ProjectsPage} />
                   <Route path="*" render={() => <Redirect to="/" />} />
                 </Switch>
               </Suspense>

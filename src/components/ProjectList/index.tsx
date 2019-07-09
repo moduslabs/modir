@@ -12,6 +12,7 @@ const pseudoRecord: Project = {
 
 const ProjectList: FunctionComponent<ProjectListProps> = ({
   addSpacerRow = false,
+  className,
   lastScrollOffset = 0,
   onScroll,
   plain = false,
@@ -25,7 +26,7 @@ const ProjectList: FunctionComponent<ProjectListProps> = ({
   )
 
   return (
-    <AutoSizer aria-label="The list of projects">
+    <AutoSizer className={className} aria-label="The list of projects">
       {({ height, width }: { height: number; width: number }) => (
         <>
           <List

@@ -6,9 +6,10 @@ export interface ListItemProps {
 }
 
 export default interface VirtualizedListProps {
-  records: Modite[]
-  lastScrollOffset: number
-  onScroll: (...args: any) => void
   addSpacerRow?: boolean
+  className?: string
+  lastScrollOffset?: number
+  onScroll?: (...args: any) => void
   plain?: boolean
+  records: Modite[]
 }

@@ -11,11 +11,12 @@ const pseudoRecord: Modite = {
 }
 
 const ModiteList: FunctionComponent<ModiteListProps> = ({
-  records,
-  lastScrollOffset,
-  onScroll = () => {},
   addSpacerRow = false,
+  className,
+  lastScrollOffset = 0,
+  onScroll,
   plain = false,
+  records,
 }) => {
   const getItemSize = (index: number) => (addSpacerRow && index === 0 ? document.body.clientHeight / 2 : 60)
   const localRecords = addSpacerRow ? [{ ...pseudoRecord }, ...records] : records
@@ -25,7 +26,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   )
 
   return (
-    <AutoSizer aria-label="The list of Modites">
+    <AutoSizer className={className} aria-label="The list of Modites">
       {({ height, width }: { height: number; width: number }) => (
         <>
           <List
