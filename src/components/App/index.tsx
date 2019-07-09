@@ -20,8 +20,6 @@ import s from './styles.module.scss'
 import './icons'
 import './theme.css'
 
-// http://localhost:3000/project/20727741
-
 const ModiteDetailPage = React.lazy(() =>
   import('../../pages/ModiteDetail' /* webpackChunkName: "page-modite-detail", webpackPrefetch: true  */),
 )
@@ -113,8 +111,16 @@ const Inner = () => {
       <IonPage className={classnames(s.bodyWrapper, showTabBar ? null : s.isFullscreen)}>
         {isLoaded ? (
           <TransitionGroup>
-            <CSSTransition key={location.key} classNames="slide-down" timeout={300}>
-              <Suspense fallback={<div className="loader" />}>
+            <CSSTransition
+              key={location.key}
+              unmountOnExit
+              mountOnEnter
+              appear
+              in={true}
+              classNames="slide-down"
+              timeout={300}
+            >
+              <Suspense fallback={<div />}>
                 <Switch location={location}>
                   <Route exact path="/modite/:id" component={ModiteDetailPage} />
                   <Route exact path="/" render={() => <ModitesPage listType={moditeListType} />} />

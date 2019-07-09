@@ -90,7 +90,6 @@ $backgroundColor: #f4f4f2;
   > * {
     cursor: pointer;
     flex: 1;
-    padding: 5px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -99,7 +98,7 @@ $backgroundColor: #f4f4f2;
 
   ion-icon {
     display: block;
-    font-size: 190%;
+    font-size: 250%;
   }
 
   .activeTab {
@@ -108,7 +107,7 @@ $backgroundColor: #f4f4f2;
 }
 
 .bodyWrapper {
-  padding: 0 0 46px;
+  padding: 0 0 43px;
 
   > * {
     flex: 1;
