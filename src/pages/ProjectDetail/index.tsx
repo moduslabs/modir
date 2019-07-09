@@ -4,14 +4,13 @@ import Back from '../../components/Back'
 import ModiteList from '../../components/ModiteList'
 import { useParams } from '../../hook/useRouter'
 import Project from '../../models/Project'
-import { useData } from '../../service/Data'
+import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
-import { DataState } from '../../types/service/Data'
 import s from './styles.module.scss'
 
 const ProjectDetail = () => {
-  const [{ projects }]: [DataState] = useData()
+  const [{ projects }, dispatch]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const [, setViewport]: MapContextArray = useMap()
   const { id } = useParams()
@@ -25,6 +24,8 @@ const ProjectDetail = () => {
 
   const { users = [] } = project
 
+  // TODO filter map to show only users
+
   useEffect(() => {
     setGlobalState({
       ...globalState,
@@ -32,12 +33,17 @@ const ProjectDetail = () => {
       searchBarHidden: true,
     })
 
+    dispatch({
+      type: 'filter-project-users',
+      modites: users,
+    })
+
     setViewport({ ...defaultViewport })
   }, [project])
 
   return (
     <>
-      <Back />
+      <Back backTo="/projects" />
       <div className={s.detailContainer}>
         <div className={s.detailInnerContainer}>
           <h2 className={s.name}>{project.name}</h2>

@@ -12,9 +12,10 @@ export interface DataState {
 }
 
 export interface DataAction {
-  type: string
+  type: 'clear-filter' | 'filter-project-users' | 'on-fetch-modite-profile' | 'on-filter' | 'on-load'
   filter?: string
   id?: string
+  modites?: Modite[]
 }
 
 export interface DataProps {

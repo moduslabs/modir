@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import MapGL, { ViewportProps, ViewState, Marker } from 'react-map-gl'
 import { useInterval } from '../../hook/useInterval'
-import { useData } from '../../service/Data'
-import { ContextArray, useMap } from '../../service/Map'
+import { ContextArray as DataContextArray, useData } from '../../service/Data'
+import { ContextArray as MapContextArray, useMap } from '../../service/Map'
 import Pin from './pin'
 import Modite, { LocationData } from '../../models/Modite'
 
@@ -24,8 +24,8 @@ const moditeToCoord = (modite: Modite): any => {
 }
 
 const Map = ({ animate = false, className, height: heightProp = '100%' }: Props) => {
-  const [state] = useData()
-  const [viewport, setViewport]: ContextArray = useMap()
+  const [state]: DataContextArray = useData()
+  const [viewport, setViewport]: MapContextArray = useMap()
   const [height, setHeight] = useState<number | string>(heightProp)
   const [width, setWidth] = useState<number | string>('100%')
 

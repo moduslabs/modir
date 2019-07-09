@@ -6,10 +6,11 @@ import history from '../../utils/history'
 import s from './styles.module.scss'
 
 interface Props {
+  backTo?: string
   className?: string
 }
 
-const Back: FunctionComponent<Props> = ({ className }) => {
+const Back: FunctionComponent<Props> = ({ backTo = '/', className }) => {
   const lastLocation: LastLocationType = useLastLocation()
 
   const onBackClick = (e: SyntheticEvent) => {
@@ -23,7 +24,7 @@ const Back: FunctionComponent<Props> = ({ className }) => {
     if (lastLocation) {
       history.goBack()
     } else {
-      history.push('/')
+      history.push(backTo)
     }
   }
 

@@ -1,16 +1,17 @@
 import '@ionic/core/css/core.css'
 import '@ionic/core/css/ionic.bundle.css'
+import { SearchbarChangeEventDetail } from '@ionic/core'
 import { IonApp, IonIcon, IonPage, IonSearchbar } from '@ionic/react'
 import classnames from 'classnames'
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
-import { LastLocationProvider } from 'react-router-last-location'
+import { LastLocationProvider, LastLocationType, useLastLocation } from 'react-router-last-location'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import Footer from '../Footer'
 import Map from '../Map'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
 import { useNavigate, useLocation } from '../../hook/useRouter'
-import { useData } from '../../service/Data'
+import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 import Providers from '../../service/Providers'
@@ -18,6 +19,8 @@ import history from '../../utils/history'
 import s from './styles.module.scss'
 import './icons'
 import './theme.css'
+
+// http://localhost:3000/project/20727741
 
 const ModiteDetailPage = React.lazy(() =>
   import('../../pages/ModiteDetail' /* webpackChunkName: "page-modite-detail", webpackPrefetch: true  */),
@@ -35,8 +38,9 @@ const ProjectsPage = React.lazy(() =>
 type ModiteListTypes = 'globe' | 'list'
 
 const Inner = () => {
-  const [state] = useData()
+  const [state, dispatch]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
+  const lastLocation: LastLocationType = useLastLocation()
   const location = useLocation()
   const [, setViewport]: MapContextArray = useMap()
   const go = useNavigate('/{tab}')
@@ -50,9 +54,25 @@ const Inner = () => {
   const isGlobe = moditeListType === 'globe'
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
+  useEffect(() => {
+    if (lastLocation) {
+      const lastActivePage = locationToViewType(lastLocation.pathname)
+
+      if (lastActivePage === VIEW_TYPES.project) {
+        dispatch({ type: 'clear-filter' })
+      }
+    }
+  }, [lastLocation])
+
   if (!isLoaded && state.modites.length === 0 && !state.filter) {
     setTimeout(() => setIsLoaded(true), 1500)
   }
+
+  const onFilter = (event: CustomEvent<SearchbarChangeEventDetail>): void =>
+    dispatch({
+      type: 'on-filter',
+      filter: event.detail.value,
+    })
 
   const onTabClick = (newTab: ViewTypes) =>
     go({
@@ -121,8 +141,8 @@ const Inner = () => {
           debounce={200}
           placeholder={isTeam || isModite ? 'Search Modites' : 'Search Projects'}
           // TODO need to handle filtering
-          // value={filter}
-          // onIonChange={onFilter}
+          value={state.filter}
+          onIonChange={onFilter}
           className={classnames(
             s.searchbar,
             globalState.searchBarCollapsed ? s.searchbarCollapsed : null,

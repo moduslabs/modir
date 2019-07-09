@@ -1,4 +1,4 @@
-import React, { Context, createContext, useContext, useEffect, Dispatch } from 'react'
+import React, { Context, Dispatch, SetStateAction, createContext, useContext, useEffect } from 'react'
 import get from 'lodash-es/get'
 import Modite, { ListTypes, ModiteProfile } from '../models/Modite'
 import Project from '../models/Project'
@@ -12,6 +12,8 @@ const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
+
+export type ContextArray = [DataState, Dispatch<SetStateAction<DataAction>>]
 
 let rawModites: Modite[] = []
 let rawProjects: Project[] = []
@@ -76,9 +78,8 @@ const filterRecords = ({
       )
     : records
 }
-const filterModites = (filter: string): Modite[] => {
-  return filterRecords({ records: [...rawModites], type: VIEW_TYPES.modites, filter })
-}
+const filterModites = (filter: string): Modite[] =>
+  filterRecords({ records: [...rawModites], type: VIEW_TYPES.modites, filter })
 const filterProjects = (filter: string): Project[] =>
   filterRecords({ records: [...rawProjects], type: VIEW_TYPES.projects, filter }) as Project[]
 
@@ -149,6 +150,18 @@ const reducer = (state: DataState, action: DataAction): DataState => {
   let processed: { modites: Modite[]; projects: Project[] }
 
   switch (action.type) {
+    case 'clear-filter':
+      return {
+        ...state,
+        modites: state.rawModites || state.modites,
+        rawModites: [],
+      }
+    case 'filter-project-users':
+      return {
+        ...state,
+        modites: action.modites || [],
+        rawModites: state.rawModites || state.modites,
+      }
     case 'on-fetch-modite-profile':
       return {
         ...state,
@@ -203,7 +216,7 @@ const augmentProjectUsers = (): void => {
 // @ts-ignore
 const signOut = () => gapi.auth2.getAuthInstance().signOut()
 
-const DataProvider = ({ children }: { children?: React.ReactNode }) => {
+export const DataProvider = ({ children }: { children?: React.ReactNode }) => {
   const [state, dispatch]: [DataState, Dispatch<DataAction>] = React.useReducer(reducer, initialState)
 
   const getData = async (): Promise<void> => {
@@ -229,54 +242,53 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
     dispatch({ type: 'on-load' })
   }
 
-  const props: DataProps = {
-    setFilter: (filter: string) => {
-      dispatch({
-        type: 'on-filter',
-        filter,
-      })
-    },
-    processTimestamps,
-    fetchModiteProfile: (id: string) => {
-      const suffix: string = MODITE_URL.includes('.json') ? '' : id
-      const url = `${MODITE_URL}${suffix}`
+  // const props: DataProps = {
+  //   setFilter: (filter: string) => {
+  //     dispatch({
+  //       type: 'on-filter',
+  //       filter,
+  //     })
+  //   },
+  //   processTimestamps,
+  //   fetchModiteProfile: (id: string) => {
+  //     const suffix: string = MODITE_URL.includes('.json') ? '' : id
+  //     const url = `${MODITE_URL}${suffix}`
 
-      fetch(url, { headers: getHeaders() })
-        .then(res => res.json())
-        .then(json => {
-          const { ok, profile }: { ok: boolean; profile: ModiteProfile } = json
+  //     fetch(url, { headers: getHeaders() })
+  //       .then(res => res.json())
+  //       .then(json => {
+  //         const { ok, profile }: { ok: boolean; profile: ModiteProfile } = json
 
-          if (ok && profile) {
-            const rawTarget: Modite = rawModites.find((modite: Modite) => modite.id === id) as Modite
-            if (rawTarget) {
-              rawTarget.profile = profile
-            }
-            const mappedTarget: Modite = moditeMap[id]
-            if (mappedTarget) {
-              mappedTarget.profile = profile
-              augmentProjectUsers()
-              dispatch({ type: 'on-fetch-modite-profile' })
-            }
-          }
-        })
-        .catch(signOut)
-      // https://modus.app/modite/U0AUTJZUL
-      // fetch(MODITE_URL, { headers }).then(res => res.json())
-      // dispatch({
-      //   type: 'on-fetch-modite-profile',
-      //   id,
-      // })
-    },
-  }
+  //         if (ok && profile) {
+  //           const rawTarget: Modite = rawModites.find((modite: Modite) => modite.id === id) as Modite
+  //           if (rawTarget) {
+  //             rawTarget.profile = profile
+  //           }
+  //           const mappedTarget: Modite = moditeMap[id]
+  //           if (mappedTarget) {
+  //             mappedTarget.profile = profile
+  //             augmentProjectUsers()
+  //             dispatch({ type: 'on-fetch-modite-profile' })
+  //           }
+  //         }
+  //       })
+  //       .catch(signOut)
+  //     // https://modus.app/modite/U0AUTJZUL
+  //     // fetch(MODITE_URL, { headers }).then(res => res.json())
+  //     // dispatch({
+  //     //   type: 'on-fetch-modite-profile',
+  //     //   id,
+  //     // })
+  //   },
+  // }
 
   useEffect((): void => {
     getData()
   }, [])
 
-  return <DataContext.Provider value={[state, props]}>{children}</DataContext.Provider>
+  return <DataContext.Provider value={[state, dispatch]}>{children}</DataContext.Provider>
 }
 
-export { DataProvider }
 export default DataContext
 
 export const useData = () => useContext(DataContext)

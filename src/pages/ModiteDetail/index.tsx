@@ -9,16 +9,15 @@ import Time from '../../components/Time'
 import { useParams } from '../../hook/useRouter'
 import Modite from '../../models/Modite'
 import Project from '../../models/Project'
-import { useData } from '../../service/Data'
+import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, useMap } from '../../service/Map'
-import { DataState } from '../../types/service/Data'
 import s from './styles.module.scss'
 
 const latitudeDiff = -5.5
 
 const ModiteDetail = () => {
-  const [{ modites, projects }]: [DataState] = useData()
+  const [{ modites, projects }]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const [viewport, setViewport]: MapContextArray = useMap()
   const { id } = useParams()

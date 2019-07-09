@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
 import ProjectList from '../../components/ProjectList'
-import { useData } from '../../service/Data'
+import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
-import { DataState } from '../../types/service/Data'
 
 let lastScrollOffset = 0 // used by onScroll
 
 const Projects = () => {
-  const [state]: [DataState] = useData()
+  const [state]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
 
   useEffect(() => {
