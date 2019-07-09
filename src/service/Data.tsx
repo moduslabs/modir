@@ -1,14 +1,13 @@
 import React, { Context, Dispatch, SetStateAction, createContext, useContext, useEffect } from 'react'
 import get from 'lodash-es/get'
-import Modite, { ListTypes, ModiteProfile } from '../models/Modite'
+import Modite, { ListTypes } from '../models/Modite'
 import Project from '../models/Project'
 import { VIEW_TYPES, NAME_PROPERTIES } from '../constants/constants'
-import { DataState, DataAction, DataProps } from '../types/service/Data'
+import { DataState, DataAction } from '../types/service/Data'
 import { envOrDefault } from '../utils/env'
 
 const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
-const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataContext: Context<any> = createContext([{}, Function])
@@ -241,46 +240,6 @@ export const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
     dispatch({ type: 'on-load' })
   }
-
-  // const props: DataProps = {
-  //   setFilter: (filter: string) => {
-  //     dispatch({
-  //       type: 'on-filter',
-  //       filter,
-  //     })
-  //   },
-  //   processTimestamps,
-  //   fetchModiteProfile: (id: string) => {
-  //     const suffix: string = MODITE_URL.includes('.json') ? '' : id
-  //     const url = `${MODITE_URL}${suffix}`
-
-  //     fetch(url, { headers: getHeaders() })
-  //       .then(res => res.json())
-  //       .then(json => {
-  //         const { ok, profile }: { ok: boolean; profile: ModiteProfile } = json
-
-  //         if (ok && profile) {
-  //           const rawTarget: Modite = rawModites.find((modite: Modite) => modite.id === id) as Modite
-  //           if (rawTarget) {
-  //             rawTarget.profile = profile
-  //           }
-  //           const mappedTarget: Modite = moditeMap[id]
-  //           if (mappedTarget) {
-  //             mappedTarget.profile = profile
-  //             augmentProjectUsers()
-  //             dispatch({ type: 'on-fetch-modite-profile' })
-  //           }
-  //         }
-  //       })
-  //       .catch(signOut)
-  //     // https://modus.app/modite/U0AUTJZUL
-  //     // fetch(MODITE_URL, { headers }).then(res => res.json())
-  //     // dispatch({
-  //     //   type: 'on-fetch-modite-profile',
-  //     //   id,
-  //     // })
-  //   },
-  // }
 
   useEffect((): void => {
     getData()
