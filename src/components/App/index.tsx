@@ -68,11 +68,21 @@ const Inner = () => {
     setTimeout(() => setIsLoaded(true), 1500)
   }
 
-  const onFilter = (event: CustomEvent<SearchbarChangeEventDetail>): void =>
+  const onFilter = (event: CustomEvent<SearchbarChangeEventDetail>): void => {
+    const filter = event.detail.value
+
+    if (!filter) {
+      setGlobalState({
+        ...globalState,
+        searchBarCollapsed: false,
+      })
+    }
+
     dispatch({
       type: 'on-filter',
-      filter: event.detail.value,
+      filter,
     })
+  }
 
   const onTabClick = (newTab: ViewTypes) =>
     go({

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import GlobeModiteList from '../../components/GlobeModiteList'
 import ModiteList from '../../components/ModiteList'
+import NoResults from '../../components/NoResults'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
@@ -12,7 +13,7 @@ interface Props {
 let lastScrollOffset = 0 // used by onScroll
 
 const Modites = ({ listType }: Props) => {
-  const [state]: DataContextArray = useData()
+  const [{ modites }]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const [, setViewport]: MapContextArray = useMap()
 
@@ -20,9 +21,14 @@ const Modites = ({ listType }: Props) => {
     setGlobalState({
       ...globalState,
       headerHidden: false,
+      searchBarCollapsed: modites.length === 0,
       searchBarHidden: false,
     })
-  }, [])
+  }, [modites])
+
+  if (!modites.length) {
+    return <NoResults />
+  }
 
   if (listType === 'list') {
     const onListScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
@@ -39,12 +45,7 @@ const Modites = ({ listType }: Props) => {
     }
 
     return (
-      <ModiteList
-        addSpacerRow={true}
-        records={state.modites}
-        onScroll={onListScroll}
-        lastScrollOffset={lastScrollOffset}
-      />
+      <ModiteList addSpacerRow={true} records={modites} onScroll={onListScroll} lastScrollOffset={lastScrollOffset} />
     )
   } else {
     return <GlobeModiteList />
