@@ -166,8 +166,8 @@ a {
   color: var(--ion-color-modus-charcoal);
 }
 
-a.mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-attrib.mapboxgl-compact {
+.mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-attrib {
   display: none !important;
 }
 
