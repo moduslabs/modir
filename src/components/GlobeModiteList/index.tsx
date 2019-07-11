@@ -4,7 +4,7 @@ import ModiteImage from '../../components/ModiteImage'
 import Time from '../../components/Time'
 import { useBuffered } from '../../hook/useBuffered'
 import { useData } from '../../service/Data'
-import { ContextArray, useMap } from '../../service/Map'
+import { ContextArray, defaultViewport, useMap } from '../../service/Map'
 import { DataState } from '../../types/service/Data'
 import s from './styles.module.scss'
 
@@ -49,7 +49,7 @@ const GlobeModiteList = () => {
         }
       : {
           ...viewport,
-          modite: undefined,
+          ...defaultViewport,
         }
 
     setViewport(newViewport)
