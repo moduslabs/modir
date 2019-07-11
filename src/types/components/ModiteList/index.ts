@@ -1,16 +1,15 @@
 import Modite from '../../../models/Modite'
-import Project from '../../../models/Project'
 
-export default interface ModiteListProps {
-  activeView: 'project' | 'projects' | 'modite' | 'modites'
-  filter: string
-  listRecords: (Modite | Project)[]
-  activeRecord: Modite | Project | undefined
-  setFilter: (val: string) => void
+export interface ListItemProps {
+  item: Modite
+  plain?: boolean
 }
 
-export interface FilterEvent {
-  detail: {
-    value?: string
-  }
+export default interface VirtualizedListProps {
+  addSpacerRow?: boolean
+  className?: string
+  lastScrollOffset?: number
+  onScroll?: (...args: any) => void
+  plain?: boolean
+  records: Modite[]
 }

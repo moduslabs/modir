@@ -1,0 +1,78 @@
+@import '../../theme/variables.scss';
+
+.thumbnailContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.appear {
+  animation-name: appear;
+  animation-fill-mode: forwards;
+  animation-duration: 100ms;
+  animation-timing-function: cubic-bezier(0.1, 0.1, 1, 1);
+}
+
+.itemInnerCt {
+  margin: 0 10px;
+  background-color: white;
+  height: 52px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-flow: wrap;
+  flex: 1;
+
+  &:not(.plainItem) {
+    border-radius: 10px;
+    box-shadow: 0px 14px 24px 0px rgba(0, 0, 0, 0.25), 0px 33px 24px 0px rgba(255, 255, 255, 1);
+  }
+
+  &.plainItem {
+    border-bottom: 1px solid $liteGray;
+  }
+}
+
+.thumbContainer {
+  width: 36px;
+  height: 36px;
+  box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.25);
+  margin-right: 8px;
+}
+
+.thumbContainer img {
+  border-radius: 5px;
+}
+
+.nameCt {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  margin-left: 6px;
+}
+
+.projectUserCount {
+  font-size: 15px;
+  opacity: 0.5;
+  width: 23px;
+  text-align: right;
+}
+
+.itemInnerCt ion-icon {
+  opacity: 0.35;
+  margin-left: 14px;
+  width: 18px;
+  height: 18px;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

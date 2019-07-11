@@ -1,0 +1,21 @@
+@import '../../theme/variables.scss';
+
+.logoContainerBlack {
+  display: inline-block;
+  text-align: center;
+}
+
+.logoBlack {
+  width: (250rem/24);
+  display: flex;
+}
+
+.logoContainerBlack .leftfill.path_bottom,
+.logoContainerBlack .leftfill.path_top,
+.logoContainerBlack .rightfill.path_bottom,
+.logoContainerBlack .rightfill.path_top,
+.logoContainerBlack .topfill.path_bottom,
+.logoContainerBlack .topfill.path_top,
+.logoContainerBlack .modusText {
+  fill: $liteGray;
+}

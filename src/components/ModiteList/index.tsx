@@ -1,153 +1,50 @@
-import React, { FunctionComponent, lazy, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { IonSearchbar, IonIcon, IonPage } from '@ionic/react'
-import classNames from 'classnames/bind'
-import s from './styles.module.css'
-import Loader from '../Loader'
-import DetailsView from '../../components/DetailsView'
-import BackButton from '../BackButton'
-import { VIEW_TYPES } from '../../constants/constants'
-import ModiteListProps, { FilterEvent } from '../../types/components/ModiteList'
-import NoRecordsFound from '../NoRecordsFound'
+import React, { FunctionComponent } from 'react'
+import { VariableSizeList as List, ListChildComponentProps } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import Modite from '../../models/Modite'
+import ModiteListProps from '../../types/components/ModiteList'
+import Row from './Row'
 
-const VirtualizedList = lazy(() =>
-  import('../VirtualizedList' /* webpackChunkName: "modite-virtualized-list", webpackPrefetch: true  */),
-)
-
-let lastFilter = '' // used by onFilter
-let lastScrollOffsetModites = 0 // used by onScroll
-let lastScrollOffsetProjects = 0 // used by onScroll
-
-const cx: (...args: any) => string = classNames.bind(s)
+// used for spacer row
+const pseudoRecord: Modite = {
+  id: '-1',
+}
 
 const ModiteList: FunctionComponent<ModiteListProps> = ({
-  activeView,
-  filter,
-  listRecords,
-  activeRecord,
-  setFilter,
+  addSpacerRow = false,
+  className,
+  lastScrollOffset = 0,
+  onScroll,
+  plain = false,
+  records,
 }) => {
-  const isDetails: boolean = activeView === VIEW_TYPES.project || activeView === VIEW_TYPES.modite
-  const isProjects = activeView === VIEW_TYPES.projects
-  const isModites = activeView === VIEW_TYPES.modites
-  const searchBarRef = useRef<HTMLLabelElement>(null)
-  const lastScrollOffset = isProjects ? lastScrollOffsetProjects : lastScrollOffsetModites
+  const getItemSize = (index: number) => (addSpacerRow && index === 0 ? document.body.clientHeight / 2 : 60)
+  const localRecords = addSpacerRow ? [{ ...pseudoRecord }, ...records] : records
 
-  const onScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
-    const doCollapse = scrollOffset > 0
-
-    requestAnimationFrame(() => {
-      const el: HTMLLabelElement = searchBarRef.current as HTMLLabelElement
-
-      if (doCollapse || filter) {
-        el.classList.add(s.searchbarWrapCollapsed)
-      } else {
-        el.classList.remove(s.searchbarWrapCollapsed)
-      }
-    })
-
-    if (isProjects) {
-      lastScrollOffsetProjects = scrollOffset
-    } else {
-      lastScrollOffsetModites = scrollOffset
-    }
-  }
-
-  const onFilter = (event: FilterEvent): void => {
-    const query: string = event.detail.value || ''
-
-    if (query === lastFilter) {
-      return
-    }
-
-    lastFilter = query
-    setFilter(query.trim())
-  }
-
-  const resetScroll = () => {
-    setFilter('')
-  }
-
-  // adjusts the searchbar appropriately on route change
-  useEffect(() => {
-    onScroll({ scrollOffset: lastScrollOffset })
-  }, [activeView])
-
-  const moditeListCtCls: string = cx('moditeListCt', { detailsView: isDetails })
-  const moditeListWrapCls: string = cx('moditeListWrap')
-  const globalBarWrapCls: string = cx('globalBarWrap', { globalBarWrapHidden: !!isDetails })
-  const searchbarWrapCls: string = cx('searchbarWrap', {
-    searchbarWrapHidden: !!isDetails,
-  })
-  const moditesTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.modites })
-  const projectsTabCls: string = cx('listTypeTab', { listTypeTabSelected: activeView === VIEW_TYPES.projects })
-  const activeModiteCls: string = cx({ activeModiteShown: !!isDetails })
-  const tabCtCls: string = cx('tabCt', { tabCtHidden: !!isDetails })
+  const Renderer: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
+    <Row plain={plain} addSpacerRow={addSpacerRow} modite={localRecords[index]} style={style} />
+  )
 
   return (
-    <>
-      <IonPage className={moditeListCtCls}>
-        {isDetails ? <BackButton className={s.backButton} /> : null}
-        <div className={moditeListWrapCls}>
-          {isProjects && listRecords.length && (
-            <VirtualizedList
-              addSpacerRow={true}
-              records={listRecords}
-              onScroll={onScroll}
-              lastScrollOffset={lastScrollOffsetProjects}
-            />
-          )}
-          {isModites && listRecords.length && (
-            <VirtualizedList
-              addSpacerRow={true}
-              records={listRecords}
-              onScroll={onScroll}
-              lastScrollOffset={lastScrollOffsetModites}
-            />
-          )}
-          {!isDetails && !listRecords.length && filter.length && <NoRecordsFound />}
-          {!isDetails && !listRecords.length && !filter.length && <Loader />}
-          <DetailsView record={activeRecord} className={activeModiteCls} />
-        </div>
-        <div className={tabCtCls}>
-          <Link to="/" className={moditesTabCls} onClick={resetScroll}>
-            <IonIcon ios="ios-people" md="ios-people" />
-            Team
-          </Link>
-          <Link to="/projects" className={projectsTabCls} onClick={resetScroll}>
-            <IonIcon ios="md-clipboard" md="md-clipboard" />
-            Projects
-          </Link>
-        </div>
-      </IonPage>
-
-      <div className={s.searchbarCt}>
-        <div className={globalBarWrapCls}>
-          <div className={s.globalSpacer} />
-          <div className={s.globeTitle}>MODUS LAND</div>
-          <IonIcon
-            class={`${s.globeButton}`}
-            slot="icon-only"
-            ios="ios-globe"
-            md="ios-globe"
-            // TODO: wire up the handling of the globe click for really realz
-            // onClick={() => console.log('clicked')}
-          />
-        </div>
-        <label ref={searchBarRef} className={searchbarWrapCls}>
-          <IonSearchbar
-            mode="md"
-            debounce={200}
-            value={filter}
-            placeholder="Filter Modites"
-            onIonChange={onFilter}
-            class={s.searchbar}
-          />
-          <div className={s.searchbarSpacer} />
-        </label>
-      </div>
-    </>
+    <AutoSizer className={className} aria-label="The list of Modites">
+      {({ height, width }: { height: number; width: number }) => (
+        <>
+          <List
+            itemSize={getItemSize}
+            itemCount={localRecords.length}
+            height={height}
+            width={width}
+            initialScrollOffset={lastScrollOffset}
+            onScroll={onScroll}
+            itemKey={(index: number) => localRecords[index].id || (index.toString() as string)}
+            overscanCount={200}
+          >
+            {Renderer}
+          </List>
+        </>
+      )}
+    </AutoSizer>
   )
 }
 
-export default ModiteList
+export default React.memo(ModiteList)

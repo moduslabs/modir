@@ -18,7 +18,7 @@ configs:
       accessibility: 100
       'best-practices': 90
       performance: 60
-      pwa: 75
+      pwa: 70
       seo: 100
   size:
     - path: ./build/precache-*.js
@@ -49,7 +49,7 @@ plugins:
           service/Data.tsx: 4 KB
           components/App/index.tsx: 500 B
           serviceWorker.js: 1.5 KB
-          index.tsx: 300 B
+          index.tsx: 700 B
           <unmapped>: 250 B
       - path: '**/maps.*.js'
         thresholds:
@@ -81,7 +81,7 @@ plugins:
         thresholds:
           pages/Modites/styles.module.css: 350 B
           utils/util.ts: 350 B
-          pages/Modites/index.tsx: 1.5 KB
+          pages/Modites/index.tsx: 700 B
           <unmapped>: 150 B
       - path: '**/*.js'
         disable: true

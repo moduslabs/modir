@@ -1,0 +1,5 @@
+.moditeRow {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 3px 0;
+}
