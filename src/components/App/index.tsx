@@ -70,8 +70,8 @@ const Inner = () => {
     }
   }, [lastLocation])
 
-  if (!isLoaded && state.modites.length === 0 && !state.filter) {
-    setTimeout(() => setIsLoaded(true), 1500)
+  if (!isLoaded && state.isLoaded) {
+    setIsLoaded(true)
   }
 
   const onFilter = (event: CustomEvent<SearchbarChangeEventDetail>): void => {
