@@ -14,6 +14,7 @@ export const MapContext: Context<any> = createContext([{}, Function])
 export const defaultViewport: Viewport = {
   latitude: -50,
   longitude: -40,
+  modite: undefined,
   zoom: 1,
   bearing: 0,
   pitch: 0,

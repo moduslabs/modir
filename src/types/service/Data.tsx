@@ -5,6 +5,7 @@ export type NameProperties = 'real_name' | 'name'
 
 export interface DataState {
   filter: string
+  isLoaded: boolean
   modites: Modite[]
   projects: Project[]
   rawModites: Modite[]

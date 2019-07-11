@@ -167,7 +167,9 @@ const reducer = (state: DataState, action: DataAction): DataState => {
       }
     case 'on-filter':
       processed = processRecords(action.filter as string)
+
       return {
+        ...state,
         filter: action.filter as string,
         modites: processed.modites,
         projects: processed.projects,
@@ -176,8 +178,10 @@ const reducer = (state: DataState, action: DataAction): DataState => {
       }
     case 'on-load':
       processed = processRecords(state.filter)
+
       return {
         ...state,
+        isLoaded: true,
         modites: processed.modites,
         projects: processed.projects,
         rawModites,
@@ -190,6 +194,7 @@ const reducer = (state: DataState, action: DataAction): DataState => {
 
 const initialState: DataState = {
   filter: '',
+  isLoaded: false,
   modites: [],
   projects: [],
   rawModites: [],

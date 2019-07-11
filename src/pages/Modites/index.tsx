@@ -4,7 +4,6 @@ import ModiteList from '../../components/ModiteList'
 import NoResults from '../../components/NoResults'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
-import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 
 interface Props {
   listType: 'globe' | 'list'
@@ -15,7 +14,6 @@ let lastScrollOffset = 0 // used by onScroll
 const Modites = ({ listType }: Props) => {
   const [{ modites }]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
-  const [, setViewport]: MapContextArray = useMap()
 
   useEffect(() => {
     setGlobalState({
@@ -37,10 +35,6 @@ const Modites = ({ listType }: Props) => {
       setGlobalState({
         ...globalState,
         searchBarCollapsed: scrollOffset >= document.body.clientHeight / 5,
-      })
-
-      setViewport({
-        ...defaultViewport,
       })
     }
 

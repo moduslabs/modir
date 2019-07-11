@@ -18,7 +18,6 @@ const GlobeModiteList = () => {
 
     return (
       <div style={style} className={s.item}>
-        <ModiteImage className={s.thumbContainer} modite={modite} />
         <div className={s.innerItem}>
           <div>{modite.real_name}</div>
           <div className={s.moditeSubline}>
@@ -30,6 +29,8 @@ const GlobeModiteList = () => {
             <Time modite={modite} />
           </div>
         </div>
+
+        <ModiteImage className={s.thumbContainer} modite={modite} />
       </div>
     )
   }

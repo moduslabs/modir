@@ -67,8 +67,6 @@ const ModiteDetail = () => {
     <>
       <Back />
       <div className={s.detailContainer}>
-        <ModiteImage className={s.thumbContainer} modite={modite} />
-
         <div className={s.detailInnerContainer}>
           <div className={s.tacos}>
             <span className={s.taco}>🌮</span>
@@ -97,6 +95,8 @@ const ModiteDetail = () => {
           <h4 className={s.projectHeader}>Projects</h4>
           {moditeProjects.length ? <ProjectList plain records={moditeProjects} /> : <div>No current projects</div>}
         </div>
+
+        <ModiteImage className={s.thumbContainer} modite={modite} />
       </div>
     </>
   )

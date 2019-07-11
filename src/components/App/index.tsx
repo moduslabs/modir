@@ -40,7 +40,7 @@ const Inner = () => {
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const lastLocation: LastLocationType = useLastLocation()
   const location = useLocation()
-  const [, setViewport]: MapContextArray = useMap()
+  const [viewport, setViewport]: MapContextArray = useMap()
   const go = useNavigate('/{tab}')
   const [isLoaded, setIsLoaded] = useState(false)
   const [moditeListType, setModiteListType] = useState<ModiteListTypes>('list')
@@ -58,6 +58,14 @@ const Inner = () => {
 
       if (lastActivePage === VIEW_TYPES.project) {
         dispatch({ type: 'clear-filter' })
+      }
+
+      // if current is modites list or projects list but did not come from one of them lists
+      if ((isTeam || isProjects) && (lastActivePage !== VIEW_TYPES.projects && lastActivePage !== VIEW_TYPES.modites)) {
+        setViewport({
+          ...viewport,
+          ...defaultViewport,
+        })
       }
     }
   }, [lastLocation])
@@ -96,6 +104,7 @@ const Inner = () => {
 
     if (isGlobe) {
       setViewport({
+        ...viewport,
         ...defaultViewport,
       })
     }
@@ -139,7 +148,6 @@ const Inner = () => {
           <div className={classnames(s.header, isLoaded ? s.loaded : null)}>
             <div className={s.title}>Modus Land</div>
             {isLoaded && isTeam ? (
-              /* eslint-disable-next-line no-console */
               <IonIcon
                 className={s.globeButton}
                 mode="ios"

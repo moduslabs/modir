@@ -1,58 +1,11 @@
 .hidden {
   display: none;
 }
-.moditeImage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
 
 .moditeImage img {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
   border-radius: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
-}
-
-@keyframes scaleout {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
-}
-
-.loading:before {
-  content: '';
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  margin-top: -16px;
-  margin-left: -16px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  animation: scaleout 1.2s infinite ease-in-out;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.lazyload,
-.lazyloading {
-  opacity: 0;
-}
-
-.loading,
-.lazyload,
-.lazyloaded,
-.moditeImage {
-  opacity: 1;
-  transition: opacity 2s cubic-bezier(0.215, 0.61, 0.355, 1);
 }

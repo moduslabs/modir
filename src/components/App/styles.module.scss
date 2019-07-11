@@ -1,7 +1,5 @@
 @import '../../theme/variables.scss';
 
-$backgroundColor: #f4f4f2;
-
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,
@@ -13,11 +11,6 @@ $backgroundColor: #f4f4f2;
 .main {
   background: $backgroundColor;
   height: 100%;
-
-  > *:first-child {
-    transition: height $animDuration;
-    will-change: height;
-  }
 }
 
 .bottomFader,
