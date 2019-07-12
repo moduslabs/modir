@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import Back from '../../components/Back'
 import GitHub from '../../components/GitHub'
 import ModiteImage from '../../components/ModiteImage'
 import ProjectList from '../../components/ProjectList'
@@ -64,41 +63,38 @@ const ModiteDetail = () => {
   }, [modite])
 
   return (
-    <>
-      <Back />
-      <div className={s.detailContainer}>
-        <div className={s.detailInnerContainer}>
-          <div className={s.tacos}>
-            <span className={s.taco}>🌮</span>
-            {tacos}
-          </div>
-
-          <div className={s.gitUser}>
-            {gitHubUser ? <GitHub iconOnly name={gitHubUser} /> : null}
-            {skypeUser ? <Skype iconOnly name={skypeUser} /> : null}
-          </div>
-
-          <h2 className={s.name}>{name}</h2>
-
-          <div className={s.location}>{Location}</div>
-
-          <div className={s.todWrap}>
-            <Time modite={modite} date />
-          </div>
-
-          <div className={s.fieldTitle}>{Title}</div>
-
-          <div className={s.slackName}>@{profile.display_name}</div>
-
-          <div className={s.title}>{title}</div>
-
-          <h4 className={s.projectHeader}>Projects</h4>
-          {moditeProjects.length ? <ProjectList plain records={moditeProjects} /> : <div>No current projects</div>}
+    <div className={s.detailContainer}>
+      <div className={s.detailInnerContainer}>
+        <div className={s.tacos}>
+          <span className={s.taco}>🌮</span>
+          {tacos}
         </div>
 
-        <ModiteImage className={s.thumbContainer} modite={modite} />
+        <div className={s.gitUser}>
+          {gitHubUser ? <GitHub iconOnly name={gitHubUser} /> : null}
+          {skypeUser ? <Skype iconOnly name={skypeUser} /> : null}
+        </div>
+
+        <h2 className={s.name}>{name}</h2>
+
+        <div className={s.location}>{Location}</div>
+
+        <div className={s.todWrap}>
+          <Time modite={modite} date />
+        </div>
+
+        <div className={s.fieldTitle}>{Title}</div>
+
+        <div className={s.slackName}>@{profile.display_name}</div>
+
+        <div className={s.title}>{title}</div>
+
+        <h4 className={s.projectHeader}>Projects</h4>
+        {moditeProjects.length ? <ProjectList plain records={moditeProjects} /> : <div>No current projects</div>}
       </div>
-    </>
+
+      <ModiteImage className={s.thumbContainer} modite={modite} />
+    </div>
   )
 }
 

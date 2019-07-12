@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import Back from '../../components/Back'
 import ModiteList from '../../components/ModiteList'
 import { useParams } from '../../hook/useRouter'
 import Project from '../../models/Project'
@@ -42,23 +41,20 @@ const ProjectDetail = () => {
   }, [project])
 
   return (
-    <>
-      <Back backTo="/projects" />
-      <div className={s.detailContainer}>
-        <div className={s.detailInnerContainer}>
-          <h2 className={s.name}>{project.name}</h2>
-          <div className={s.userNumberHeader}>
-            {users.length} Team Member{users.length === 1 ? '' : 's'}
-          </div>
-
-          {users.length > 0 ? (
-            <ModiteList plain className={s.moditeList} records={users} />
-          ) : (
-            <div>No current modites</div>
-          )}
+    <div className={s.detailContainer}>
+      <div className={s.detailInnerContainer}>
+        <h2 className={s.name}>{project.name}</h2>
+        <div className={s.userNumberHeader}>
+          {users.length} Team Member{users.length === 1 ? '' : 's'}
         </div>
+
+        {users.length > 0 ? (
+          <ModiteList plain className={s.moditeList} records={users} />
+        ) : (
+          <div>No current modites</div>
+        )}
       </div>
-    </>
+    </div>
   )
 }
 

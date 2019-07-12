@@ -7,6 +7,7 @@ import React, { Suspense, useEffect, useState } from 'react'
 import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { LastLocationProvider, LastLocationType, useLastLocation } from 'react-router-last-location'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import Back from '../Back'
 import Footer from '../Footer'
 import Map from '../Map'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
@@ -159,12 +160,11 @@ const Inner = () => {
         </div>
       )}
 
-      {globalState.searchBarHidden ? null : (
+      {!isLoaded || globalState.searchBarHidden ? null : (
         <IonSearchbar
           mode="md"
           debounce={200}
           placeholder={isTeam || isModite ? 'Search Modites' : 'Search Projects'}
-          // TODO need to handle filtering
           value={state.filter}
           onIonChange={onFilter}
           className={classnames(
@@ -176,6 +176,8 @@ const Inner = () => {
       )}
 
       {isLoaded ? null : <Footer />}
+
+      {isLoaded && (isModite || isProject) ? <Back backTo={isProject ? '/projects' : '/'} /> : null}
 
       {showTabBar ? (
         <div className={s.tabBar}>

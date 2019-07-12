@@ -16,7 +16,7 @@
 .bottomFader,
 .topFader {
   background: #FFFFFF;
-  box-shadow: 0 0 3em 3em rgba(255, 255, 255, 1);
+  box-shadow: 0 0 3em 3em #FFFFFF;
   height: 10%;
   position: absolute;
   right: 0;
@@ -58,8 +58,9 @@
 }
 
 .title {
+  font-size: 115%;
   font-weight: bold;
-  letter-spacing: 0.5em;
+  letter-spacing: 0.7em;
   text-transform: uppercase;
 }
 
