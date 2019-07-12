@@ -99,13 +99,11 @@ const Inner = () => {
       setViewport(newViewport)
     }
 
-    if (!filter) {
-      if (!isGlobe) {
-        setGlobalState({
-          ...globalState,
-          searchBarCollapsed: false,
-        })
-      }
+    if (!filter && !isGlobe) {
+      setGlobalState({
+        ...globalState,
+        searchBarCollapsed: false,
+      })
     }
 
     if (filter !== (currentFilter || '')) {
