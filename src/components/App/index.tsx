@@ -166,7 +166,7 @@ const Inner = () => {
       {!isLoaded || globalState.searchBarHidden ? null : (
         <IonSearchbar
           mode="md"
-          debounce={200}
+          debounce={300}
           placeholder={isTeam || isModite ? 'Search Modites' : 'Search Projects'}
           value={isTeam ? state.moditesFilter : state.projectsFilter}
           onIonChange={onFilter}
