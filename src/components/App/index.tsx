@@ -53,6 +53,23 @@ const Inner = () => {
   const isGlobe = moditeListType === 'globe'
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
+  // eslint-disable-next-line
+  console.log('activePage', activePage)
+  // eslint-disable-next-line
+  console.log('isModite', isModite)
+  // eslint-disable-next-line
+  console.log('isProject', isProject)
+  // eslint-disable-next-line
+  console.log('isProjects', isProjects)
+  // eslint-disable-next-line
+  console.log('isTeam', isTeam)
+  // eslint-disable-next-line
+  console.log('isGlobe', isGlobe)
+  // eslint-disable-next-line
+  console.log('isLoaded', isLoaded)
+  // eslint-disable-next-line
+  console.log('show search bar', !isLoaded || isModite || isProject)
+
   useEffect(() => {
     if (lastLocation) {
       const lastActivePage = locationToViewType(lastLocation.pathname)
