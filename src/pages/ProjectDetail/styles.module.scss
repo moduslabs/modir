@@ -19,7 +19,6 @@ $pageHeight: 60vh;
   flex-direction: column;
   height: $pageHeight;
   left: 10px;
-  overflow-y: scroll;
   padding: 50px 0 10px;
   position: absolute;
   right: 10px;
@@ -33,4 +32,9 @@ $pageHeight: 60vh;
 .userNumberHeader {
   color: $grey-shadow;
   margin: 10px 0;
+}
+
+.userList {
+  flex: 1;
+  overflow-y: auto;
 }

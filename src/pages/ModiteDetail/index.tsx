@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import GitHub from '../../components/GitHub'
 import ModiteImage from '../../components/ModiteImage'
-import ProjectList from '../../components/ProjectList'
+import Row from '../../components/ProjectList/Row'
 import Skype from '../../components/Skype'
 import Time from '../../components/Time'
 import { useParams } from '../../hook/useRouter'
@@ -81,8 +81,19 @@ const ModiteDetail = () => {
 
         <div className={s.title}>{title}</div>
 
-        <h4 className={s.projectHeader}>Projects</h4>
-        {moditeProjects.length ? <ProjectList plain records={moditeProjects} /> : <div>No current projects</div>}
+        <h4 className={s.projectHeader}>
+          {moditeProjects.length === 0 ? 'Projects' : `Projects (${moditeProjects.length})`}
+        </h4>
+
+        {moditeProjects.length ? (
+          <div className={s.projectList}>
+            {moditeProjects.map((project: Project) => (
+              <Row key={project.id} addSpacerRow={false} plain style={{ height: '60px' }} project={project} />
+            ))}
+          </div>
+        ) : (
+          <div>No current projects</div>
+        )}
       </div>
 
       <ModiteImage className={s.thumbContainer} modite={modite} />

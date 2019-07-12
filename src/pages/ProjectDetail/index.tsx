@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import ModiteList from '../../components/ModiteList'
+import Row from '../../components/ModiteList/Row'
 import { useParams } from '../../hook/useRouter'
+import Modite from '../../models/Modite'
 import Project from '../../models/Project'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
@@ -38,8 +39,12 @@ const ProjectDetail = () => {
           {users.length} Team Member{users.length === 1 ? '' : 's'}
         </div>
 
-        {users.length > 0 ? (
-          <ModiteList plain className={s.moditeList} records={users} />
+        {users.length ? (
+          <div className={s.userList}>
+            {users.map((modite: Modite) => (
+              <Row key={modite.id} addSpacerRow={false} plain style={{ height: '60px' }} modite={modite} />
+            ))}
+          </div>
         ) : (
           <div>No current modites</div>
         )}
