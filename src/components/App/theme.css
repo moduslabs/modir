@@ -200,7 +200,9 @@ a {
   z-index: 1;
 }
 
-.slide-down-exit.slide-down-exit-active,
-.slide-down-enter.slide-down-enter-active {
+.slide-down-exit.slide-down-exit-active {
   transition: transform 250ms ease-in;
+}
+.slide-down-enter.slide-down-enter-active {
+  transition: transform 500ms ease-in;
 }
