@@ -204,5 +204,5 @@ a {
   transition: transform 250ms ease-in;
 }
 .slide-down-enter.slide-down-enter-active {
-  transition: transform 500ms ease-in;
+  transition: transform 250ms ease-in;
 }

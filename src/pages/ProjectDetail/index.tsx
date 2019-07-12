@@ -4,13 +4,11 @@ import ModiteList from '../../components/ModiteList'
 import { useParams } from '../../hook/useRouter'
 import Project from '../../models/Project'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
-import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 import s from './styles.module.scss'
 
 const ProjectDetail = () => {
   const [{ projects }, dispatch]: DataContextArray = useData()
-  const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const [, setViewport]: MapContextArray = useMap()
   const { id } = useParams()
   const project = projects.find(
@@ -23,14 +21,7 @@ const ProjectDetail = () => {
 
   const { users = [] } = project
 
-  // TODO filter map to show only users
-
   useEffect(() => {
-    setGlobalState({
-      ...globalState,
-      headerHidden: true,
-    })
-
     dispatch({
       type: 'filter-project-users',
       modites: users,

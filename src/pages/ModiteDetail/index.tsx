@@ -9,7 +9,6 @@ import { useParams } from '../../hook/useRouter'
 import Modite from '../../models/Modite'
 import Project from '../../models/Project'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
-import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, useMap } from '../../service/Map'
 import s from './styles.module.scss'
 
@@ -17,7 +16,6 @@ const latitudeDiff = -5.5
 
 const ModiteDetail = () => {
   const [{ modites, projects }]: DataContextArray = useData()
-  const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const [viewport, setViewport]: MapContextArray = useMap()
   const { id } = useParams()
   const modite = modites.find((modite: Modite): boolean => modite.id === id)
@@ -52,11 +50,6 @@ const ModiteDetail = () => {
           ...viewport,
           modite: undefined,
         }
-
-    setGlobalState({
-      ...globalState,
-      headerHidden: true,
-    })
 
     setViewport(newViewport)
   }, [modite])

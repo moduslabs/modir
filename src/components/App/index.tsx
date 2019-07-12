@@ -13,7 +13,7 @@ import Map from '../Map'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
 import { useNavigate, useLocation } from '../../hook/useRouter'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
-import { ContextArray as GlobalContextArray, State as GlobalState, useGlobal } from '../../service/Global'
+import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 import Providers from '../../service/Providers'
 import history from '../../utils/history'
@@ -153,7 +153,7 @@ const Inner = () => {
               appear
               in={true}
               classNames="slide-down"
-              timeout={300}
+              timeout={1000}
             >
               <Suspense fallback={<div />}>
                 <Switch location={location}>
@@ -169,7 +169,7 @@ const Inner = () => {
         ) : null}
       </IonPage>
 
-      {globalState.headerHidden ? null : (
+      {!isLoaded || isModite || isProject ? null : (
         <div className={s.headerCt}>
           <div className={classnames(s.header, isLoaded ? s.loaded : null)}>
             <div className={s.title}>Modus Land</div>

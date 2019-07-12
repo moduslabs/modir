@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ProjectList from '../../components/ProjectList'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
@@ -8,13 +8,6 @@ let lastScrollOffset = 0 // used by onScroll
 const Projects = () => {
   const [state]: DataContextArray = useData()
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
-
-  useEffect(() => {
-    setGlobalState({
-      ...globalState,
-      headerHidden: false,
-    })
-  }, [])
 
   const onListScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
     lastScrollOffset = scrollOffset

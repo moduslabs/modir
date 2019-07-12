@@ -19,7 +19,6 @@ const Modites = ({ listType }: Props) => {
     if (listType === 'list') {
       setGlobalState({
         ...globalState,
-        headerHidden: false,
         searchBarCollapsed: modites.length === 0,
       })
     }
