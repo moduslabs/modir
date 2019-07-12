@@ -8,6 +8,7 @@ import Row from './Row'
 // used for spacer row
 const pseudoRecord: Project = {
   id: '-1',
+  name: '',
 }
 
 const ProjectList: FunctionComponent<ProjectListProps> = ({
