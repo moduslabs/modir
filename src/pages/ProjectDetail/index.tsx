@@ -29,7 +29,6 @@ const ProjectDetail = () => {
     setGlobalState({
       ...globalState,
       headerHidden: true,
-      searchBarHidden: true,
     })
 
     dispatch({

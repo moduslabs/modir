@@ -56,7 +56,6 @@ const ModiteDetail = () => {
     setGlobalState({
       ...globalState,
       headerHidden: true,
-      searchBarHidden: true,
     })
 
     setViewport(newViewport)

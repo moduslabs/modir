@@ -20,7 +20,6 @@ const Modites = ({ listType }: Props) => {
       ...globalState,
       headerHidden: false,
       searchBarCollapsed: modites.length === 0,
-      searchBarHidden: false,
     })
   }, [modites])
 
@@ -34,7 +33,7 @@ const Modites = ({ listType }: Props) => {
 
       setGlobalState({
         ...globalState,
-        searchBarCollapsed: scrollOffset >= Math.min(100, document.body.clientHeight / 6),
+        searchBarCollapsed: scrollOffset >= 50,
       })
     }
 

@@ -13,7 +13,6 @@ const Projects = () => {
     setGlobalState({
       ...globalState,
       headerHidden: false,
-      searchBarHidden: false,
     })
   }, [])
 
@@ -22,7 +21,7 @@ const Projects = () => {
 
     setGlobalState({
       ...globalState,
-      searchBarCollapsed: scrollOffset >= Math.min(100, document.body.clientHeight / 6),
+      searchBarCollapsed: scrollOffset >= 50,
     })
   }
 

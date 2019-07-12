@@ -163,7 +163,7 @@ const Inner = () => {
         </div>
       )}
 
-      {!isLoaded || globalState.searchBarHidden ? null : (
+      {!isLoaded || isModite || isProject ? null : (
         <IonSearchbar
           mode="md"
           debounce={300}

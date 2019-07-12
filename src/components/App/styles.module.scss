@@ -121,8 +121,8 @@
   right: 0;
   left: 0;
   transform: translateY(calc(25vh - 21px));
-  transition: transform $animDuration, right $animDuration;
-  will-change: transform;
+  transition: transform $animDuration, right $animDuration ease $animDuration + 50;
+  will-change: transform, right;
   width: unset;
 
   &.searchbarCollapsed {
