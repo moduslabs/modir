@@ -70,7 +70,7 @@ const Map = ({ animate = false, className, height: heightProp = '100%' }: Props)
       onViewportChange={(newViewport: ViewState) => onViewportChange(newViewport)}
     >
       {state.modites.map((modite: Modite): any => {
-        if (!modite.id) {
+        if (modite.id === '-1') {
           return null
         }
 
@@ -80,9 +80,11 @@ const Map = ({ animate = false, className, height: heightProp = '100%' }: Props)
           return coords
         }
 
+        const isActiveModite = viewport.modite === modite
+
         return (
           <Marker key={modite.id} latitude={coords.latitude} longitude={coords.longitude}>
-            <Pin size={viewport.modite === modite ? 'big' : 'normal'} />
+            <Pin active={isActiveModite} size={isActiveModite ? 'big' : 'normal'} />
           </Marker>
         )
       })}
