@@ -12,8 +12,6 @@ import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as MapContextArray, useMap } from '../../service/Map'
 import s from './styles.module.scss'
 
-const latitudeDiff = -5.5
-
 const ModiteDetail = () => {
   const [{ modites, projects }]: DataContextArray = useData()
   const [viewport, setViewport]: MapContextArray = useMap()
@@ -41,7 +39,7 @@ const ModiteDetail = () => {
     const newViewport = locationData
       ? {
           ...viewport,
-          latitude: locationData.lat + latitudeDiff,
+          latitude: locationData.lat - document.body.clientHeight / 160,
           longitude: locationData.lon,
           modite,
           zoom: 5,
