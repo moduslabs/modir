@@ -16,12 +16,14 @@ const Modites = ({ listType }: Props) => {
   const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
 
   useEffect(() => {
-    setGlobalState({
-      ...globalState,
-      headerHidden: false,
-      searchBarCollapsed: modites.length === 0,
-    })
-  }, [modites])
+    if (listType === 'list') {
+      setGlobalState({
+        ...globalState,
+        headerHidden: false,
+        searchBarCollapsed: modites.length === 0,
+      })
+    }
+  }, [listType, modites])
 
   if (!modites.length) {
     return <NoResults />

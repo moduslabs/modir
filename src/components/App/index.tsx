@@ -13,7 +13,7 @@ import Map from '../Map'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
 import { useNavigate, useLocation } from '../../hook/useRouter'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
-import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
+import { ContextArray as GlobalContextArray, State as GlobalState, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 import Providers from '../../service/Providers'
 import history from '../../utils/history'
@@ -79,11 +79,33 @@ const Inner = () => {
     const filter = event.detail.value
     const currentFilter = isTeam ? state.moditesFilter : state.projectsFilter
 
+    if (isGlobe) {
+      const modite = state.modites[0]
+      const locationData = modite.profile && modite.profile.fields && modite.profile.fields.locationData
+
+      const newViewport = locationData
+        ? {
+            ...viewport,
+            latitude: locationData.lat,
+            longitude: locationData.lon,
+            modite,
+            zoom: 5,
+          }
+        : {
+            ...viewport,
+            ...defaultViewport,
+          }
+
+      setViewport(newViewport)
+    }
+
     if (!filter) {
-      setGlobalState({
-        ...globalState,
-        searchBarCollapsed: false,
-      })
+      if (!isGlobe) {
+        setGlobalState({
+          ...globalState,
+          searchBarCollapsed: false,
+        })
+      }
     }
 
     if (filter !== (currentFilter || '')) {

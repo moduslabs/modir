@@ -1,6 +1,6 @@
 import React, { Context, Dispatch, SetStateAction, createContext, useContext, useState } from 'react'
 
-interface State {
+export interface State {
   headerHidden: boolean
   searchBarCollapsed: boolean
 }
