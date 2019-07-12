@@ -77,6 +77,7 @@ const Inner = () => {
 
   const onFilter = (event: CustomEvent<SearchbarChangeEventDetail>): void => {
     const filter = event.detail.value
+    const currentFilter = isTeam ? state.moditesFilter : state.projectsFilter
 
     if (!filter) {
       setGlobalState({
@@ -85,10 +86,12 @@ const Inner = () => {
       })
     }
 
-    dispatch({
-      type: 'on-filter',
-      filter,
-    })
+    if (filter !== (currentFilter || '')) {
+      dispatch({
+        type: isTeam ? 'filter-modites' : 'filter-projects',
+        filter,
+      })
+    }
   }
 
   const onTabClick = (newTab: ViewTypes) =>
@@ -165,7 +168,7 @@ const Inner = () => {
           mode="md"
           debounce={200}
           placeholder={isTeam || isModite ? 'Search Modites' : 'Search Projects'}
-          value={state.filter}
+          value={isTeam ? state.moditesFilter : state.projectsFilter}
           onIonChange={onFilter}
           className={classnames(
             s.searchbar,

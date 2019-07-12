@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { DataProvider } from './Data'
+import DataProvider from './Data'
 import GlobalProvider from './Global'
 import MapProvider from './Map'
 

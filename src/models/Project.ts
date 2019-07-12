@@ -1,7 +1,7 @@
-import { RecordTypes, ModiteProfile } from './Modite'
+import { RecordTypes } from './Modite'
 
 export default interface Project {
-  name?: string
+  name: string
   real_name?: string
   id: string
   localTime?: string
@@ -9,5 +9,4 @@ export default interface Project {
   tod?: string
   recordType?: RecordTypes
   users?: any
-  profile?: ModiteProfile
 }
