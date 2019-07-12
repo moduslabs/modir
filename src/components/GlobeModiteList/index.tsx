@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window'
 import ModiteImage from '../../components/ModiteImage'
 import Time from '../../components/Time'
@@ -17,7 +18,7 @@ const GlobeModiteList = () => {
     const modite = state.modites[index]
 
     return (
-      <div style={style} className={s.item}>
+      <Link to={`/modite/${modite.id}`} className={s.item} style={style}>
         <div className={s.innerItem}>
           <div>{modite.real_name}</div>
           <div className={s.moditeSubline}>
@@ -31,7 +32,7 @@ const GlobeModiteList = () => {
         </div>
 
         <ModiteImage className={s.thumbContainer} modite={modite} />
-      </div>
+      </Link>
     )
   }
 
