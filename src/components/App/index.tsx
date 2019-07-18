@@ -167,7 +167,7 @@ const Inner = () => {
         ) : null}
       </IonPage>
 
-      {!isLoaded || isModite || isProject ? null : (
+      {isLoaded && (isModite || isProject) ? null : (
         <div className={s.headerCt}>
           <div className={classnames(s.header, isLoaded ? s.loaded : null)}>
             <div className={s.title}>Modus Land</div>
