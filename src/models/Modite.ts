@@ -64,11 +64,3 @@ export default interface Modite {
   is_app_user?: boolean
   updated?: number
 }
-
-export const defaultModite: Modite = {
-  profile: {
-    fields: {},
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    image_192: profilePlaceholder,
-  },
-}
