@@ -34,7 +34,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
       initialScrollOffset={lastScrollOffset}
       onScroll={onScroll}
       itemKey={(index: number) => localRecords[index].id}
-      overscanCount={250}
+      overscanCount={20}
     >
       {Renderer}
     </List>
