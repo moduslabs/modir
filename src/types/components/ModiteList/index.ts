@@ -7,7 +7,6 @@ export interface ListItemProps {
 
 export default interface VirtualizedListProps {
   addSpacerRow?: boolean
-  className?: string
   lastScrollOffset?: number
   onScroll?: (...args: any) => void
   plain?: boolean

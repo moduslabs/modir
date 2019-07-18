@@ -977,10 +977,10 @@
     ionicons "4.6.1"
     tslib "^1.10.0"
 
-"@ionic/react@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-0.0.6.tgz#0347bd3f10303c0a3b7af44f9304523bfbf62701"
-  integrity sha512-ifRtFIn1hFAdiio8Y7V55EEREjvzkgS/mYkpCV+JBroCjxxdiAyKYscWfxUv+3avcpQL1Nvmk8QPPQ4+EI80pw==
+"@ionic/react@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-0.0.7.tgz#3e27c63d3202c18e699fbb5baeb41bd561b82091"
+  integrity sha512-QamAAMpccCQ7TxBGhSfOtXdPuuwigLmZ3t+mxFDpNkcWY0P7HrXaTAIygMd/MxpDlfg6IvLec2LTjgYHoyCO6Q==
   dependencies:
     "@ionic/core" "^4.6.0"
     tslib "^1.10.0"
@@ -1556,13 +1556,6 @@
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-2.9.2.tgz#c48cf2a11977c8b4ff539a1c91d259eaa627028d"
   integrity sha512-5Fv2DQNO+GpdPZcxp2x/OQG/H19A01WlmpjVD9cKvVFmoVLOZ9LvBgSWG6pSXIU4og5fgbvGPaCV5+VGkWAEHA==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react-virtualized-auto-sizer@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.0.tgz#fc32f30a8dab527b5816f3a757e1e1d040c8f272"
-  integrity sha512-NMErdIdSnm2j/7IqMteRiRvRulpjoELnXWUwdbucYCz84xG9PHcoOrr7QfXwB/ku7wd6egiKFrzt/+QK4Imeeg==
   dependencies:
     "@types/react" "*"
 
@@ -4138,10 +4131,10 @@ eslint-plugin-import@2.16.0:
     read-pkg-up "^2.0.0"
     resolve "^1.9.0"
 
-eslint-plugin-jest@22.7.2:
-  version "22.7.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.7.2.tgz#7ab118a66a34e46ae5e16a128b5d24fd28b43dca"
-  integrity sha512-Aecqe3ulBVI7amgOycVI8ZPL8o0SnGHOf3zn2/Ciu8TXyXDHcjtwD3hOs3ss/Qh/VAwlW/DMcuiXg5btgF+XMA==
+eslint-plugin-jest@22.10.0:
+  version "22.10.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.10.0.tgz#a22be77f4dc692808b88ead0059620bda299a97d"
+  integrity sha512-iBEWJn60Z5bctcjacymUnOQ3xN3gdvGOy3tDHpalAa99r4+jwH0CvICsIIHBNXNlJxuklkbx+wxr49tXk6M0tg==
 
 eslint-plugin-jsx-a11y@6.2.1:
   version "6.2.1"
@@ -7383,7 +7376,7 @@ mixin-object@^2.0.1:
     for-in "^0.1.3"
     is-extendable "^0.1.1"
 
-mjolnir.js@^2.1.1:
+mjolnir.js@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.1.2.tgz#db89819c418b6f3d200b1c51386fc7487f98bd5a"
   integrity sha512-OjvkNzTCdJd/I7XxgIomNozYS6me6OWY+t8I6SZlINaFmNmgAW3I5x+Hd8sgA+WxAjFvBf576lD7N1MGo89/WA==
@@ -9364,14 +9357,14 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-react-map-gl@5.0.4:
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-5.0.4.tgz#210cdcb14cab68ec16681e194144bf2d8a7b427a"
-  integrity sha512-gDyY3Y6l61ZX2YLRnFHzoOASjx5t3sSHPrgMVsqgEXja3CElMS6ENCxLw0JmOe2DxAQbTxNRgKeg+VT2BkUQ+Q==
+react-map-gl@5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-5.0.7.tgz#91ce55f60171d06b9c4a6951304c6ffcdaddd8d0"
+  integrity sha512-5NVwb2xFfLMg/Uq28lBkzloEljdXu44YrrNJm9Td/22Z9kC4jClZXPV3/HxlA6mInMHOe8jS0AhjDW0uXKrByw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     mapbox-gl "^1.0.0"
-    mjolnir.js "^2.1.1"
+    mjolnir.js "^2.1.2"
     prop-types "^15.7.2"
     react-virtualized-auto-sizer "^1.0.2"
     viewport-mercator-project "^6.1.0"
@@ -9501,7 +9494,7 @@ react-transition-group@4.2.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-virtualized-auto-sizer@1.0.2, react-virtualized-auto-sizer@^1.0.2:
+react-virtualized-auto-sizer@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.2.tgz#a61dd4f756458bbf63bd895a92379f9b70f803bd"
   integrity sha512-MYXhTY1BZpdJFjUovvYHVBmkq79szK/k7V3MO+36gJkWGkrXKtyr4vCPtpphaTLRAdDNoYEYFZWE8LjN+PIHNg==

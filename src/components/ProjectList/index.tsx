@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { VariableSizeList as List, ListChildComponentProps } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import Project from '../../models/Project'
+import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import ProjectListProps from '../../types/components/ProjectList'
 import Row from './Row'
 
@@ -13,13 +13,13 @@ const pseudoRecord: Project = {
 
 const ProjectList: FunctionComponent<ProjectListProps> = ({
   addSpacerRow = false,
-  className,
   lastScrollOffset = 0,
   onScroll,
   plain = false,
   records,
 }) => {
-  const getItemSize = (index: number) => (addSpacerRow && index === 0 ? document.body.clientHeight / 2 : 60)
+  const dimensions: Dimensions = useWindowDimensions()
+  const getItemSize = (index: number) => (addSpacerRow && index === 0 ? dimensions.height / 2 : 60)
   const localRecords = addSpacerRow ? [{ ...pseudoRecord }, ...records] : records
 
   const Renderer: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
@@ -27,24 +27,18 @@ const ProjectList: FunctionComponent<ProjectListProps> = ({
   )
 
   return (
-    <AutoSizer className={className} aria-label="The list of projects">
-      {({ height, width }: { height: number; width: number }) => (
-        <>
-          <List
-            itemSize={getItemSize}
-            itemCount={localRecords.length}
-            height={height}
-            width={width}
-            initialScrollOffset={lastScrollOffset}
-            onScroll={onScroll}
-            itemKey={(index: number) => localRecords[index].id || (index.toString() as string)}
-            overscanCount={200}
-          >
-            {Renderer}
-          </List>
-        </>
-      )}
-    </AutoSizer>
+    <List
+      itemSize={getItemSize}
+      itemCount={localRecords.length}
+      height={dimensions.height - 43}
+      width={dimensions.width}
+      initialScrollOffset={lastScrollOffset}
+      onScroll={onScroll}
+      itemKey={(index: number) => localRecords[index].id}
+      overscanCount={200}
+    >
+      {Renderer}
+    </List>
   )
 }
 

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { VariableSizeList as List, ListChildComponentProps } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import Modite from '../../models/Modite'
+import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import ModiteListProps from '../../types/components/ModiteList'
 import Row from './Row'
 
@@ -12,13 +12,13 @@ const pseudoRecord: Modite = {
 
 const ModiteList: FunctionComponent<ModiteListProps> = ({
   addSpacerRow = false,
-  className,
   lastScrollOffset = 0,
   onScroll,
   plain = false,
   records,
 }) => {
-  const getItemSize = (index: number) => (addSpacerRow && index === 0 ? document.body.clientHeight / 2 : 60)
+  const dimensions: Dimensions = useWindowDimensions()
+  const getItemSize = (index: number) => (addSpacerRow && index === 0 ? dimensions.height / 2 : 60)
   const localRecords = addSpacerRow ? [{ ...pseudoRecord }, ...records] : records
 
   const Renderer: FunctionComponent<ListChildComponentProps> = ({ index, style }) => (
@@ -26,24 +26,18 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   )
 
   return (
-    <AutoSizer className={className} aria-label="The list of Modites">
-      {({ height, width }: { height: number; width: number }) => (
-        <>
-          <List
-            itemSize={getItemSize}
-            itemCount={localRecords.length}
-            height={height}
-            width={width}
-            initialScrollOffset={lastScrollOffset}
-            onScroll={onScroll}
-            itemKey={(index: number) => localRecords[index].id || (index.toString() as string)}
-            overscanCount={250}
-          >
-            {Renderer}
-          </List>
-        </>
-      )}
-    </AutoSizer>
+    <List
+      itemSize={getItemSize}
+      itemCount={localRecords.length}
+      height={dimensions.height - 43}
+      width={dimensions.width}
+      initialScrollOffset={lastScrollOffset}
+      onScroll={onScroll}
+      itemKey={(index: number) => localRecords[index].id}
+      overscanCount={250}
+    >
+      {Renderer}
+    </List>
   )
 }
 

@@ -10,12 +10,14 @@ import Modite from '../../models/Modite'
 import Project from '../../models/Project'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
 import { ContextArray as MapContextArray, useMap } from '../../service/Map'
+import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import s from './styles.module.scss'
 
 const ModiteDetail = () => {
   const [{ modites, projects }]: DataContextArray = useData()
   const [viewport, setViewport]: MapContextArray = useMap()
   const { id } = useParams()
+  const dimensions: Dimensions = useWindowDimensions()
   const modite = modites.find((modite: Modite): boolean => modite.id === id)
 
   if (!modite) {
@@ -39,7 +41,7 @@ const ModiteDetail = () => {
     const newViewport = locationData
       ? {
           ...viewport,
-          latitude: locationData.lat - document.body.clientHeight / 160,
+          latitude: locationData.lat - dimensions.height / 160,
           longitude: locationData.lon,
           modite,
           zoom: 5,

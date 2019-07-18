@@ -6,14 +6,16 @@ import Time from '../../components/Time'
 import { useBuffered } from '../../hook/useBuffered'
 import { useData } from '../../service/Data'
 import { ContextArray, defaultViewport, useMap } from '../../service/Map'
+import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import { DataState } from '../../types/service/Data'
 import s from './styles.module.scss'
 
 const GlobeModiteList = () => {
   const [state]: [DataState] = useData()
   const [viewport, setViewport]: ContextArray = useMap()
+  const dimensions: Dimensions = useWindowDimensions()
 
-  const itemSize = (document.body.clientWidth / 4) * 3
+  const itemSize = (dimensions.width / 4) * 3
   const Item = ({ index, style }: ListChildComponentProps) => {
     const modite = state.modites[index]
 

@@ -42,7 +42,7 @@ export type ListTypes = 'projects' | 'modites'
 export default interface Modite {
   real_name?: string
   name?: string
-  id?: string
+  id: string
   team_id?: string
   deleted?: boolean
   tz?: string
