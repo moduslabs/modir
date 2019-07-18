@@ -977,10 +977,10 @@
     ionicons "4.6.1"
     tslib "^1.10.0"
 
-"@ionic/react@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-0.0.6.tgz#0347bd3f10303c0a3b7af44f9304523bfbf62701"
-  integrity sha512-ifRtFIn1hFAdiio8Y7V55EEREjvzkgS/mYkpCV+JBroCjxxdiAyKYscWfxUv+3avcpQL1Nvmk8QPPQ4+EI80pw==
+"@ionic/react@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-0.0.7.tgz#3e27c63d3202c18e699fbb5baeb41bd561b82091"
+  integrity sha512-QamAAMpccCQ7TxBGhSfOtXdPuuwigLmZ3t+mxFDpNkcWY0P7HrXaTAIygMd/MxpDlfg6IvLec2LTjgYHoyCO6Q==
   dependencies:
     "@ionic/core" "^4.6.0"
     tslib "^1.10.0"

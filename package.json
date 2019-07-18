@@ -14,7 +14,7 @@
     "test": "react-app-rewired test"
   },
   "dependencies": {
-    "@ionic/react": "0.0.6",
+    "@ionic/react": "0.0.7",
     "classnames": "2.2.6",
     "lodash-es": "4.17.14",
     "query-string": "6.8.1",
