@@ -2,7 +2,7 @@
   <img  src="https://res.cloudinary.com/modus-labs/image/upload/w_240,f_auto/v1561025523/labs/modir.png" alt="Modite Directory" width="120" />
 
   <h1>Modite Directory</h1>
- 
+
 
 
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ModusCreateOrg/beep/blob/master/LICENSE)
