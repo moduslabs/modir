@@ -32,10 +32,6 @@ const Modites = ({ listType }: Props) => {
     const onListScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
       lastScrollOffset = scrollOffset
 
-      setGlobalState({
-        ...globalState,
-        searchBarCollapsed: scrollOffset >= 50,
-      })
     }
 
     return (
