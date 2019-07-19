@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import DataProvider from './Data'
-import GlobalProvider from './Global'
 import MapProvider from './Map'
 import WindowDimensionsProvider from './WindowDimensions'
 
@@ -11,9 +10,7 @@ interface Props {
 const Providers = ({ children }: Props) => (
   <WindowDimensionsProvider>
     <DataProvider>
-      <GlobalProvider>
-        <MapProvider>{children}</MapProvider>
-      </GlobalProvider>
+      <MapProvider>{children}</MapProvider>
     </DataProvider>
   </WindowDimensionsProvider>
 )

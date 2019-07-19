@@ -1,5 +1,3 @@
-import profilePlaceholder from '../assets/images/modus-neon.gif'
-
 export interface LocationData {
   lat: number
   lon: number
