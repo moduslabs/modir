@@ -1,28 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import GlobeModiteList from '../../components/GlobeModiteList'
 import ModiteList from '../../components/ModiteList'
 import NoResults from '../../components/NoResults'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
-import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 
 interface Props {
   listType: 'globe' | 'list'
+  onScroll: (offset: number) => void
 }
 
-let lastScrollOffset = 0 // used by onScroll
+let lastScrollOffset = 0 // used by onListScroll
 
-const Modites = ({ listType }: Props) => {
+const Modites = ({ listType, onScroll }: Props) => {
   const [{ modites }]: DataContextArray = useData()
-  const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
-
-  useEffect(() => {
-    if (listType === 'list') {
-      setGlobalState({
-        ...globalState,
-        searchBarCollapsed: modites.length === 0,
-      })
-    }
-  }, [listType, modites])
 
   if (!modites.length) {
     return <NoResults />
@@ -32,6 +22,7 @@ const Modites = ({ listType }: Props) => {
     const onListScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
       lastScrollOffset = scrollOffset
 
+      onScroll(scrollOffset)
     }
 
     return (

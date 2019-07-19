@@ -13,7 +13,6 @@ import Map from '../Map'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
 import { useNavigate, useLocation } from '../../hook/useRouter'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
-import { ContextArray as GlobalContextArray, useGlobal } from '../../service/Global'
 import { ContextArray as MapContextArray, defaultViewport, useMap } from '../../service/Map'
 import Providers from '../../service/Providers'
 import history from '../../utils/history'
@@ -38,13 +37,13 @@ type ModiteListTypes = 'globe' | 'list'
 
 const Inner = () => {
   const [state, dispatch]: DataContextArray = useData()
-  const [globalState, setGlobalState]: GlobalContextArray = useGlobal()
   const lastLocation: LastLocationType = useLastLocation()
   const location = useLocation()
   const [viewport, setViewport]: MapContextArray = useMap()
   const go = useNavigate('/{tab}')
   const [isLoaded, setIsLoaded] = useState(false)
   const [moditeListType, setModiteListType] = useState<ModiteListTypes>('list')
+  const [searchBarCollapsed, setSearchBarCollapsed] = useState(false)
   const activePage = locationToViewType(location.pathname)
   const isModite = activePage === VIEW_TYPES.modite
   const isProject = activePage === VIEW_TYPES.project
@@ -100,10 +99,7 @@ const Inner = () => {
     }
 
     if (!filter && !isGlobe) {
-      setGlobalState({
-        ...globalState,
-        searchBarCollapsed: false,
-      })
+      setSearchBarCollapsed(false)
     }
 
     if (filter !== (currentFilter || '')) {
@@ -114,6 +110,8 @@ const Inner = () => {
     }
   }
 
+  const onScroll = (offset: number) => setSearchBarCollapsed(offset >= 50)
+
   const onTabClick = (newTab: ViewTypes) =>
     go({
       tab: newTab === 'modites' ? '' : newTab,
@@ -121,10 +119,8 @@ const Inner = () => {
 
   const toggleListType = () => {
     setModiteListType(isGlobe ? 'list' : 'globe')
-    setGlobalState({
-      ...globalState,
-      searchBarCollapsed: !isGlobe,
-    })
+
+    setSearchBarCollapsed(!isGlobe)
 
     if (isGlobe) {
       setViewport({
@@ -156,9 +152,9 @@ const Inner = () => {
               <Suspense fallback={<div />}>
                 <Switch location={location}>
                   <Route exact path="/modite/:id" component={ModiteDetailPage} />
-                  <Route exact path="/" render={() => <ModitesPage listType={moditeListType} />} />
+                  <Route exact path="/" render={() => <ModitesPage listType={moditeListType} onScroll={onScroll} />} />
                   <Route exact path="/project/:id" component={ProjectDetailPage} />
-                  <Route exact path="/projects" component={ProjectsPage} />
+                  <Route exact path="/projects" render={() => <ProjectsPage onScroll={onScroll} />} />
                   <Route path="*" render={() => <Redirect to="/" />} />
                 </Switch>
               </Suspense>
@@ -192,7 +188,7 @@ const Inner = () => {
           onIonChange={onFilter}
           className={classnames(
             s.searchbar,
-            globalState.searchBarCollapsed ? s.searchbarCollapsed : null,
+            searchBarCollapsed ? s.searchbarCollapsed : null,
             isTeam ? s.searchbarSpaced : null,
           )}
         />
