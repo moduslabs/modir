@@ -2,6 +2,10 @@
   display: none;
 }
 
+.moditeImage {
+  background: #FFFFFF;
+}
+
 .moditeImage img {
   width: 100%;
   height: 100%;
