@@ -11,6 +11,7 @@ export interface RecordTypes {
 export type ViewTypes = 'project' | 'projects' | 'modite' | 'modites'
 
 export interface ViewTypesInterface {
+  details: 'modite'
   project: 'project'
   projects: 'projects'
   modite: 'modite'
@@ -18,6 +19,7 @@ export interface ViewTypesInterface {
 }
 
 export const VIEW_TYPES: ViewTypesInterface = {
+  details: 'modite',
   project: 'project',
   projects: 'projects',
   modite: 'modite',
@@ -39,6 +41,7 @@ type LocationViewTypeMap = {
 }
 
 const LOCATION_VIEW_TYPE_MAP: LocationViewTypeMap = {
+  details: 'modite',
   modite: 'modite',
   modites: 'modites',
   project: 'project',

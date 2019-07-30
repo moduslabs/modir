@@ -151,7 +151,8 @@ const Inner = () => {
             >
               <Suspense fallback={<div />}>
                 <Switch location={location}>
-                  <Route exact path="/modite/:id" component={ModiteDetailPage} />
+                  {/* use /details instead of /modite as there is an API route that conflicts */}
+                  <Route exact path="/details/:id" component={ModiteDetailPage} />
                   <Route exact path="/" render={() => <ModitesPage listType={moditeListType} onScroll={onScroll} />} />
                   <Route exact path="/project/:id" component={ProjectDetailPage} />
                   <Route exact path="/projects" render={() => <ProjectsPage onScroll={onScroll} />} />

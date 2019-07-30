@@ -15,7 +15,7 @@ const Row: FunctionComponent<RowProps> = ({ addSpacerRow, plain, modite, style }
   addSpacerRow && modite.id === '-1' ? (
     <div style={style} />
   ) : (
-    <Link to={`/modite/${modite.id}`} className={s.moditeRow} style={style}>
+    <Link to={`/details/${modite.id}`} className={s.moditeRow} style={style}>
       <ModiteItem plain={plain} key={modite.id} item={modite} />
     </Link>
   )
