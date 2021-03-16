@@ -1,12 +1,14 @@
-import React, { Context, Dispatch, SetStateAction, createContext, useContext, useEffect } from 'react'
+import React, { Context, Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 import get from 'lodash-es/get'
 import Modite, { ListTypes } from '../models/Modite'
 import Project from '../models/Project'
 import { VIEW_TYPES, NAME_PROPERTIES } from '../constants/constants'
 import { DataState, DataAction } from '../types/service/Data'
 import { envOrDefault } from '../utils/env'
-
+import { ModiteProfile } from '../models/Modite'
+import { ModiteProfile as ModiteProfileDefault } from '../defaults/modite'
 const MODITES_URL = envOrDefault('REACT_APP_MODITES_DATA_URL') as string
+const MODITE_URL = envOrDefault('REACT_APP_MODITE_DATA_URL') as string
 const PROJECTS_URL = envOrDefault('REACT_APP_PROJECTS_DATA_URL') as string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -259,3 +261,38 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 export default DataProvider
 
 export const useData = () => useContext(DataContext)
+
+interface GetModiteData {
+  moditeData: ModiteProfile
+  isLoading: boolean
+}
+export const getModiteData = (slackId: string): GetModiteData => {
+  const [moditeData, setModiteData] = useState<ModiteProfile>(ModiteProfileDefault)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const getData = async () => {
+      const url = process.env.NODE_ENV === 'development' ? MODITE_URL : `${MODITE_URL}/${slackId}`
+      await Promise.resolve(
+        fetch(url, {
+          headers: getHeaders(),
+        }).then(res => res.json()),
+      )
+        .then(modite => {
+          setModiteData(modite.profile)
+          setIsLoading(false)
+        })
+        .catch(e => {
+          // eslint-disable-next-line no-console
+          console.log('error', e)
+        })
+
+      // eslint-disable-next-line no-console
+      console.log('mod', moditeData)
+    }
+
+    getData()
+  }, [])
+
+  return { moditeData, isLoading }
+}
