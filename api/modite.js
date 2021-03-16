@@ -1,3 +1,4 @@
+// TEST: https://modus.app/modite/U0AUTJZUL
 // fetches the location data for a given location string
 const getGeocode = async location => {
   const address = encodeURI(location)
@@ -16,15 +17,13 @@ const getGeocode = async location => {
   }
 }
 
-// gets the location data for a given modite either from the KV store or from the geocode service
-const addLocationPoint = async (modite, slackId) => {
+// gets the location data for a given modite from the geocode service
+const addLocationPoint = async modite => {
   const { Location: location } = modite.profile.fields
 
   if (!location) return // if the user hasn't populated a location no lookup can be performed
 
-  const cachedModite = (await MODITES.get(slackId, 'json')) || { profile: { fields: {} } }
-  const { Location: cachedLocation, locationData: cachedLocationData } = cachedModite.profile.fields
-  const geocode = !cachedLocationData || cachedLocation !== location ? await getGeocode(location) : cachedLocationData
+  const geocode = await getGeocode(location)
 
   modite.profile.fields.locationData = geocode
 }
@@ -41,24 +40,41 @@ const addFields = moditeResp => {
 }
 
 const getModite = async slackId => {
-  // seems like our cache has expired. Let's fetch the slack user
-  const userKey = await KEYS.get('mosquito-user-key')
-  const moditeRes = await fetch(
-    `https://slack.com/api/users.profile.get?token=${userKey}&user=${slackId}&include_labels=true`,
-    {
+  try {
+    // seems like our cache has expired. Let's fetch the slack user
+    const userKey = await KEYS.get('mosquito-bot-key-awakened')
+    const moditeRes = await fetch(`https://slack.com/api/users.profile.get?user=${slackId}&include_labels=true`, {
       cf: { cacheTtlByStatus: { '200-299': 300, 404: 1, '500-599': 0 } },
-    },
-  )
-  const modite = await moditeRes.json()
+      headers: {
+        Authorization: `Bearer ${userKey}`,
+      },
+    })
+    const modite = await moditeRes.json()
 
-  addFields(modite)
-  await addLocationPoint(modite, slackId)
-  await MODITES.put(slackId, JSON.stringify(modite)) // cache the modite instance in KV
+    addFields(modite)
+    await addLocationPoint(modite, slackId)
 
-  return modite
+    return modite
+  } catch (e) {
+    console.log('error', e)
+    return new Response('', { status: 404, statusText: e })
+  }
+}
+
+const checkToken = async req => {
+  const token = (req.headers.get('authorization') || '').replace('Bearer ', '')
+
+  const tokenInfo = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`).then(res => res.json())
+
+  return tokenInfo.hd === 'moduscreate.com'
 }
 
 const getModiteResponse = async event => {
+  const isAllowed = await checkToken(event.request)
+  if (!isAllowed) {
+    return new Response('', { status: 403, statusText: 'Forbidden' })
+  }
+
   let cache = caches.default
   let response = await cache.match(event.request)
 
