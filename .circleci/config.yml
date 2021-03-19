@@ -1,25 +1,25 @@
 aliases:
   - &restore-npm-cache
-    key: v1-dependencies-{{ checksum "yarn.lock" }}
+    key: v2-dependencies-{{ checksum "yarn.lock" }}
     name: Restoring node_modules cache
   - &restore-webpack-cache
-    key: v1-webpackcache-{{ checksum "yarn.lock" }}
+    key: v2-webpackcache-{{ checksum "yarn.lock" }}
     name: Restoring webpack cache
   - &restore-dist-cache
-    key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+    key: v2-dist-{{ .Environment.CIRCLE_SHA1 }}
     name: Restoring build
   - &save-npm-cache
-    key: v1-dependencies-{{ checksum "yarn.lock" }}
+    key: v2-dependencies-{{ checksum "yarn.lock" }}
     name: Saving node_modules cache
     paths:
       - node_modules
   - &save-webpack-cache
-    key: v1-webpackcache-{{ checksum "yarn.lock" }}
+    key: v2-webpackcache-{{ checksum "yarn.lock" }}
     name: Saving webpack cache
     paths:
       - node_modules/.cache
   - &save-dist-cache
-    key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+    key: v2-dist-{{ .Environment.CIRCLE_SHA1 }}
     name: Saving build
     paths:
       - build
