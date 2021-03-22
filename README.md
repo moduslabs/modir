@@ -23,6 +23,47 @@
 
 # Developing
 
+## Use Docker
+
+The benefit of Docker is that the specific versions of node_modules and Node JS required to build/run this 
+can be encapsulated within a Docker container rather than having to have those versions of software installed
+on your workstation.
+
+The Dockerfile is used to build a Docker image that has no node_mocules/ directory.  
+
+There are 4 .sh (shell) scripts to make using Docker easy:
+
+### docker-build.sh
+The docker-build.sh script uses the Dockerfile to create an image, then mounts a named volume over node_modules and does
+the npm install into that volume.
+
+You use npm/yarn to add modules to package.json on the workstation.  When you run the docker-build.sh script, your local
+node_modules/ will be removed (since it's not needed by the container).
+
+This script might be slow the first time you run it, but should be quite fast each successive time - as long as the
+node_modules in the named container are preserved.
+
+
+### docker-debug.sh
+The docker-debug.sh script uses an image built with docker-build.sh and runs it (not as a deamon) so you can see any
+outoput from the program run via npm start within the container.  The working dir ($PWD) is mounted at /home/app where
+the app is run.  This allows you to edit files on your workstation and the changes take effect as if the code were
+running natively on the workstation.  The named volume is mounted on /home/app/node_modules so they are available.
+
+### docker-prod-build.sh
+This script does an npm build within the container but generates its output files in the build/ directory on the host so
+you can use them accordingly.
+
+### docker-clean.sh
+This script cleans up the Docker files for this project (removes them), including the named volume and the Docker image.
+
+### Typical workflow:
+1) ./docker-build.sh (to build the container and node_modules volume)
+2) ./docker-debug.sh (to run the container so you can edit and debug)
+3) ./docker-prod-build.sh (eventually, to make a production build/ set of files)
+
+## Without Docker
+
 In the project directory, you can run:
 
 ### `npm start`
