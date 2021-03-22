@@ -16,12 +16,13 @@ const ModiteImage: FunctionComponent<Props> = ({ className, modite }) => {
     return null
   }
 
-  const { profile = {} }: Modite = modite
+  const { profile }: Modite = modite
 
   return (
     <Img
       crossorigin="anonymous"
-      src={[profile.image_72, profile.image_192]}
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      src={[profile!.image_72, profile!.image_192]}
       loader={<img src={userIconPlaceholder} role="presentation" />}
       unloader={<img src={userIconPlaceholder} role="presentation" />}
       container={(children: JSX.Element[]): JSX.Element => (
