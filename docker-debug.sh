@@ -4,7 +4,7 @@
 
 docker run \
   --rm \
-  --net=host \
+  -p 3000:3000 \
   -v $PWD:/home/app \
   --name modir \
   modir
