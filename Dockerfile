@@ -1,5 +1,5 @@
-FROM node:12
+FROM node:14
 COPY . /home/modir
 WORKDIR /home/modir
-RUN npm install
-CMD [ "npm", "start" ]
+RUN yarn install
+CMD [ "yarn", "start" ]
