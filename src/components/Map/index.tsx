@@ -59,6 +59,7 @@ const Map = ({ animate = false, className, height: heightProp = '100%' }: Props)
     )
   }
 
+  let key = 0
   return (
     <MapGL
       className={className}
@@ -83,7 +84,7 @@ const Map = ({ animate = false, className, height: heightProp = '100%' }: Props)
         const isActiveModite = viewport.modite === modite
 
         return (
-          <Marker key={modite.id} latitude={coords.latitude} longitude={coords.longitude}>
+          <Marker key={++keyj} latitude={coords.latitude} longitude={coords.longitude}>
             <Pin active={isActiveModite} size={isActiveModite ? 'big' : 'normal'} />
           </Marker>
         )

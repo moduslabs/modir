@@ -130,6 +130,7 @@ const Inner = () => {
     }
   }
 
+  let key = 0
   return (
     <>
       <Map />
@@ -141,7 +142,7 @@ const Inner = () => {
         {isLoaded ? (
           <TransitionGroup>
             <CSSTransition
-              key={location.key}
+              key={++key}
               unmountOnExit
               mountOnEnter
               appear
