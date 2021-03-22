@@ -55,6 +55,8 @@ outoput from the program run via npm start within the container.  The working di
 the app is run.  This allows you to edit files on your workstation and the changes take effect as if the code were
 running natively on the workstation.  The named volume is mounted on /home/app/node_modules so they are available.
 
+You can change the port the server listens on by editing this file.
+
 #### docker-prod-build.sh
 This script does an npm build within the container but generates its output files in the build/ directory on the host so
 you can use them accordingly.
