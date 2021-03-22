@@ -1,37 +1,56 @@
 export interface LocationData {
+  place_id?: number
+  licence: string
+  osm_type: string
+  osm_id: number
+  boundingbox: string[]
   lat: number
   lon: number
+  display_name?: string
+  class?: string
+  type?: string
+  importance?: number
+  icon?: string
 }
 
 export interface ModiteProfile {
   title?: string
-  last_name?: string
+  phone?: string
+  skype?: string
   real_name?: string
   real_name_normalized?: string
   display_name?: string
   display_name_normalized?: string
+  fields: {
+    'Skype User'?: string
+    'Name Pronunciation'?: string
+    'Start Date'?: string
+    Location?: string
+    'Current Project'?: string
+    Position?: string
+    Bio?: string
+    Bday?: string
+    'Preferred Pronoun'?: string
+    locationData?: LocationData
+    'GitHub User'?: string
+  }
   status_text?: string
   status_emoji?: string
   status_expiration?: number
-  status_text_canonical?: string
   avatar_hash?: string
-  first_name?: string
-  phone?: string
+  image_original?: string
+  is_custom_image?: boolean
   email?: string
-  skype?: string
+  first_name?: string
+  last_name?: string
   image_24?: string
   image_32?: string
   image_48?: string
   image_72?: string
   image_192?: string
   image_512?: string
-  fields?: {
-    'GitHub User'?: string
-    Location?: string
-    locationData?: LocationData
-    'Skype User'?: string
-    Title?: string
-  }
+  image_1024?: string
+  status_text_canonical?: string
 }
 
 export type RecordTypes = 'user' | 'project'
@@ -61,4 +80,5 @@ export default interface Modite {
   is_bot?: boolean
   is_app_user?: boolean
   updated?: number
+  fields?: string
 }

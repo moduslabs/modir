@@ -8,13 +8,14 @@ import Time from '../../components/Time'
 import { useParams } from '../../hook/useRouter'
 import Modite from '../../models/Modite'
 import Project from '../../models/Project'
-import { ContextArray as DataContextArray, useData } from '../../service/Data'
+import { ContextArray as DataContextArray, getModiteData, useData } from '../../service/Data'
 import { ContextArray as MapContextArray, useMap } from '../../service/Map'
 import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import s from './styles.module.scss'
 
 const ModiteDetail = () => {
   const [{ modites, projects }]: DataContextArray = useData()
+
   const [viewport, setViewport]: MapContextArray = useMap()
   const { id } = useParams()
   const dimensions: Dimensions = useWindowDimensions()
@@ -24,6 +25,11 @@ const ModiteDetail = () => {
     return <Redirect to="/" />
   }
 
+  const { real_name: name, tacos }: Modite = modite
+  const { moditeData, isLoading } = getModiteData(id)
+
+  const { fields, title, display_name } = moditeData
+  const { Location, 'GitHub User': gitHubUser, 'Skype User': skypeUser } = fields
   const moditeProjects: Project[] = projects.reduce((matches: Project[], project: Project) => {
     if (project.users && project.users.find((user: Modite) => user.id === id)) {
       matches.push(project)
@@ -32,27 +38,32 @@ const ModiteDetail = () => {
     return matches
   }, [])
 
-  const { profile = {}, real_name: name, tacos }: Modite = modite
-  const { fields = {}, title } = profile
-  const { Location, Title, 'GitHub User': gitHubUser, 'Skype User': skypeUser } = fields
-
   useEffect(() => {
-    const locationData = modite.profile && modite.profile.fields && modite.profile.fields.locationData
-    const newViewport = locationData
-      ? {
-          ...viewport,
-          latitude: locationData.lat - dimensions.height / 160,
-          longitude: locationData.lon,
-          modite,
-          zoom: 5,
-        }
-      : {
-          ...viewport,
-          modite: undefined,
-        }
-
-    setViewport(newViewport)
-  }, [modite])
+    if (isLoading === false) {
+      const locationDataExists =
+        Object.keys(fields).length > 0 &&
+        fields.locationData &&
+        Object.keys(fields.locationData).length > 0 &&
+        fields.locationData.lat &&
+        fields.locationData.lon
+      /* eslint-disable @typescript-eslint/no-non-null-assertion */
+      const newViewport = locationDataExists
+        ? {
+            ...viewport,
+            latitude: fields.locationData!.lat - dimensions.height / 160,
+            longitude: fields.locationData!.lon,
+            //FIXME: because the modite profile returned from modites API does not have profile
+            modite: { ...modite, profile: moditeData },
+            zoom: 5,
+          }
+        : {
+            ...viewport,
+            modite: undefined,
+          }
+      /* eslint-enable @typescript-eslint/no-non-null-assertion */
+      setViewport(newViewport)
+    }
+  }, [modite, isLoading])
 
   return (
     <div className={s.detailContainer}>
@@ -75,11 +86,9 @@ const ModiteDetail = () => {
           <Time modite={modite} date />
         </div>
 
-        <div className={s.fieldTitle}>{Title}</div>
+        <div className={s.fieldTitle}>{title}</div>
 
-        <div className={s.slackName}>@{profile.display_name}</div>
-
-        <div className={s.title}>{title}</div>
+        <div className={s.slackName}>@{display_name}</div>
 
         <h4 className={s.projectHeader}>
           {moditeProjects.length === 0 ? 'Projects' : `Projects (${moditeProjects.length})`}
