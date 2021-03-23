@@ -34,7 +34,7 @@ on your workstation.
 
 ### Shell scripts
 
-The Dockerfile is used to build a Docker image that has no node_mocules/ directory.  
+The Dockerfile is used to build a Docker image that has no node_modules/ directory.  
 
 There are 4 .sh (shell) scripts to make using Docker easy:
 
