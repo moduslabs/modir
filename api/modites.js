@@ -20,27 +20,36 @@ const addTacosToUsers = async users => {
   return users
 }
 
-const getModites = async () => {
+const getModites = async (cursor="") => {
   // seems like our cache has expired. Let's fetch slack users
-  const botKey = await KEYS.get('mosquito-bot-key-awakened')
-  const usersRes = await fetch(`https://slack.com/api/users.list`, {
+  const botKey = await KEYS.get('mosquito-bot-key-awakened');
+  const usersRes = await fetch(`https://slack.com/api/users.list?cursor=${cursor}`, {
     cf: {
-      cacheTtlByStatus: { '200-299': 86400, 404: 1, '500-599': 0 },
+      cacheTtlByStatus: { '200-299': 86400, 404: 1, '500-599': 0 }
     },
     headers: {
-      Authorization: `Bearer ${botKey}`,
-    },
-  })
-  const users = await usersRes.json()
+      'Authorization': `Bearer ${botKey}`,
+    }
+  });
+  const users = await usersRes.json();
 
-  const activeUsers = users.members.filter(
-    user => user.name !== 'slackbot' && !user.is_bot && !user.is_restricted && !user.deleted,
-  )
+  const activeUsers = users.members.filter(user => user.name !== 'slackbot' && !user.is_bot && !user.is_restricted && !user.deleted);
 
-  const usersWithTacos = await addTacosToUsers(activeUsers)
+  let usersWithTacos = await addTacosToUsers(activeUsers);
 
-  return usersWithTacos
-}
+  // We'll probably need to go to the next page
+  if (users?.response_metadata?.next_cursor) {
+    // recursively call the same function
+    const nextUsers = await getModites(users.response_metadata.next_cursor);
+    // merge users from this and the previous call
+    const mergedUsers = nextUsers.concat(usersWithTacos);
+
+    // re-associate with usersWithTacos so we get all the things
+    usersWithTacos = mergedUsers;
+  }
+
+  return usersWithTacos;
+};
 
 const checkToken = async req => {
   const token = (req.headers.get('authorization') || '').replace('Bearer ', '')
