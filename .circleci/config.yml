@@ -59,9 +59,6 @@ jobs:
       - checkout
       - restore_cache: *restore-npm-cache
       - run:
-          name: Check Version Prefixes
-          command: yarn check:versions
-      - run:
           name: Run ESLint
           command: yarn lint
       - run:
