@@ -54,8 +54,8 @@
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react-hooks": "1.6.1",
     "hard-source-webpack-plugin": "0.13.1",
-    "husky": "3.0.2",
-    "lint-staged": "9.2.1",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
     "node": "12.7.0",
     "node-sass": "4.14.1",
     "prettier": "2.2.1",
@@ -69,20 +69,19 @@
     "**/@typescript-eslint/eslint-plugin": "^4.1.1",
     "**/@typescript-eslint/parser": "^4.1.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run autoformat"
-    }
-  },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx},!src/models": [
-      "eslint --fix",
+    "*.{ts,tsx,js,jsx}": [
+      "yarn lint:fix",
       "git add"
     ],
-    "src/**/*.{js,jsx,ts,tsx,json}": [
-      "prettier --write",
-      "git add"
+    "*.{ts,tsx,json,js,jsx,html,scss,css}": [
+      "prettier --write"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "browserslist": [
     ">0.2%",
