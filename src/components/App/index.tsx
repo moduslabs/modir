@@ -20,17 +20,17 @@ import s from './styles.module.scss'
 import './icons'
 import './theme.css'
 
-const ModiteDetailPage = React.lazy(() =>
-  import('../../pages/ModiteDetail' /* webpackChunkName: "page-modite-detail", webpackPrefetch: true  */),
+const ModiteDetailPage = React.lazy(
+  () => import('../../pages/ModiteDetail' /* webpackChunkName: "page-modite-detail", webpackPrefetch: true  */),
 )
-const ModitesPage = React.lazy(() =>
-  import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
+const ModitesPage = React.lazy(
+  () => import('../../pages/Modites' /* webpackChunkName: "page-modites", webpackPrefetch: true  */),
 )
-const ProjectDetailPage = React.lazy(() =>
-  import('../../pages/ProjectDetail' /* webpackChunkName: "page-project-detail", webpackPrefetch: true  */),
+const ProjectDetailPage = React.lazy(
+  () => import('../../pages/ProjectDetail' /* webpackChunkName: "page-project-detail", webpackPrefetch: true  */),
 )
-const ProjectsPage = React.lazy(() =>
-  import('../../pages/Projects' /* webpackChunkName: "page-projects", webpackPrefetch: true  */),
+const ProjectsPage = React.lazy(
+  () => import('../../pages/Projects' /* webpackChunkName: "page-projects", webpackPrefetch: true  */),
 )
 
 type ModiteListTypes = 'globe' | 'list'
@@ -61,7 +61,7 @@ const Inner = () => {
       }
 
       // if current is modites list or projects list but did not come from one of them lists
-      if ((isTeam || isProjects) && (lastActivePage !== VIEW_TYPES.projects && lastActivePage !== VIEW_TYPES.modites)) {
+      if ((isTeam || isProjects) && lastActivePage !== VIEW_TYPES.projects && lastActivePage !== VIEW_TYPES.modites) {
         setViewport({
           ...viewport,
           ...defaultViewport,

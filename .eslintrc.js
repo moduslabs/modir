@@ -10,9 +10,6 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
-    'prettier/@typescript-eslint',
-    'prettier/babel',
-    'prettier/react',
   ],
   parserOptions: {
     ecmaFeatures: {
