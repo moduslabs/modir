@@ -3,12 +3,7 @@ import cx from 'classnames'
 import Modite from '../../models/Modite'
 import s from './styles.module.css'
 
-interface TimeData {
-  time?: string
-  tod?: string
-}
-
-var event = new Event('timestamp')
+const event = new Event('timestamp')
 
 let minute: number
 

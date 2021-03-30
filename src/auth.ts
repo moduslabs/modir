@@ -1,4 +1,3 @@
-/* global gapi */
 /* eslint-disable no-console */
 
 const signIn = () => {
@@ -48,7 +47,6 @@ const initClient = (cb: () => void) => {
       discoveryDocs: ['https://people.googleapis.com/$discovery/rest?version=v1'],
       scope: 'profile',
       // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/camelcase
       ux_mode: 'redirect',
     })
     .then(() => {
