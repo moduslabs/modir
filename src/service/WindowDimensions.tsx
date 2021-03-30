@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 interface Props {
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 export type Orientation = 'landscape' | 'portrait'

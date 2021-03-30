@@ -1,8 +1,7 @@
-import classnames from 'classnames'
-import React, { FunctionComponent } from 'react'
-// @ts-ignore
+import React, { FunctionComponent, ReactNode } from 'react'
 import Img from 'react-image'
 import Modite from '../../models/Modite'
+import classnames from 'classnames'
 import s from './styles.module.css'
 import userIconPlaceholder from './user-icon-placeholder.png'
 
@@ -12,20 +11,21 @@ interface Props {
 }
 
 const ModiteImage: FunctionComponent<Props> = ({ className, modite }) => {
-  if (!modite) {
+  if (!modite || !modite.profile) {
     return null
   }
 
   const { profile }: Modite = modite
 
+  const images = [profile.image_72, profile.image_192]
+
   return (
     <Img
       crossorigin="anonymous"
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      src={[profile!.image_72, profile!.image_192]}
+      src={images}
       loader={<img src={userIconPlaceholder} role="presentation" />}
       unloader={<img src={userIconPlaceholder} role="presentation" />}
-      container={(children: JSX.Element[]): JSX.Element => (
+      container={(children: ReactNode): JSX.Element => (
         <div aria-hidden="true" className={classnames(className, s.moditeImage)}>
           {children}
         </div>
