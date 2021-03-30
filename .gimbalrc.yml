@@ -55,7 +55,7 @@ plugins:
         thresholds:
           styles.module.css: 100 B
           index.tsx: 2.5 KB
-          <unmapped>: 150 B
+          <unmapped>: 5 KB
       - path: '**/modite-list.*.js'
         thresholds:
           Time/index.tsx: 1 KB

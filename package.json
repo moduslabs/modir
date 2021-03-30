@@ -70,13 +70,23 @@
     "**/@typescript-eslint/parser": "^4.1.1"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": ["yarn lint:fix", "git add"],
-    "*.{ts,tsx,json,js,jsx,html,scss,css}": ["prettier --write"]
+    "*.{ts,tsx,js,jsx}": [
+      "yarn lint:fix",
+      "git add"
+    ],
+    "*.{ts,tsx,json,js,jsx,html,scss,css}": [
+      "prettier --write"
+    ]
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
-  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

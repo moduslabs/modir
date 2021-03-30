@@ -2,14 +2,14 @@ import { addIcons } from 'ionicons'
 import { clipboard, globe, list, logoGithub, logoSkype, people } from 'ionicons/icons'
 
 addIcons({
-  'ios-clipboard': clipboard.ios,
-  'md-clipboard': clipboard.md,
-  'ios-globe': globe.ios,
-  'md-globe': globe.md,
-  'ios-list': list.md,
-  'md-list': list.md,
-  'ios-people': people.ios,
-  'md-people': people.md,
+  'ios-clipboard': clipboard,
+  'md-clipboard': clipboard,
+  'ios-globe': globe,
+  'md-globe': globe,
+  'ios-list': list,
+  'md-list': list,
+  'ios-people': people,
+  'md-people': people,
 
   'logo-github': logoGithub,
   'logo-skype': logoSkype,

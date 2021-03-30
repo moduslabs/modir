@@ -30,7 +30,6 @@ const Map = ({ animate = false, className, height: heightProp = '100%' }: Props)
   const [width, setWidth] = useState<number | string>('100%')
 
   const onViewportChange = useCallback((newViewport: ViewState): void => {
-    /* eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion */
     const stuff = { ...newViewport } as ViewportProps
 
     setViewport(newViewport)
