@@ -58,19 +58,19 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
             <IonLabel>Sort By</IonLabel>
           </IonListHeader>
           <IonItem>
-            <IonLabel>Last Asc</IonLabel>
+            <IonLabel>Last Name Asc</IonLabel>
             <IonRadio value="lasta" />
           </IonItem>
           <IonItem>
-            <IonLabel>Last Desc</IonLabel>
+            <IonLabel>Last Name Desc</IonLabel>
             <IonRadio value="lastd" />
           </IonItem>
           <IonItem>
-            <IonLabel>First Asc</IonLabel>
+            <IonLabel>First Name Asc</IonLabel>
             <IonRadio value="firsta" />
           </IonItem>
           <IonItem>
-            <IonLabel>First Desc</IonLabel>
+            <IonLabel>First Name Desc</IonLabel>
             <IonRadio value="firstd" />
           </IonItem>
           <IonItem>
@@ -82,11 +82,11 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
             <IonRadio value="tacosd" />
           </IonItem>
           <IonItem>
-            <IonLabel>TZ Asc</IonLabel>
+            <IonLabel>Local Time Asc</IonLabel>
             <IonRadio value="timea" />
           </IonItem>
           <IonItem>
-            <IonLabel>TZ Desc</IonLabel>
+            <IonLabel>Local Time Desc</IonLabel>
             <IonRadio value="timed" />
           </IonItem>
         </IonRadioGroup>
