@@ -18,18 +18,20 @@ const Modites = ({ listType, onScroll }: Props) => {
     return <NoResults />
   }
 
-  if (listType === 'list') {
-    const onListScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
-      lastScrollOffset = scrollOffset
+  switch (listType) {
+    case 'list':
+      const onListScroll = ({ scrollOffset }: { scrollOffset: number }): void => {
+        lastScrollOffset = scrollOffset
 
-      onScroll(scrollOffset)
-    }
+        onScroll(scrollOffset)
+      }
 
-    return (
-      <ModiteList addSpacerRow={true} records={modites} onScroll={onListScroll} lastScrollOffset={lastScrollOffset} />
-    )
-  } else {
-    return <GlobeModiteList />
+      return (
+        <ModiteList listType={listType} addSpacerRow={true} records={modites} onScroll={onListScroll} lastScrollOffset={lastScrollOffset} />
+      )
+    default:
+      return <GlobeModiteList />
+
   }
 }
 

@@ -10,6 +10,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import Back from '../Back'
 import Footer from '../Footer'
 import Map from '../Map'
+import ListOptions from '../ListOptions'
 import { locationToViewType, VIEW_TYPES, ViewTypes } from '../../constants/constants'
 import { useNavigate, useLocation } from '../../hook/useRouter'
 import { ContextArray as DataContextArray, useData } from '../../service/Data'
@@ -36,6 +37,10 @@ const ProjectsPage = React.lazy(() =>
 type ModiteListTypes = 'globe' | 'list'
 
 const Inner = () => {
+//  const listOptions = JSON.parse(localStorage.getItem("list-options")) || {
+//    view: "list",
+//    sort: "lasta",
+//  }
   const [state, dispatch]: DataContextArray = useData()
   const lastLocation: LastLocationType = useLastLocation()
   const location = useLocation()
@@ -43,16 +48,34 @@ const Inner = () => {
   const go = useNavigate('/{tab}')
   const [isLoaded, setIsLoaded] = useState(false)
   const [moditeListType, setModiteListType] = useState<ModiteListTypes>('list')
+  const [listOptionsPopover, setListOptionsPopover] = useState(false)
   const [searchBarCollapsed, setSearchBarCollapsed] = useState(false)
   const activePage = locationToViewType(location.pathname)
   const isModite = activePage === VIEW_TYPES.modite
   const isProject = activePage === VIEW_TYPES.project
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
-  const isGlobe = moditeListType === 'globe'
+//  let isGlobe = listOptions.view === 'globe'
+  let isGlobe
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
+  const updateGlobe = () => {
+    const listOptions = JSON.parse(localStorage.getItem("list-options")) || {
+      view: "list",
+      sort: "lasta",
+    }
+     isGlobe = listOptions.view === 'globe'
+//    setModiteListType(isGlobe ? 'list' : 'globe')
+    setModiteListType(isGlobe ? 'globe' : 'list')
+    if (isGlobe) {
+      setViewport({
+        ...viewport,
+        ...defaultViewport,
+      })
+    }
+  }
   useEffect(() => {
+    updateGlobe()
     if (lastLocation) {
       const lastActivePage = locationToViewType(lastLocation.pathname)
 
@@ -117,19 +140,34 @@ const Inner = () => {
       tab: newTab === 'modites' ? '' : newTab,
     })
 
-  const toggleListType = () => {
-    setModiteListType(isGlobe ? 'list' : 'globe')
+//  const toggleListType = () => {
+//    setModiteListType(isGlobe ? 'list' : 'globe')
 
-    setSearchBarCollapsed(!isGlobe)
+//    setSearchBarCollapsed(!isGlobe)
 
-    if (isGlobe) {
-      setViewport({
-        ...viewport,
-        ...defaultViewport,
-      })
-    }
+//    if (isGlobe) {
+//      setViewport({
+//        ...viewport,
+//        ...defaultViewport,
+//      })
+//    }
+//  }
+
+  const toggleListOptions = () => {
+    setListOptionsPopover(!listOptionsPopover)
+    updateGlobe()
+
+//    setModiteListType(isGlobe ? 'list' : 'globe')
+
+//    setSearchBarCollapsed(!isGlobe)
+
+//    if (isGlobe) {
+//      setViewport({
+//        ...viewport,
+//        ...defaultViewport,
+//      })
+//    }
   }
-
   return (
     <>
       <Map />
@@ -169,12 +207,19 @@ const Inner = () => {
           <div className={classnames(s.header, isLoaded ? s.loaded : null)}>
             <div className={s.title}>Modus Land</div>
             {isLoaded && isTeam ? (
+              <>
               <IonIcon
                 className={s.globeButton}
                 mode="ios"
-                name={moditeListType === 'globe' ? 'list' : 'globe'}
-                onClick={toggleListType}
+                name={moditeListType === 'globe' ? 'globe' : 'list'}
+//                  name='list'
+                onClick={toggleListOptions}
               />
+                <ListOptions
+                  isOpen={listOptionsPopover}
+                  onClose={toggleListOptions}
+                />
+              </>
             ) : null}
           </div>
         </div>

@@ -15,9 +15,59 @@ const GlobeModiteList = () => {
   const [viewport, setViewport]: ContextArray = useMap()
   const dimensions: Dimensions = useWindowDimensions()
 
+  const options = JSON.parse(localStorage.getItem("list-options")) || {
+    view: "list",
+    sort: "lasta",
+  }
+  const sortBy = options.sort
+
+  let sort_records = [...state.modites]
+  switch (sortBy) {
+    case "lasta":
+      break
+    case "lastd":
+      sort_records = sort_records.reverse()
+      break
+    case "firsta":
+      sort_records.sort((a, b) => {
+        const aFirst = a.real_name.split(' ').shift(),
+          bFirst = b.real_name.split(' ').shift()
+        return aFirst.localeCompare(bFirst)
+      })
+      break
+    case "firstd":
+      sort_records.sort((a, b) => {
+        const aFirst = a.real_name.split(' ').shift(),
+          bFirst = b.real_name.split(' ').shift()
+        return bFirst.localeCompare(aFirst)
+      })
+      break
+    case "tacosa":
+      sort_records.sort((a, b) => {
+        return a.tacos - a.tacos
+      })
+      break
+    case "tacosd":
+      sort_records.sort((a, b) => {
+        return b.tacos - a.tacos
+      })
+      break
+    case "timea":
+      sort_records.sort((a, b) => {
+        return a.tz_offset - b.tz_offset
+      })
+      break
+    case "timed":
+      sort_records.sort((a, b) => {
+        return b.tz_offset - a.tz_offset
+      })
+      break;
+  }
+
   const itemSize = (dimensions.width / 4) * 3
   const Item = ({ index, style }: ListChildComponentProps) => {
-    const modite = state.modites[index]
+//    const modite = state.modites[index]
+    const modite = sort_records[index]
 
     return (
       <Link to={`/modite/${modite.id}`} className={s.item} style={style}>
