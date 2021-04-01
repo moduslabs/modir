@@ -15,7 +15,7 @@ const GlobeModiteList = () => {
   const [state]: [DataState] = useData()
   const [viewport, setViewport]: ContextArray = useMap()
   const dimensions: Dimensions = useWindowDimensions()
-  const sortedRecords = useModites([...state.modites])
+  const sortedRecords = useModites(state.modites)
 
   const itemSize = (dimensions.width / 4) * 3
   const Item = ({ index, style }: ListChildComponentProps) => {

@@ -1,18 +1,51 @@
-import React, { FunctionComponent} from 'react'
+import * as React from 'react'
 import {IonPopover, IonIcon, IonToolbar, IonButtons, IonButton, IonList, IonListHeader, IonItem, IonLabel, IonRadioGroup, IonRadio} from '@ionic/react'
 import s from './styles.module.scss'
 
 const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
-  const options = JSON.parse(localStorage.getItem("list-options")) || {
-    view: "list",
-    sort: "lasta",
+  let options;
+  try {
+    options = JSON.parse(localStorage.getItem("list-options"))
+  }
+  catch (e) {
+    options = {
+      view: "list",
+      sort: "lasta",
+    }
   }
   const saveOptions = () => {
-    localStorage.setItem('list-options', JSON.stringify(options))
+    try {
+      localStorage.setItem('list-options', JSON.stringify(options))
+    }
+    catch (e) {
+    }
   }
+
+  const onApply = () => {
+    saveOptions()
+    if (onClose) {
+      onClose()
+    }
+  }
+
+  const onCancel = () => {
+    if (onClose) {
+      onClose()
+    }
+  }
+
+  const onViewAsChange = (e) => {
+    options.view = e.detail.value;
+  }
+
+  const onSortByChange = (e) => {
+    options.sort = e.detail.value;
+  }
+
   return (
     <IonPopover
       isOpen={isOpen}
+      backdropDismiss={false}
     >
       <IonList>
         <IonItem>
@@ -23,9 +56,8 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
 
         <IonRadioGroup
           value={options.view}
-          onIonChange = {(e) => {
-            options.view = e.detail.value;
-        }}>
+          onIonChange = {onViewAsChange}
+        >
           <IonListHeader>
             <IonLabel>View As</IonLabel>
           </IonListHeader>
@@ -51,9 +83,8 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
 
         <IonRadioGroup
           value={options.sort}
-          onIonChange = {(e) => {
-            options.sort = e.detail.value;
-          }}>
+          onIonChange = {onSortByChange}
+        >
           <IonListHeader>
             <IonLabel>Sort By</IonLabel>
           </IonListHeader>
@@ -95,22 +126,13 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
           <IonButtons slot="end">
           <IonButton
             color="success"
-            onClick={() => {
-              saveOptions()
-              if (onClose) {
-                onClose()
-              }
-            }}
+            onClick={onApply}
           >
             Apply
           </IonButton>
           <IonButton
             color="danger"
-            onClick={() => {
-              if (onClose) {
-                onClose()
-              }
-            }}
+            onClick={onCancel}
           >
             Cancel
           </IonButton>

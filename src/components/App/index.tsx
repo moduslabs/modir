@@ -37,10 +37,6 @@ const ProjectsPage = React.lazy(() =>
 type ModiteListTypes = 'globe' | 'list'
 
 const Inner = () => {
-//  const listOptions = JSON.parse(localStorage.getItem("list-options")) || {
-//    view: "list",
-//    sort: "lasta",
-//  }
   const [state, dispatch]: DataContextArray = useData()
   const lastLocation: LastLocationType = useLastLocation()
   const location = useLocation()
@@ -60,12 +56,17 @@ const Inner = () => {
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
   const updateGlobe = () => {
-    const listOptions = JSON.parse(localStorage.getItem("list-options")) || {
-      view: "list",
-      sort: "lasta",
+    let listOptions;
+    try {
+      listOptions = JSON.parse(localStorage.getItem("list-options"))
     }
-     isGlobe = listOptions.view === 'globe'
-//    setModiteListType(isGlobe ? 'list' : 'globe')
+    catch (e) {
+      listOptions = {
+        view: "list",
+        sort: "lasta",
+      }
+    }
+    isGlobe = listOptions.view === 'globe'
     setModiteListType(isGlobe ? 'globe' : 'list')
     if (isGlobe) {
       setViewport({
@@ -140,34 +141,11 @@ const Inner = () => {
       tab: newTab === 'modites' ? '' : newTab,
     })
 
-//  const toggleListType = () => {
-//    setModiteListType(isGlobe ? 'list' : 'globe')
-
-//    setSearchBarCollapsed(!isGlobe)
-
-//    if (isGlobe) {
-//      setViewport({
-//        ...viewport,
-//        ...defaultViewport,
-//      })
-//    }
-//  }
-
   const toggleListOptions = () => {
     setListOptionsPopover(!listOptionsPopover)
     updateGlobe()
-
-//    setModiteListType(isGlobe ? 'list' : 'globe')
-
-//    setSearchBarCollapsed(!isGlobe)
-
-//    if (isGlobe) {
-//      setViewport({
-//        ...viewport,
-//        ...defaultViewport,
-//      })
-//    }
   }
+
   return (
     <>
       <Map />
@@ -212,7 +190,6 @@ const Inner = () => {
                 className={s.globeButton}
                 mode="ios"
                 name={moditeListType === 'globe' ? 'globe' : 'list'}
-//                  name='list'
                 onClick={toggleListOptions}
               />
                 <ListOptions

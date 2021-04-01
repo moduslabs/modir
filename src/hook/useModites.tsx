@@ -1,7 +1,16 @@
- const useModites = (records) => {
-  const options = JSON.parse(localStorage.getItem("list-options")) || {
-    view: "list",
-    sort: "lasta",
+import {ListOptions} from '../models/ListOptions.tsx'
+
+const useModites = (records) => {
+  let options:ListOptions
+
+  try {
+    options = JSON.parse(localStorage.getItem("list-options"))
+  }
+  catch (e) {
+    options = {
+      view: "list",
+      sort: "lasta",
+    }
   }
 
   let sort_records = [...records]
