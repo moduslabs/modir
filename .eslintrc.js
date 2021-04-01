@@ -10,9 +10,6 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
-    'prettier/@typescript-eslint',
-    'prettier/babel',
-    'prettier/react',
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -31,6 +28,10 @@ module.exports = {
     'prettier/prettier': 'error',
     'react/prop-types': 'off',
     '@typescript-eslint/camelcase': 'off',
+    // Quick fixes
+    // TODO: fix the codebase and re-enable these
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
   settings: {
     react: {

@@ -50,12 +50,12 @@ plugins:
           components/App/index.tsx: 500 B
           serviceWorker.js: 1.5 KB
           index.tsx: 700 B
-          <unmapped>: 250 B
+          <unmapped>: 5 KB
       - path: '**/maps.*.js'
         thresholds:
           styles.module.css: 100 B
           index.tsx: 2.5 KB
-          <unmapped>: 150 B
+          <unmapped>: 5 KB
       - path: '**/modite-list.*.js'
         thresholds:
           Time/index.tsx: 1 KB
@@ -76,13 +76,13 @@ plugins:
           BackButton/index.ts: 400 B
           NoRecordsFound/index.tsx: 250 B
           ModiteList/index.tsx: 2.5 KB
-          <unmapped>: 150 B
+          <unmapped>: 5 KB
       - path: '**/page-modites.*.js'
         thresholds:
           pages/Modites/styles.module.css: 350 B
           utils/util.ts: 350 B
           pages/Modites/index.tsx: 700 B
-          <unmapped>: 150 B
+          <unmapped>: 5 KB
       - path: '**/*.js'
         disable: true
       - '!precache-manifest*'

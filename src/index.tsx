@@ -6,6 +6,10 @@ let doInit: boolean | (() => void)
 
 const App = React.lazy(() => import('./components/App') /* webpackChunkName: "modir-app", webpackPrefetch: true  */)
 
+type GetAuthResponse = () => {
+  id_token: string
+}
+
 const Boot = () => {
   const [booted, setBooted] = useState(false)
 
@@ -32,7 +36,7 @@ const Boot = () => {
   )
 }
 
-function initApp(googleUser: { getAuthResponse: Function } | void) {
+function initApp(googleUser: { getAuthResponse: GetAuthResponse } | void) {
   // false means the app has been booted
   if (doInit !== false) {
     if (googleUser) {
@@ -61,7 +65,7 @@ if ((!navigator.onLine || process.env.NODE_ENV === 'development') && localStorag
 }
 
 // @ts-ignore
-window.initApp = initApp
+globalThis.initApp = initApp
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

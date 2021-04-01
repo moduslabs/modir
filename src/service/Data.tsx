@@ -88,12 +88,7 @@ const filterRecords = ({
   }
 
   return filter.trim().length
-    ? (records as (Modite | Project)[]).filter(
-        item =>
-          fieldGetter(item)
-            .toLowerCase()
-            .indexOf(filterLowered) > -1,
-      )
+    ? (records as (Modite | Project)[]).filter((item) => fieldGetter(item).toLowerCase().indexOf(filterLowered) > -1)
     : records
 }
 const filterModites = (filter: string): Modite[] =>
@@ -226,8 +221,8 @@ const DataProvider = ({ children }: { children?: React.ReactNode }) => {
 
   const getData = async (): Promise<void> => {
     const [modites, projects]: [Modite[], Project[]] = await Promise.all([
-      fetch(MODITES_URL, { headers: getHeaders() }).then(res => res.json()),
-      fetch(PROJECTS_URL, { headers: getHeaders() }).then(res => res.json()),
+      fetch(MODITES_URL, { headers: getHeaders() }).then((res) => res.json()),
+      fetch(PROJECTS_URL, { headers: getHeaders() }).then((res) => res.json()),
     ]).catch(signOut)
 
     rawModites = modites
@@ -276,13 +271,13 @@ export const getModiteData = (slackId: string): GetModiteData => {
       await Promise.resolve(
         fetch(url, {
           headers: getHeaders(),
-        }).then(res => res.json()),
+        }).then((res) => res.json()),
       )
-        .then(modite => {
+        .then((modite) => {
           setModiteData(modite.profile)
           setIsLoading(false)
         })
-        .catch(e => {
+        .catch((e) => {
           // eslint-disable-next-line no-console
           console.log('error', e)
         })
