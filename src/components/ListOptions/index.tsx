@@ -1,24 +1,35 @@
 import * as React from 'react'
-import {IonPopover, IonIcon, IonToolbar, IonButtons, IonButton, IonList, IonListHeader, IonItem, IonLabel, IonRadioGroup, IonRadio} from '@ionic/react'
+import {
+  IonPopover,
+  IonIcon,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonList,
+  IonListHeader,
+  IonItem,
+  IonLabel,
+  IonRadioGroup,
+  IonRadio,
+} from '@ionic/react'
 import s from './styles.module.scss'
 
 const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
-  let options;
-  try {
-    options = JSON.parse(localStorage.getItem("list-options"))
-  }
-  catch (e) {
+  let options: { view: any; sort: any }
+
+  const savedOptions = localStorage.getItem('list-options')
+  if (savedOptions) {
+    options = JSON.parse(savedOptions)
+  } else {
     options = {
-      view: "list",
-      sort: "lasta",
+      view: 'list',
+      sort: 'lasta',
     }
   }
   const saveOptions = () => {
     try {
       localStorage.setItem('list-options', JSON.stringify(options))
-    }
-    catch (e) {
-    }
+    } catch (e) {}
   }
 
   const onApply = () => {
@@ -35,56 +46,37 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
   }
 
   const onViewAsChange = (e) => {
-    options.view = e.detail.value;
+    options.view = e.detail.value
   }
 
   const onSortByChange = (e) => {
-    options.sort = e.detail.value;
+    options.sort = e.detail.value
   }
 
   return (
-    <IonPopover
-      isOpen={isOpen}
-      backdropDismiss={false}
-    >
+    <IonPopover isOpen={isOpen} backdropDismiss={false}>
       <IonList>
         <IonItem>
-          <IonListHeader>
-            List Options
-          </IonListHeader>
+          <IonListHeader>List Options</IonListHeader>
         </IonItem>
 
-        <IonRadioGroup
-          value={options.view}
-          onIonChange = {onViewAsChange}
-        >
+        <IonRadioGroup value={options.view} onIonChange={onViewAsChange}>
           <IonListHeader>
             <IonLabel>View As</IonLabel>
           </IonListHeader>
           <IonItem>
-            <IonIcon
-              class={s.globeButton}
-              mode="ios"
-              name="list"
-            />
+            <IonIcon class={s.globeButton} mode="ios" name="list" />
             <IonLabel>List</IonLabel>
             <IonRadio slot="start" value="list" />
           </IonItem>
           <IonItem>
-            <IonIcon
-              class={s.globeButton}
-              mode="ios"
-              name="globe"
-            />
+            <IonIcon class={s.globeButton} mode="ios" name="globe" />
             <IonLabel>Globe</IonLabel>
             <IonRadio slot="start" value="globe" />
           </IonItem>
         </IonRadioGroup>
 
-        <IonRadioGroup
-          value={options.sort}
-          onIonChange = {onSortByChange}
-        >
+        <IonRadioGroup value={options.sort} onIonChange={onSortByChange}>
           <IonListHeader>
             <IonLabel>Sort By</IonLabel>
           </IonListHeader>
@@ -123,24 +115,17 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
         </IonRadioGroup>
       </IonList>
       <IonToolbar>
-          <IonButtons slot="end">
-          <IonButton
-            color="success"
-            onClick={onApply}
-          >
+        <IonButtons slot="end">
+          <IonButton color="success" onClick={onApply}>
             Apply
           </IonButton>
-          <IonButton
-            color="danger"
-            onClick={onCancel}
-          >
+          <IonButton color="danger" onClick={onCancel}>
             Cancel
           </IonButton>
-          </IonButtons>
-        </IonToolbar>
+        </IonButtons>
+      </IonToolbar>
     </IonPopover>
   )
 }
 
 export default React.memo(ListOptions)
-
