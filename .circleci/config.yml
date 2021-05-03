@@ -53,17 +53,17 @@ jobs:
       - save_cache: *save-dist-cache
       - save_cache: *save-webpack-cache
 
-  lint:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache: *restore-npm-cache
-      - run:
-          name: Run ESLint
-          command: yarn lint
-      - run:
-          name: Run Test TypeScript Compile
-          command: yarn check:compile
+#   lint:
+#     <<: *defaults
+#     steps:
+#       - checkout
+#       - restore_cache: *restore-npm-cache
+#       - run:
+#           name: Run ESLint
+#           command: yarn lint
+#       - run:
+#           name: Run Test TypeScript Compile
+#           command: yarn check:compile
 
   gimbal:
     <<: *defaults
@@ -84,12 +84,14 @@ workflows:
   build-and-test:
     jobs:
       - install-dependencies
-      - lint:
-          requires:
-            - install-dependencies
+#       - lint:
+#           requires:
+#             - install-dependencies
       - build-pwa:
           requires:
-            - lint
+            - install-dependencies
+#           requires:
+#             - lint
       - gimbal:
           requires:
             - build-pwa

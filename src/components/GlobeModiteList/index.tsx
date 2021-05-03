@@ -8,16 +8,18 @@ import { useData } from '../../service/Data'
 import { ContextArray, defaultViewport, useMap } from '../../service/Map'
 import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import { DataState } from '../../types/service/Data'
+import useModites from '../../hook/useModites.tsx'
 import s from './styles.module.scss'
 
 const GlobeModiteList = () => {
   const [state]: [DataState] = useData()
   const [viewport, setViewport]: ContextArray = useMap()
   const dimensions: Dimensions = useWindowDimensions()
+  const sortedRecords = useModites(state.modites)
 
   const itemSize = (dimensions.width / 4) * 3
   const Item = ({ index, style }: ListChildComponentProps) => {
-    const modite = state.modites[index]
+    const modite = sortedRecords[index]
 
     return (
       <Link to={`/modite/${modite.id}`} className={s.item} style={style}>
