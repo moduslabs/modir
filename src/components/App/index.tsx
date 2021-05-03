@@ -51,21 +51,22 @@ const Inner = () => {
   const isProject = activePage === VIEW_TYPES.project
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
-//  let isGlobe = listOptions.view === 'globe'
+  //  let isGlobe = listOptions.view === 'globe'
   let isGlobe
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
   const updateGlobe = () => {
-    let listOptions;
-    try {
-      listOptions = JSON.parse(localStorage.getItem("list-options"))
-    }
-    catch (e) {
+    let listOptions
+    const savedListOptions = localStorage.getItem('list-options')
+    if (savedListOptions) {
+      listOptions = JSON.parse(savedListOptions)
+    } else {
       listOptions = {
-        view: "list",
-        sort: "lasta",
+        view: 'list',
+        sort: 'lasta',
       }
     }
+
     isGlobe = listOptions.view === 'globe'
     setModiteListType(isGlobe ? 'globe' : 'list')
     if (isGlobe) {
@@ -186,16 +187,13 @@ const Inner = () => {
             <div className={s.title}>Modus Land</div>
             {isLoaded && isTeam ? (
               <>
-              <IonIcon
-                className={s.globeButton}
-                mode="ios"
-                name={moditeListType === 'globe' ? 'globe' : 'list'}
-                onClick={toggleListOptions}
-              />
-                <ListOptions
-                  isOpen={listOptionsPopover}
-                  onClose={toggleListOptions}
+                <IonIcon
+                  className={s.globeButton}
+                  mode="ios"
+                  name={moditeListType === 'globe' ? 'globe' : 'list'}
+                  onClick={toggleListOptions}
                 />
+                <ListOptions isOpen={listOptionsPopover} onClose={toggleListOptions} />
               </>
             ) : null}
           </div>

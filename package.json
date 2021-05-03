@@ -71,7 +71,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "yarn lint:fix",
+      "yarn lint",
       "git add"
     ],
     "*.{ts,tsx,json,js,jsx,html,scss,css}": [
