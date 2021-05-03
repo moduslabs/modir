@@ -35,4 +35,3 @@ functions:
       - http:
           url: dir.modus.app/modite/*
           method: GET
-

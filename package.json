@@ -10,6 +10,7 @@
     "build": "env-cmd -f ./.env/prod.env react-app-rewired build",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.js' 'src/**/*.ts' 'src/**/*.tsx'",
+    "format": "prettier --write .",
     "start": "env-cmd -f ./.env/local.env react-app-rewired start",
     "test": "react-app-rewired test"
   },
@@ -71,11 +72,11 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "yarn lint:fix",
+      "yarn lint",
       "git add"
     ],
     "*.{ts,tsx,json,js,jsx,html,scss,css}": [
-      "prettier --write"
+      "yarn format"
     ]
   },
   "husky": {

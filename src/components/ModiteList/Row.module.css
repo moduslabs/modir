@@ -4,6 +4,6 @@
   padding: 3px 0;
 }
 
-div[class="List"] {
+div[class='List'] {
   transition: opacity 250ms;
 }

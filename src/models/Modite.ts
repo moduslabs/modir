@@ -57,28 +57,28 @@ export type RecordTypes = 'user' | 'project'
 export type ListTypes = 'projects' | 'modites'
 
 export default interface Modite {
-  real_name?: string
-  name?: string
+  real_name: string
+  name: string
   id: string
-  team_id?: string
-  deleted?: boolean
-  tz?: string
-  tz_label?: string
-  tz_offset?: number
-  color?: string
-  localTime?: string
-  localDate?: string
-  tod?: string
-  profile?: ModiteProfile
-  tacos?: number
-  recordType?: RecordTypes
-  is_admin?: boolean
-  is_owner?: boolean
-  is_primary_owner?: boolean
-  is_restricted?: boolean
-  is_ultra_restricted?: boolean
-  is_bot?: boolean
-  is_app_user?: boolean
-  updated?: number
-  fields?: string
+  team_id: string
+  deleted: boolean
+  tz: string
+  tz_label: string
+  tz_offset: number
+  color: string
+  localTime: string
+  localDate: string
+  tod: string
+  profile: ModiteProfile
+  tacos: number
+  recordType: RecordTypes
+  is_admin: boolean
+  is_owner: boolean
+  is_primary_owner: boolean
+  is_restricted: boolean
+  is_ultra_restricted: boolean
+  is_bot: boolean
+  is_app_user: boolean
+  updated: number
+  fields: string
 }

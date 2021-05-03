@@ -6,11 +6,11 @@ const props = ['dependencies', 'devDependencies', 'optionalDependencies', 'peerD
 const UNPREFIXED_RE = /^\^|~/
 const found = []
 
-props.forEach(prop => {
+props.forEach((prop) => {
   const obj = packageJson[prop]
 
   if (obj) {
-    Object.keys(obj).forEach(name => {
+    Object.keys(obj).forEach((name) => {
       const version = obj[name]
 
       if (version.match(UNPREFIXED_RE)) {
@@ -27,11 +27,7 @@ props.forEach(prop => {
 if (found.length) {
   console.log(`FOUND ${found.length} UNPREFIXED VERSION${found.length === 1 ? '' : 'S'}!`)
 
-  found.forEach(({
-    name,
-    prop,
-    version
-  }) => console.log(`  ${name} -> ${version} (in ${prop})`))
+  found.forEach(({ name, prop, version }) => console.log(`  ${name} -> ${version} (in ${prop})`))
 
   console.log()
 

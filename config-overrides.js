@@ -12,7 +12,7 @@ module.exports = function override(config, env) {
 
   // custom service workers
   config.plugins = config.plugins
-    .map(plugin => {
+    .map((plugin) => {
       if (plugin.constructor.name === 'GenerateSW') {
         return new WorkboxWebpackPlugin.InjectManifest({
           swDest: 'service-worker.js',
@@ -43,7 +43,7 @@ module.exports = function override(config, env) {
 
   // remove pdfmake from amcharts
   config.externals = [
-    function(context, request, callback) {
+    function (context, request, callback) {
       if (/(pdfmake|xlsx|canvg)/.test(request)) {
         return callback(null, 'commonjs ' + request)
       }
