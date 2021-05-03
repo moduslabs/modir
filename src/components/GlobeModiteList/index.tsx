@@ -8,7 +8,7 @@ import { useData } from '../../service/Data'
 import { ContextArray, defaultViewport, useMap } from '../../service/Map'
 import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import { DataState } from '../../types/service/Data'
-import useModites from '../../hook/useModites.tsx'
+import useModites from '../../hook/useModites'
 import s from './styles.module.scss'
 
 const GlobeModiteList = () => {

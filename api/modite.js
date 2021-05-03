@@ -1,6 +1,6 @@
 // TEST: https://modus.app/modite/U0AUTJZUL
 // fetches the location data for a given location string
-const getGeocode = async location => {
+const getGeocode = async (location) => {
   const address = encodeURI(location)
   const request = new Request(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`)
   request.headers.set('Referer', 'https://dir.modus.app')
@@ -18,7 +18,7 @@ const getGeocode = async location => {
 }
 
 // gets the location data for a given modite from the geocode service
-const addLocationPoint = async modite => {
+const addLocationPoint = async (modite) => {
   const { Location: location } = modite.profile.fields
 
   if (!location) return // if the user hasn't populated a location no lookup can be performed
@@ -29,7 +29,7 @@ const addLocationPoint = async modite => {
 }
 
 // adds key / value from label / value data in the Modite profile
-const addFields = moditeResp => {
+const addFields = (moditeResp) => {
   let { fields = {} } = moditeResp.profile
   fields = fields || {}
 
@@ -39,9 +39,10 @@ const addFields = moditeResp => {
   }, {})
 }
 
-const getModite = async slackId => {
+const getModite = async (slackId) => {
   try {
     // seems like our cache has expired. Let's fetch the slack user
+    // eslint-disable-next-line no-undef
     const userKey = await KEYS.get('mosquito-bot-key-awakened')
     const moditeRes = await fetch(`https://slack.com/api/users.profile.get?user=${slackId}&include_labels=true`, {
       cf: { cacheTtlByStatus: { '200-299': 300, 404: 1, '500-599': 0 } },
@@ -56,20 +57,19 @@ const getModite = async slackId => {
 
     return modite
   } catch (e) {
-    console.log('error', e)
     return new Response('', { status: 404, statusText: e })
   }
 }
 
-const checkToken = async req => {
+const checkToken = async (req) => {
   const token = (req.headers.get('authorization') || '').replace('Bearer ', '')
 
-  const tokenInfo = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`).then(res => res.json())
+  const tokenInfo = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`).then((res) => res.json())
 
   return tokenInfo.hd === 'moduscreate.com'
 }
 
-const getModiteResponse = async event => {
+const getModiteResponse = async (event) => {
   const isAllowed = await checkToken(event.request)
   if (!isAllowed) {
     return new Response('', { status: 403, statusText: 'Forbidden' })
@@ -92,6 +92,6 @@ const getModiteResponse = async event => {
   return response
 }
 
-addEventListener('fetch', event => {
+addEventListener('fetch', (event) => {
   event.respondWith(getModiteResponse(event))
 })

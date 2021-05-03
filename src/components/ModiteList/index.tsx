@@ -1,18 +1,17 @@
 import React, { FunctionComponent } from 'react'
 import { VariableSizeList as List, ListChildComponentProps } from 'react-window'
-import Modite from '../../models/Modite'
 import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import ModiteListProps from '../../types/components/ModiteList'
 import Row from './Row'
-import useModites from "../../hook/useModites"
+import useModites from '../../hook/useModites'
+import Modite from '../../models/Modite'
 
 // used for spacer row
-const pseudoRecord: Modite = {
+const pseudoRecord = {
   id: '-1',
-}
+} as Modite
 
 const ModiteList: FunctionComponent<ModiteListProps> = ({
-  listType = 'list',
   addSpacerRow = false,
   lastScrollOffset = 0,
   onScroll,

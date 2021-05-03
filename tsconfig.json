@@ -13,17 +13,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "isolatedModules": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/serviceWorkerCustom.js"
-  ]
+  "include": ["src"],
+  "exclude": ["src/serviceWorkerCustom.js"]
 }

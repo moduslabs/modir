@@ -9,12 +9,12 @@ $thumbSize: 150px;
 }
 
 .detailInnerContainer {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 10px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   bottom: 0;
-  box-shadow: 0px 0px 5em 4px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5em 4px rgba(0, 0, 0, 0.75);
   display: flex;
   flex-direction: column;
   height: calc(75vh - #{$thumbSize / 2});
@@ -27,7 +27,7 @@ $thumbSize: 150px;
 
 .thumbContainer {
   border-radius: 12px;
-  box-shadow: 0px 0px 3em 4px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 3em 4px rgba(0, 0, 0, 0.75);
   height: $thumbSize;
   left: calc(50% - #{$thumbSize / 2});
   position: absolute;
@@ -40,7 +40,7 @@ $thumbSize: 150px;
   position: absolute;
   top: 10px;
   right: 10px;
-  border: 2px solid #DCAF39;
+  border: 2px solid #dcaf39;
   border-radius: 10px;
   font-size: 15px;
 }

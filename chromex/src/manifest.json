@@ -4,9 +4,7 @@
   "description": "See where Modites across the world are",
   "manifest_version": 2,
   "incognito": "split",
-  "permissions": [
-     "activeTab"
-   ],
+  "permissions": ["activeTab"],
   "icons": {
     "16": "logo16.png",
     "32": "logo32.png",
