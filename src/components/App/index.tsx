@@ -20,7 +20,7 @@ import history from '../../utils/history'
 import s from './styles.module.scss'
 import './icons'
 import './theme.css'
-
+// force ci
 const ModiteDetailPage = React.lazy(
   () => import('../../pages/ModiteDetail' /* webpackChunkName: "page-modite-detail", webpackPrefetch: true  */),
 )
