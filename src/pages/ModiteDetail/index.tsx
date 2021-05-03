@@ -13,6 +13,7 @@ import { ContextArray as MapContextArray, useMap } from '../../service/Map'
 import { Dimensions, useWindowDimensions } from '../../service/WindowDimensions'
 import s from './styles.module.scss'
 
+// this is just to test the CI build
 const ModiteDetail = () => {
   const [{ modites, projects }]: DataContextArray = useData()
 
