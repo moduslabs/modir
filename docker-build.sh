@@ -8,6 +8,4 @@ echo installing node_modules in volume modir-node_modules
 docker run \
   --rm \
   -v modir-node_modules:/home/app/node_modules \
-  -p 3000:3000 \
-  -e CHOKIDAR_USEPOLLING=true \
   modir
