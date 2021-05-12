@@ -85,13 +85,12 @@ workflows:
     jobs:
       - install-dependencies
       - lint:
-           requires:
-             - install-dependencies
+          requires:
+            - install-dependencies
       - build-pwa:
           requires:
             - install-dependencies
-          requires:
-             - lint
+            - lint
       - gimbal:
           requires:
             - build-pwa
