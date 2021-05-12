@@ -27,11 +27,16 @@ const Modites = ({ listType, onScroll }: Props) => {
       }
 
       return (
-        <ModiteList listType={listType} addSpacerRow={true} records={modites} onScroll={onListScroll} lastScrollOffset={lastScrollOffset} />
+        <ModiteList
+          listType={listType}
+          addSpacerRow={true}
+          records={modites}
+          onScroll={onListScroll}
+          lastScrollOffset={lastScrollOffset}
+        />
       )
     default:
       return <GlobeModiteList />
-
   }
 }
 

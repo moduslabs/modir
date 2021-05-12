@@ -29,7 +29,9 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
   const saveOptions = () => {
     try {
       localStorage.setItem('list-options', JSON.stringify(options))
-    } catch (e) {}
+    } catch (e) {
+      // @todo add exception here
+    }
   }
 
   const onApply = () => {

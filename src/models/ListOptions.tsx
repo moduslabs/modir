@@ -5,4 +5,3 @@ export interface ListOptions {
   view: ViewTypes
   sort: SortTypes
 }
-
