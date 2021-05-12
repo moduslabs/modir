@@ -15,6 +15,7 @@ const ModiteList: FunctionComponent<ModiteListProps> = ({
   addSpacerRow = false,
   lastScrollOffset = 0,
   onScroll,
+  listType,
   plain = false,
   records,
 }) => {
