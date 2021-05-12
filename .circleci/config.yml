@@ -84,14 +84,14 @@ workflows:
   build-and-test:
     jobs:
       - install-dependencies
-      #       - lint:
-      #           requires:
-      #             - install-dependencies
+            - lint:
+                requires:
+                  - install-dependencies
       - build-pwa:
           requires:
             - install-dependencies
-      #           requires:
-      #             - lint
+                requires:
+                  - lint
       - gimbal:
           requires:
             - build-pwa
