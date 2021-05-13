@@ -50,11 +50,11 @@ const ListOptions: React.FC<{ isOpen: boolean; onClose: () => any }> = ({ isOpen
     }
   }
 
-  const onViewAsChange = (e) => {
+  const onViewAsChange = (e: any) => {
     options.view = e.detail.value
   }
 
-  const onSortByChange = (e) => {
+  const onSortByChange = (e: any) => {
     options.sort = e.detail.value
   }
 
