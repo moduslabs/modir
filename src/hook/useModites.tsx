@@ -14,7 +14,6 @@ const useModites = (records: Modite[]) => {
       sort: 'lasta',
     }
   }
-
   let sort_records = [...records]
   switch (options.sort) {
     case 'lasta':

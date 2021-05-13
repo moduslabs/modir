@@ -52,16 +52,14 @@ const Inner = () => {
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
   //  let isGlobe = listOptions.view === 'globe'
-  let isGlobe: boolean
+  let isGlobe
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
   const updateGlobe = () => {
     let listOptions
-
-    const savedOptions = localStorage.getItem('list-options')
-
-    if (savedOptions) {
-      listOptions = JSON.parse(savedOptions)
+    const savedListOptions = localStorage.getItem('list-options')
+    if (savedListOptions) {
+      listOptions = JSON.parse(savedListOptions)
     } else {
       listOptions = {
         view: 'list',
