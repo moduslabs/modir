@@ -51,10 +51,7 @@ const Inner = () => {
   const isProject = activePage === VIEW_TYPES.project
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
-  //  let isGlobe = listOptions.view === 'globe'
-  let isGlobe: boolean
-  // @todo check this with Mike Kezii about this commit https://github.com/moduslabs/modir/commit/91db7bad10eb499b53ccdf9950b2a6fd890b13ec --> ignore temporary
-  // @ts-ignore
+  let isGlobe = false
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
   const updateGlobe = () => {

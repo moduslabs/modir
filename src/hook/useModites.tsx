@@ -36,7 +36,7 @@ const useModites = (records: Modite[]) => {
       break
     case 'tacosa':
       sort_records.sort((a: any, b: any) => {
-        return a.tacos - a.tacos
+        return a.tacos - b.tacos
       })
       break
     case 'tacosd':
