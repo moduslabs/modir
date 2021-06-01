@@ -63,6 +63,12 @@ if ((!navigator.onLine || process.env.NODE_ENV === 'development') && localStorag
   initApp()
 }
 
+// disable console log for prod
+if (process.env.NODE_ENV !== 'development') {
+  /* eslint-disable */
+  console.log = () => {}
+}
+
 // @ts-ignore
 globalThis.initApp = initApp
 
