@@ -31,5 +31,5 @@ if (found.length) {
 
   process.exit(1)
 } else {
-  console.warn('No prefixed versions found!')
+  console.log('No prefixed versions found!')
 }
