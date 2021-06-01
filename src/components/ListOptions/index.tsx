@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {
   IonPopover,
   IonIcon,
@@ -14,7 +14,7 @@ import {
 } from '@ionic/react'
 import s from './styles.module.scss'
 
-const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
+const ListOptions = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   let options: { view: any; sort: any }
 
   const savedOptions = localStorage.getItem('list-options')
@@ -29,7 +29,9 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
   const saveOptions = () => {
     try {
       localStorage.setItem('list-options', JSON.stringify(options))
-    } catch (e) {}
+    } catch (e) {
+      // @todo add exception here
+    }
   }
 
   const onApply = () => {
@@ -45,11 +47,11 @@ const ListOptions: FunctionComponent = ({ isOpen, onClose }) => {
     }
   }
 
-  const onViewAsChange = (e) => {
+  const onViewAsChange = (e: any) => {
     options.view = e.detail.value
   }
 
-  const onSortByChange = (e) => {
+  const onSortByChange = (e: any) => {
     options.sort = e.detail.value
   }
 

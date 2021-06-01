@@ -9,7 +9,6 @@ const App = React.lazy(() => import('./components/App') /* webpackChunkName: "mo
 type GetAuthResponse = () => {
   id_token: string
 }
-
 const Boot = () => {
   const [booted, setBooted] = useState(false)
 

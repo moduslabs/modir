@@ -51,8 +51,7 @@ const Inner = () => {
   const isProject = activePage === VIEW_TYPES.project
   const isProjects = activePage === VIEW_TYPES.projects
   const isTeam = activePage === VIEW_TYPES.modites
-  //  let isGlobe = listOptions.view === 'globe'
-  let isGlobe
+  let isGlobe = false
   const showTabBar = isLoaded && (isProjects || (isTeam && !isGlobe)) && !isProject
 
   const updateGlobe = () => {

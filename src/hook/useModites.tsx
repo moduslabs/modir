@@ -21,36 +21,36 @@ const useModites = (records: Modite[]) => {
       sort_records = sort_records.reverse()
       break
     case 'firsta':
-      sort_records.sort((a, b) => {
+      sort_records.sort((a: any, b: any) => {
         const aFirst = a.real_name.split(' ').shift(),
           bFirst = b.real_name.split(' ').shift()
         return aFirst.localeCompare(bFirst)
       })
       break
     case 'firstd':
-      sort_records.sort((a, b) => {
+      sort_records.sort((a: any, b: any) => {
         const aFirst = a.real_name.split(' ').shift(),
           bFirst = b.real_name.split(' ').shift()
         return bFirst.localeCompare(aFirst)
       })
       break
     case 'tacosa':
-      sort_records.sort((a, b) => {
-        return a.tacos - a.tacos
+      sort_records.sort((a: any, b: any) => {
+        return a.tacos - b.tacos
       })
       break
     case 'tacosd':
-      sort_records.sort((a, b) => {
+      sort_records.sort((a: any, b: any) => {
         return b.tacos - a.tacos
       })
       break
     case 'timea':
-      sort_records.sort((a, b) => {
+      sort_records.sort((a: any, b: any) => {
         return a.tz_offset - b.tz_offset
       })
       break
     case 'timed':
-      sort_records.sort((a, b) => {
+      sort_records.sort((a: any, b: any) => {
         return b.tz_offset - a.tz_offset
       })
       break

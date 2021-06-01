@@ -11,4 +11,5 @@ export default interface VirtualizedListProps {
   onScroll?: (...args: any) => void
   plain?: boolean
   records: Modite[]
+  listType?: string
 }

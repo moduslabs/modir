@@ -1,4 +1,6 @@
 import React, { FunctionComponent, ReactNode } from 'react'
+// react-image dependecy does not have types
+// @ts-ignore
 import Img from 'react-image'
 import Modite from '../../models/Modite'
 import classnames from 'classnames'
