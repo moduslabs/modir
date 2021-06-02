@@ -68,9 +68,9 @@ if (process.env.NODE_ENV !== 'development') {
   /* eslint-disable */
   const consoleMock = () => {}
 
-  // console.log = consoleMock
-  // console.error = consoleMock
   console.warn = consoleMock
+  console.log = consoleMock
+  console.error = consoleMock
 }
 
 // @ts-ignore
