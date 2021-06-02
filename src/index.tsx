@@ -66,7 +66,11 @@ if ((!navigator.onLine || process.env.NODE_ENV === 'development') && localStorag
 // disable console log for prod
 if (process.env.NODE_ENV !== 'development') {
   /* eslint-disable */
-  console.log = () => {}
+  const consoleMock = () => {}
+
+  console.log = consoleMock
+  console.error = consoleMock
+  console.warn = consoleMock
 }
 
 // @ts-ignore

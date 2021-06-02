@@ -279,7 +279,7 @@ export const getModiteData = (slackId: string): GetModiteData => {
         })
         .catch((e) => {
           // eslint-disable-next-line no-console
-          console.log('error', e)
+          console.error('Error fetching Modite data', e)
         })
     }
 
