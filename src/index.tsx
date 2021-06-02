@@ -70,7 +70,7 @@ if (process.env.NODE_ENV !== 'development') {
 
   console.log = consoleMock
   console.error = consoleMock
-  // console.warn = consoleMock
+  console.warn = consoleMock
 }
 
 // @ts-ignore
