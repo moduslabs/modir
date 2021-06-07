@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from 'react'
-// react-image dependecy does not have types
+// react-image dependency does not have types
 // @ts-ignore
 import Img from 'react-image'
 import Modite from '../../models/Modite'
@@ -19,7 +19,7 @@ const ModiteImage: FunctionComponent<Props> = ({ className, modite }) => {
 
   const { profile }: Modite = modite
 
-  const images = [profile.image_72, profile.image_192]
+  const images = [profile.image_72, profile.image_512]
 
   return (
     <Img
