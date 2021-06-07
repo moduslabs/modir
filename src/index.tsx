@@ -63,6 +63,16 @@ if ((!navigator.onLine || process.env.NODE_ENV === 'development') && localStorag
   initApp()
 }
 
+// disable console log for prod
+if (process.env.NODE_ENV !== 'development') {
+  /* eslint-disable */
+  const consoleMock = () => {}
+
+  console.log = consoleMock
+  console.error = consoleMock
+  // console.warn = consoleMock  // gimbal on ci circle is not working properly with warn
+}
+
 // @ts-ignore
 globalThis.initApp = initApp
 

@@ -40,5 +40,6 @@ module.exports = {
   },
   globals: {
     gapi: true,
+    KEYS: true,
   },
 }
